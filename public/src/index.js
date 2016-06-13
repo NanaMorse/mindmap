@@ -1,6 +1,12 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 
-import Topic from './Components/Topic';
+import Svg from './components/Svg';
 
-ReactDom.render(<Topic />, document.getElementById('app'));
+class App extends React.Component {
+  render () {
+    return <Svg />
+  }
+}
+
+ReactDom.render(<App />, document.getElementById('app'));
