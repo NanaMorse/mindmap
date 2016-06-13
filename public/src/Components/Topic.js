@@ -20,6 +20,19 @@ class TopicFill extends Component {
   }
 }
 
+// Topic Select Box
+class TopicSelectBox extends Component {
+  render () {
+    const { d, display } = this.props;
+    
+    const style = {
+      display : display ? 'block' : 'none'
+    };
+    
+    return <path d = { d } fill = "none" stroke="#000" style = { style }></path>;
+  }
+}
+
 // Topic Text
 class TopicText extends Component {
   
@@ -54,7 +67,9 @@ class Topic extends Component {
       text : 'Central Topic',
       fontSize : '16px',
       shapeClass : 'react',
-      fillColor : 'rgb(203, 222, 253)'
+      fillColor : 'rgb(203, 222, 253)',
+      
+      selected : false
     };
     
   }
@@ -66,17 +81,18 @@ class Topic extends Component {
     
     const textSize = this.getTextSize();
     
-    const padding = 20;
+    const paddingH = 30, paddingV = 20;
     
-    boxSize.width = textSize.width + padding * 2;
-    boxSize.height = textSize.height + padding * 2;
+    boxSize.width = textSize.width + paddingH * 2;
+    boxSize.height = textSize.height + paddingV * 2;
     
-    const topicShapePath = this.getTopicShapePath(boxSize);
+    const { topicShapePath, topicSelectBoxPath } = this.getTopicShapePath(boxSize);
     
     return (
-      <g transform = { this.getTranslatePosition() }>
+      <g transform = { this.getTranslatePosition() } onClick = {this.onClick.bind(this)}>
         <TopicShape d = { topicShapePath } />
         <TopicFill d = { topicShapePath } fillColor = { state.fillColor } />
+        <TopicSelectBox display = { state.selected } d = { topicSelectBoxPath } />
         <TopicText text = { state.text  } fontSize = { state.fontSize } />
       </g>
     );
@@ -101,6 +117,13 @@ class Topic extends Component {
   // todo
   getTranslatePosition () {
     return 'translate(300 300)'
+  }
+  
+  
+  onClick () {
+    this.setState({
+      selected : true
+    });
   }
 }
 
