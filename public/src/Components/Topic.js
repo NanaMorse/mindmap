@@ -1,22 +1,22 @@
 import React, { Component } from 'react';
 
-
+import CalcTopicShape from '../calcpath/topicshape';
 
 // Topic Shape
 class TopicShape extends Component {
   render () {
-    const d = this.props.d;
+    const { d } = this.props;
 
-    return <path d={d} fill="none" stroke="#000"></path>;
+    return <path d = { d } fill = "none" stroke="#000"></path>;
   }
 }
 
 // Topic Fill
 class TopicFill extends Component {
   render () {
-    const d = this.props.d;
+    const { d, fillColor} = this.props;
 
-    return <path d={d} fill="aquamarine" stroke="#000"></path>;
+    return <path d = { d } fill = { fillColor } stroke = "none"></path>;
   }
 }
 
@@ -24,22 +24,11 @@ class TopicFill extends Component {
 class TopicText extends Component {
   
   render () {
-    const { text, fontSize} = this.props;
+    const { text, fontSize } = this.props;
 
-    const { x, y } = this.getPosition();
+    const style = { fontSize };
     
-    return  <text font-size = {fontSize}  x = { x }  y = { y }>{ text }</text>;
-  }
-
-  getPosition () {
-    
-    const {size} = this.props;
-
-    const x = -(size.width / 2);
-    const y = size.height / 2;
-
-    return {x, y};
-    
+    return  <text textAnchor = "middle"  dominantBaseline = "central"   style = { style }>{ text }</text>;
   }
   
 }
@@ -63,23 +52,38 @@ class Topic extends Component {
     
     this.state = {
       text : 'Central Topic',
-      fontSize : '16px'
-    }
+      fontSize : '16px',
+      shapeClass : 'react',
+      fillColor : 'rgb(203, 222, 253)'
+    };
+    
   }
   
   render () {
     const state = this.state;
+
+    const boxSize = {};
+    
+    const textSize = this.getTextSize();
+    
+    const padding = 20;
+    
+    boxSize.width = textSize.width + padding * 2;
+    boxSize.height = textSize.height + padding * 2;
+    
+    const topicShapePath = this.getTopicShapePath(boxSize);
     
     return (
       <g transform = { this.getTranslatePosition() }>
-        <TopicText text = { state.text  } fontSize = { state.fontSize } size = { this.getTextElemSize() }/>
+        <TopicShape d = { topicShapePath } />
+        <TopicFill d = { topicShapePath } fillColor = { state.fillColor } />
+        <TopicText text = { state.text  } fontSize = { state.fontSize } />
       </g>
     );
   }
-  
 
-  getTextElemSize () {
-
+  getTextSize () {
+    
     textSizeDiv.style.fontSize = this.state.fontSize;
     textSizeDiv.innerText = this.state.text;
     
@@ -90,9 +94,13 @@ class Topic extends Component {
     
   }
 
+  getTopicShapePath (boxSize) {
+    return CalcTopicShape[this.state.shapeClass](boxSize);
+  }
+
   // todo
   getTranslatePosition () {
-    return 'translate(100 100)'
+    return 'translate(300 300)'
   }
 }
 
