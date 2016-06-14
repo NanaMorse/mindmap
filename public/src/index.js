@@ -1,12 +1,6 @@
 import React from 'react';
-import ReactDom from 'react-dom';
+import { render } from 'react-dom';
 
-import Svg from './components/Svg';
+import App from './containers/App';
 
-class App extends React.Component {
-  render () {
-    return <Svg />
-  }
-}
-
-ReactDom.render(<App />, document.getElementById('app'));
+render(<App />, document.getElementById('app'));
