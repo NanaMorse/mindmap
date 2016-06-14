@@ -64,17 +64,15 @@ class Topic extends Component {
     super();
     
     this.state = {
-      text : 'Central Topic',
-      fontSize : '16px',
-      shapeClass : 'react',
-      fillColor : 'rgb(203, 222, 253)',
-      
       selected : false
     };
     
   }
   
   render () {
+    
+    const props = this.props;
+    
     const state = this.state;
 
     const boxSize = {};
@@ -89,19 +87,19 @@ class Topic extends Component {
     const { topicShapePath, topicSelectBoxPath } = this.getTopicShapePath(boxSize);
     
     return (
-      <g transform = { this.getTranslatePosition() } onClick = {this.onClick.bind(this)}>
+      <g transform = { this.getTranslatePosition() } onClick = { props.onClick }>
         <TopicShape d = { topicShapePath } />
-        <TopicFill d = { topicShapePath } fillColor = { state.fillColor } />
+        <TopicFill d = { topicShapePath } fillColor = { props.fillColor } />
         <TopicSelectBox display = { state.selected } d = { topicSelectBoxPath } />
-        <TopicText text = { state.text  } fontSize = { state.fontSize } />
+        <TopicText text = { props.text  } fontSize = { props.fontSize } />
       </g>
     );
   }
 
   getTextSize () {
     
-    textSizeDiv.style.fontSize = this.state.fontSize;
-    textSizeDiv.innerText = this.state.text;
+    textSizeDiv.style.fontSize = this.props.fontSize;
+    textSizeDiv.innerText = this.props.text;
     
     return {
       width : textSizeDiv.clientWidth,
@@ -111,7 +109,7 @@ class Topic extends Component {
   }
 
   getTopicShapePath (boxSize) {
-    return CalcTopicShape[this.state.shapeClass](boxSize);
+    return CalcTopicShape[this.props.shapeClass](boxSize);
   }
 
   // todo
@@ -119,12 +117,6 @@ class Topic extends Component {
     return 'translate(300 300)'
   }
   
-  
-  onClick () {
-    this.setState({
-      selected : true
-    });
-  }
 }
 
 export default Topic;

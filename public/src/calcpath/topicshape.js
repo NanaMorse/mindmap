@@ -10,7 +10,7 @@ const getSelectBoxPath = (boxSize, space) => {
 
 export default {
   
-  'react' (boxSize) {
+  'rect' (boxSize) {
 
     const halfWidth = boxSize.width / 2;
     const halfHeight = boxSize.height / 2;

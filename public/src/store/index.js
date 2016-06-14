@@ -1,5 +1,9 @@
-import { createStore } from 'react';
+import { createStore } from 'redux';
 
-import actions from '../actions';
+import demo from '../../demo';
 
-const store = createStore(actions);
+import reducer from '../reducer';
+
+const store = createStore(reducer, demo);
+
+export default store;

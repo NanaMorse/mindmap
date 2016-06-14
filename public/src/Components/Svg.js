@@ -1,12 +1,12 @@
 import React from 'react';
 
-import Topic from './Topic'
+import TopicContainer from '../containers/TopicContainer'
 
 class Svg extends React.Component {
   render () {
 
     return <svg width="100%" height="100%">
-      <Topic />
+      <TopicContainer />
     </svg>;
   }
 }
