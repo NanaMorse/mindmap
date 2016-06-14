@@ -3,48 +3,31 @@ import React, { Component } from 'react';
 import CalcTopicShape from '../calcpath/topicshape';
 
 // Topic Shape
-class TopicShape extends Component {
-  render () {
-    const { d } = this.props;
+const TopicShape = ({ d }) => {
+  return <path d = { d } fill = "none" stroke="#000"></path>;
+};
 
-    return <path d = { d } fill = "none" stroke="#000"></path>;
-  }
-}
 
 // Topic Fill
-class TopicFill extends Component {
-  render () {
-    const { d, fillColor} = this.props;
-
-    return <path d = { d } fill = { fillColor } stroke = "none"></path>;
-  }
-}
+const TopicFill = ({ d, fillColor }) => {
+  return <path d = { d } fill = { fillColor } stroke = "none"></path>;
+};
 
 // Topic Select Box
-class TopicSelectBox extends Component {
-  render () {
-    const { d, display } = this.props;
-    
-    const style = {
-      display : display ? 'block' : 'none'
-    };
-    
-    return <path d = { d } fill = "none" stroke="#000" style = { style }></path>;
-  }
-}
+const TopicSelectBox = ({ d, display }) => {
+  const style = {
+    display : display ? 'block' : 'none'
+  };
+
+  return <path d = { d } fill = "none" stroke="#000" style = { style }></path>;
+};
 
 // Topic Text
-class TopicText extends Component {
-  
-  render () {
-    const { text, fontSize } = this.props;
+const TopicText = ({ text, fontSize }) => {
+  const style = { fontSize };
 
-    const style = { fontSize };
-    
-    return  <text textAnchor = "middle"  dominantBaseline = "central"   style = { style }>{ text }</text>;
-  }
-  
-}
+  return  <text textAnchor = "middle"  dominantBaseline = "central"   style = { style }>{ text }</text>;
+};
 
 const textSizeDiv = (() => {
   const div = document.createElement('div');
