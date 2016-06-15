@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 
+import { eventEmitter } from '../managers';
+
 import CalcTopicShape from '../calcpath/topicshape';
+
+import { CPT_SELECTED } from '../constants/EventTypes';
 
 // Topic Shape
 const TopicShape = ({ d }) => {
@@ -13,6 +17,7 @@ const TopicFill = ({ d, fillColor }) => {
   return <path d = { d } fill = { fillColor } stroke = "none"></path>;
 };
 
+
 // Topic Select Box
 const TopicSelectBox = ({ d, display }) => {
   const style = {
@@ -21,6 +26,7 @@ const TopicSelectBox = ({ d, display }) => {
 
   return <path d = { d } fill = "none" stroke="#000" style = { style }></path>;
 };
+
 
 // Topic Text
 const TopicText = ({ text, fontSize }) => {
@@ -53,7 +59,7 @@ class Topic extends Component {
   }
   
   render () {
-    
+
     const props = this.props;
     
     const state = this.state;
@@ -70,7 +76,7 @@ class Topic extends Component {
     const { topicShapePath, topicSelectBoxPath } = this.getTopicShapePath(boxSize);
     
     return (
-      <g transform = { this.getTranslatePosition() } onClick = { props.onClick }>
+      <g transform = { this.getTranslatePosition() } onClick = { this.onClick.bind(this) }>
         <TopicShape d = { topicShapePath } />
         <TopicFill d = { topicShapePath } fillColor = { props.fillColor } />
         <TopicSelectBox display = { state.selected } d = { topicSelectBoxPath } />
@@ -98,6 +104,21 @@ class Topic extends Component {
   // todo
   getTranslatePosition () {
     return 'translate(300 300)'
+  }
+  
+  // events
+  onClick (e) {
+    e.stopPropagation();
+    
+    if (this.state.selected === false) {
+      this.setState({
+        selected : true
+      });
+      
+      eventEmitter.emit(CPT_SELECTED, this);
+    }
+    
+    this.props.onClick();
   }
   
 }

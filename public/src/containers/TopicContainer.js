@@ -13,7 +13,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         onClick : () => {
             //dispatch(actions.updateTopicText(ownProps.text))
-            console.log('Hi, clicked!');
+            
+            //console.log('Hi, clicked!');
         }
     }
 };
