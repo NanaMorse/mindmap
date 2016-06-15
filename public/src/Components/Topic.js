@@ -63,23 +63,38 @@ class TopicText extends React.Component {
   
   render () {
     const { text, fontSize, textSize } = this.props;
-
-    const style = { fontSize };
     
-    textSize.height += 5;
+    const inputSize = Object.assign({}, textSize, {
+      height : textSize.height + 5
+    });
     
-    const { x, y } = this.getSelfPosition(textSize);
+    const { x, y } = this.getSelfPosition(inputSize);
     
-    const inputStyle = Object.assign({}, textSize, {
+    const textProps = {
+      textAnchor : 'middle',
+      dominantBaseline : 'central',
+      style : { 
+        fontSize
+      }
+    };
+    
+    const inputStyle = Object.assign({}, inputSize, {
       display : this.state.editing ? 'block' : 'none'
     });
     
+    const inputProps = {
+      ref : 'input',
+      type : 'text',
+      style : inputStyle,
+      onFocus : () => console.log('focus'),
+      onBlur : (e) => this.finishEditing(e)
+    };
 
     return  (
       <g>
-        <text textAnchor = "middle"  dominantBaseline = "central"  style = { style }>{ text }</text>
+        <text { ...textProps } >{ text }</text>
         <foreignObject x = { x } y = { y } >
-          <input type = "text" style = { inputStyle }/>
+          <input { ...inputProps }/>
         </foreignObject>
       </g>
     );
@@ -90,6 +105,21 @@ class TopicText extends React.Component {
       x : - size.width / 2,
       y : - size.height / 2
     }
+  }
+
+  startEditing () {
+    this.setState({ editing : true }, () => {
+      this.refs.input.focus();
+    });
+  }
+
+  finishEditing () {
+    // todo
+    this.setState({
+      editing : false
+    });
+    
+    this.props.onUpdateTopicText();
   }
 }
 
@@ -125,7 +155,8 @@ class Topic extends Component {
     
     const gProps = {
       transform : this.getTranslatePosition(),
-      onClick : () => this.onClick()
+      onClick : (e) => this.onTopicClick(e),
+      onDoubleClick : (e) => this.onTopicDoubleClick(e)
     };
     
     const TopicFillProps = {
@@ -139,9 +170,11 @@ class Topic extends Component {
     };
     
     const TopicTextProps = {
+      ref : 'topicText',
       text : props.text,
       fontSize : props.fontSize,
-      textSize : textSize
+      textSize : textSize,
+      onUpdateTopicText : props.onUpdateTopicText
     };
     
     
@@ -165,7 +198,7 @@ class Topic extends Component {
   }
   
   // events
-  onClick (e) {
+  onTopicClick (e) {
     e.stopPropagation();
     
     if (this.state.selected === false) {
@@ -176,7 +209,14 @@ class Topic extends Component {
       eventEmitter.emit(CPT_SELECTED, this);
     }
     
-    this.props.onClick();
+  }
+  
+  onTopicDoubleClick (e) {
+    const topicText = this.refs.topicText;
+    
+    if (!topicText.state.editing) {
+      topicText.startEditing();
+    }
   }
   
 }

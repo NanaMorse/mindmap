@@ -11,10 +11,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        onClick : () => {
+        onUpdateTopicText : () => {
             //dispatch(actions.updateTopicText(ownProps.text))
             
-            //console.log('Hi, clicked!');
+            console.log('Hi, updated', dispatch, ownProps);
         }
     }
 };
