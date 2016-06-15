@@ -6,6 +6,27 @@ import CalcTopicShape from '../calcpath/topicshape';
 
 import { CPT_SELECTED } from '../constants/EventTypes';
 
+// Tool method
+const getTextSize = (() => {
+  const div = document.createElement('div');
+  const body = document.querySelector('body');
+
+  div.style.position = 'fixed';
+  div.style.visibility = 'hidden';
+
+  body.appendChild(div);
+
+  return (text, fontSize) => {
+    div.style.fontSize = fontSize;
+    div.innerText = text;
+
+    return {
+      width : div.clientWidth,
+      height : div.clientHeight
+    };
+  }
+})();
+
 // Topic Shape
 const TopicShape = ({ d }) => {
   return <path d = { d } fill = "none" stroke="#000"></path>;
@@ -29,23 +50,49 @@ const TopicSelectBox = ({ d, display }) => {
 
 
 // Topic Text
-const TopicText = ({ text, fontSize }) => {
-  const style = { fontSize };
+class TopicText extends React.Component {
 
-  return  <text textAnchor = "middle"  dominantBaseline = "central"   style = { style }>{ text }</text>;
-};
+  constructor () {
+    super();
 
-const textSizeDiv = (() => {
-  const div = document.createElement('div');
-  const body = document.querySelector('body');
+    this.state = {
+      editing : false
+    };
 
-  div.style.position = 'fixed';
-  div.style.visibility = 'hidden';
+  }
   
-  body.appendChild(div);
-  
-  return div;
-})();
+  render () {
+    const { text, fontSize, textSize } = this.props;
+
+    const style = { fontSize };
+    
+    textSize.height += 5;
+    
+    const { x, y } = this.getSelfPosition(textSize);
+    
+    const inputStyle = Object.assign({}, textSize, {
+      display : this.state.editing ? 'block' : 'none'
+    });
+    
+
+    return  (
+      <g>
+        <text textAnchor = "middle"  dominantBaseline = "central"  style = { style }>{ text }</text>
+        <foreignObject x = { x } y = { y } >
+          <input type = "text" style = { inputStyle }/>
+        </foreignObject>
+      </g>
+    );
+  }
+
+  getSelfPosition (size) {
+    return {
+      x : - size.width / 2,
+      y : - size.height / 2
+    }
+  }
+}
+
 
 class Topic extends Component {
 
@@ -66,7 +113,7 @@ class Topic extends Component {
 
     const boxSize = {};
     
-    const textSize = this.getTextSize();
+    const textSize = getTextSize(props.text, props.fontSize);
     
     const paddingH = 30, paddingV = 20;
     
@@ -75,28 +122,39 @@ class Topic extends Component {
     
     const { topicShapePath, topicSelectBoxPath } = this.getTopicShapePath(boxSize);
     
+    
+    const gProps = {
+      transform : this.getTranslatePosition(),
+      onClick : () => this.onClick()
+    };
+    
+    const TopicFillProps = {
+      d : topicShapePath,
+      fillColor : props.fillColor
+    };
+    
+    const TopicSelectBoxProps = {
+      d : topicSelectBoxPath,
+      display : state.selected
+    };
+    
+    const TopicTextProps = {
+      text : props.text,
+      fontSize : props.fontSize,
+      textSize : textSize
+    };
+    
+    
     return (
-      <g transform = { this.getTranslatePosition() } onClick = { this.onClick.bind(this) }>
+      <g {...gProps} >
         <TopicShape d = { topicShapePath } />
-        <TopicFill d = { topicShapePath } fillColor = { props.fillColor } />
-        <TopicSelectBox display = { state.selected } d = { topicSelectBoxPath } />
-        <TopicText text = { props.text  } fontSize = { props.fontSize } />
+        <TopicFill { ...TopicFillProps } />
+        <TopicSelectBox { ...TopicSelectBoxProps } />
+        <TopicText { ...TopicTextProps }/>
       </g>
     );
   }
-
-  getTextSize () {
-    
-    textSizeDiv.style.fontSize = this.props.fontSize;
-    textSizeDiv.innerText = this.props.text;
-    
-    return {
-      width : textSizeDiv.clientWidth,
-      height : textSizeDiv.clientHeight
-    };
-    
-  }
-
+  
   getTopicShapePath (boxSize) {
     return CalcTopicShape[this.props.shapeClass](boxSize);
   }

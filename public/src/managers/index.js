@@ -18,6 +18,9 @@ export const selectionsManager = (() => {
   };
   
   const clearSelection = () => {
+    
+    if (!selections.length) return false;
+    
     selections.forEach((selection) => {
       selection.setState({ selected : false });
     });
