@@ -22,7 +22,7 @@ export const selectionsManager = (() => {
     if (!selections.length) return false;
     
     selections.forEach((selection) => {
-      selection.setState({ selected : false });
+      selection.onDeselected();
     });
 
     selections.splice(0, selections.length);

@@ -29,7 +29,7 @@ const getTextSize = (() => {
 
 // Topic Shape
 const TopicShape = ({ d }) => {
-  return <path d = { d } fill = "none" stroke="#000"></path>;
+  return <path className = "topic-shape" d = { d } fill = "none" stroke="#000"></path>;
 };
 
 
@@ -71,9 +71,7 @@ class TopicText extends React.Component {
     const { x, y } = this.getSelfPosition(inputSize);
     
     const textProps = {
-      textAnchor : 'middle',
-      dominantBaseline : 'central',
-      style : { 
+      style : {
         fontSize
       }
     };
@@ -86,7 +84,6 @@ class TopicText extends React.Component {
       ref : 'input',
       type : 'text',
       style : inputStyle,
-      onFocus : () => console.log('focus'),
       onBlur : (e) => this.finishEditing(e)
     };
 
@@ -119,7 +116,7 @@ class TopicText extends React.Component {
       editing : false
     });
     
-    this.props.onUpdateTopicText();
+    this.props.onUpdateTopicText(this.refs.input.value);
   }
 }
 
@@ -154,6 +151,7 @@ class Topic extends Component {
     
     
     const gProps = {
+      className : 'topic-group',
       transform : this.getTranslatePosition(),
       onClick : (e) => this.onTopicClick(e),
       onDoubleClick : (e) => this.onTopicDoubleClick(e)
@@ -197,27 +195,38 @@ class Topic extends Component {
     return 'translate(300 300)'
   }
   
-  // events
+  // userAgent events
   onTopicClick (e) {
     e.stopPropagation();
     
     if (this.state.selected === false) {
-      this.setState({
-        selected : true
-      });
+      this.onSelected();
       
       eventEmitter.emit(CPT_SELECTED, this);
     }
     
   }
   
-  onTopicDoubleClick (e) {
+  onTopicDoubleClick () {
     const topicText = this.refs.topicText;
     
     if (!topicText.state.editing) {
       topicText.startEditing();
     }
   }
+
+  // lifecycle events
+  onSelected () {
+    this.setState({ selected : true });
+  }
+  
+  onDeselected () {
+    this.setState({ selected : false });
+  }
+
+/*  onUpdateTopicText () {
+
+  }*/
   
 }
 

@@ -5,3 +5,20 @@
 .topic-default {
 
 }
+
+/* topic shape style */
+.topic-group .topic-shape {
+    fill: none;
+}
+
+/* topic text style */
+.topic-group text {
+    text-anchor : middle;
+    dominant-baseline : central;
+    cursor : default;
+
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}

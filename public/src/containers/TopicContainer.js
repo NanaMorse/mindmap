@@ -11,10 +11,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        onUpdateTopicText : () => {
-            //dispatch(actions.updateTopicText(ownProps.text))
-            
-            console.log('Hi, updated', dispatch, ownProps);
+        onUpdateTopicText : (newText) => {
+            dispatch(actions.updateTopicText(newText));
         }
     }
 };
