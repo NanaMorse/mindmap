@@ -1,31 +1,12 @@
 import React, { Component } from 'react';
 
 import { eventEmitter } from '../managers';
+import { getTextSize, editReceiver } from '../apptools';
 
 import CalcTopicShape from '../calcpath/topicshape';
 
 import { CPT_SELECTED } from '../constants/EventTypes';
-
-// Tool method
-const getTextSize = (() => {
-  const div = document.createElement('div');
-  const body = document.querySelector('body');
-
-  div.style.position = 'fixed';
-  div.style.visibility = 'hidden';
-
-  body.appendChild(div);
-
-  return (text, fontSize) => {
-    div.style.fontSize = fontSize;
-    div.innerText = text;
-
-    return {
-      width : div.clientWidth,
-      height : div.clientHeight
-    };
-  }
-})();
+import * as KeyCode from '../constants/KeyCode';
 
 // Topic Shape
 const TopicShape = ({ d }) => {
@@ -41,7 +22,7 @@ const TopicFill = ({ d, fillColor }) => {
 
 // Topic Select Box
 const TopicSelectBox = ({ d, display }) => {
-  const style = {
+  const style = { 
     display : display ? 'block' : 'none'
   };
 
@@ -50,76 +31,18 @@ const TopicSelectBox = ({ d, display }) => {
 
 
 // Topic Text
-class TopicText extends React.Component {
-
-  constructor () {
-    super();
-
-    this.state = {
-      editing : false
-    };
-
-  }
-  
+class TopicText extends Component {
   render () {
-    const { text, fontSize, textSize } = this.props;
     
-    const inputSize = Object.assign({}, textSize, {
-      height : textSize.height + 5
-    });
+    const { text } = this.props;
     
-    const { x, y } = this.getSelfPosition(inputSize);
-    
-    const textProps = {
-      style : {
-        fontSize
-      }
-    };
-    
-    const inputStyle = Object.assign({}, inputSize, {
-      display : this.state.editing ? 'block' : 'none'
-    });
-    
-    const inputProps = {
-      ref : 'input',
-      type : 'text',
-      style : inputStyle,
-      onBlur : (e) => this.finishEditing(e)
-    };
-
     return  (
-      <g>
-        <text { ...textProps } >{ text }</text>
-        <foreignObject x = { x } y = { y } >
-          <input { ...inputProps }/>
-        </foreignObject>
+      <g ref = 'text'>
+        <text>{ text }</text>
       </g>
     );
   }
-
-  getSelfPosition (size) {
-    return {
-      x : - size.width / 2,
-      y : - size.height / 2
-    }
-  }
-
-  startEditing () {
-    this.setState({ editing : true }, () => {
-      this.refs.input.focus();
-    });
-  }
-
-  finishEditing () {
-    // todo
-    this.setState({
-      editing : false
-    });
-    
-    this.props.onUpdateTopicText(this.refs.input.value);
-  }
 }
-
 
 class Topic extends Component {
 
@@ -168,7 +91,7 @@ class Topic extends Component {
     };
     
     const TopicTextProps = {
-      ref : 'topicText',
+      ref : 'TopicText',
       text : props.text,
       fontSize : props.fontSize,
       textSize : textSize,
@@ -195,6 +118,10 @@ class Topic extends Component {
     return 'translate(300 300)'
   }
   
+  getTextClientRect () {
+    return this.refs.TopicText.refs.text.getBoundingClientRect();
+  }
+  
   // userAgent events
   onTopicClick (e) {
     e.stopPropagation();
@@ -208,11 +135,8 @@ class Topic extends Component {
   }
   
   onTopicDoubleClick () {
-    const topicText = this.refs.topicText;
-    
-    if (!topicText.state.editing) {
-      topicText.startEditing();
-    }
+    console.log('topic double click');
+    editReceiver.start(this);
   }
 
   // lifecycle events
@@ -223,10 +147,6 @@ class Topic extends Component {
   onDeselected () {
     this.setState({ selected : false });
   }
-
-/*  onUpdateTopicText () {
-
-  }*/
   
 }
 
