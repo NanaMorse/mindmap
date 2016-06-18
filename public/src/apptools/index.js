@@ -1,4 +1,4 @@
-
+import * as KeyCode from '../constants/KeyCode';
 
 export const getTextSize = (() => {
   const div = document.createElement('div');
@@ -33,23 +33,65 @@ export const editReceiver = (() => {
 
   let currentComponent;
 
-  const setStyle = () => {
+  let escCancel = false;
+
+  // lifeCircle method
+  const setShowStyle = () => {
     const clientRect = currentComponent.getTextClientRect();
     
     const style = input.style;
     style.visibility = 'visible';
     style.left = clientRect.left + 'px';
     style.top = clientRect.top + 'px';
+    style.width = clientRect.width + 'px';
   };
+  
+  const setHideStyle = () => {
+    input.style.visibility = 'hidden';
+  };
+
+  const onEnterPressed = () => {
+    input.blur();
+  };
+  
+  const onEscPressed = () => {
+    escCancel = true;
+    input.blur();
+  };
+  
+  const onBlur = () => {
+    !escCancel && currentComponent.onUpdateTopicText(input.value);
+    setHideStyle();
+  };
+
+  // add Event
+  input.addEventListener('keydown', e => {
+    switch (e.which) {
+      case KeyCode.ENTER_KEY : {
+        return onEnterPressed(e);
+      }
+
+      case KeyCode.ESCAPE_KEY : {
+        return onEscPressed(e);
+      }
+    }
+  });
+
+  input.addEventListener('blur', () => {
+    onBlur();
+  });
 
   return {
     start (targetComponent) {
       
       currentComponent = targetComponent;
+      escCancel = false;
 
-      setStyle();
+      setShowStyle();
       
+      input.value = currentComponent.props.text;
       
+      input.focus();
     }
     
   }

@@ -95,7 +95,7 @@ class Topic extends Component {
       text : props.text,
       fontSize : props.fontSize,
       textSize : textSize,
-      onUpdateTopicText : props.onUpdateTopicText
+      onUpdateTopicText : this.onUpdateTopicText
     };
     
     
@@ -135,7 +135,6 @@ class Topic extends Component {
   }
   
   onTopicDoubleClick () {
-    console.log('topic double click');
     editReceiver.start(this);
   }
 
@@ -147,7 +146,10 @@ class Topic extends Component {
   onDeselected () {
     this.setState({ selected : false });
   }
-  
+
+  onUpdateTopicText (text) {
+    this.props.onUpdateTopicText(text);
+  }
 }
 
 export default Topic;
