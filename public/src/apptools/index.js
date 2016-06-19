@@ -25,9 +25,11 @@ export const editReceiver = (() => {
   const input = document.createElement('input');
   const body = document.querySelector('body');
 
-  input.style.position = 'fixed';
-  input.style.visibility = 'hidden';
+  input.id = 'editReceiver';
 
+  const minWidth = 100;
+  input.style.minWidth = minWidth + 'px';
+  
   body.appendChild(input);
   
 
@@ -37,13 +39,27 @@ export const editReceiver = (() => {
 
   // lifeCircle method
   const setShowStyle = () => {
-    const clientRect = currentComponent.getTextClientRect();
-    
+    let { top, left, width, height } = currentComponent.getTextClientRect();
     const style = input.style;
+    
+    // fix left and top
+    if (width < minWidth) {
+      left -= (minWidth - width) / 2;
+      if (width === 0) {
+        const defaultHeight = parseInt(currentComponent.props.fontSize) || 16;
+
+        height = defaultHeight;
+        top -= defaultHeight / 2;
+      }
+    } else {
+      style.width = width + 'px';
+    }
+    
+    style.left = left + 'px';
+    style.top = top + 'px';
+    style.height = height + 'px';
+
     style.visibility = 'visible';
-    style.left = clientRect.left + 'px';
-    style.top = clientRect.top + 'px';
-    style.width = clientRect.width + 'px';
   };
   
   const setHideStyle = () => {
@@ -60,7 +76,7 @@ export const editReceiver = (() => {
   };
   
   const onBlur = () => {
-    !escCancel && currentComponent.onUpdateTopicText(input.value);
+    !escCancel && currentComponent.onUpdateText(input.value);
     setHideStyle();
   };
 
@@ -92,6 +108,7 @@ export const editReceiver = (() => {
       input.value = currentComponent.props.text;
       
       input.focus();
+      input.select();
     }
     
   }

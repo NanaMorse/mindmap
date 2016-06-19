@@ -14,3 +14,9 @@ text {
     cursor: default;
 }
 
+
+/* app tools */
+#editReceiver {
+    position: fixed;
+    visibility: hidden;
+}

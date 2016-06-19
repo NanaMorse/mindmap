@@ -94,8 +94,7 @@ class Topic extends Component {
       ref : 'TopicText',
       text : props.text,
       fontSize : props.fontSize,
-      textSize : textSize,
-      onUpdateTopicText : this.onUpdateTopicText
+      textSize : textSize
     };
     
     
@@ -147,7 +146,7 @@ class Topic extends Component {
     this.setState({ selected : false });
   }
 
-  onUpdateTopicText (text) {
+  onUpdateText (text) {
     this.props.onUpdateTopicText(text);
   }
 }
