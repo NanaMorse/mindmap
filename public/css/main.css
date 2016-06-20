@@ -16,7 +16,6 @@ text {
 
 
 /* app tools */
-#editReceiver {
+#getTextSize, #editReceiver {
     position: fixed;
-    visibility: hidden;
 }

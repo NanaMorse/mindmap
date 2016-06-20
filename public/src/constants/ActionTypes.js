@@ -1,3 +1,7 @@
+// constants for sheet
+export const UPDATE_SHEET_FILLCOLOR = 'UPDATE_SHEET_FILLCOLOR';
+
+
 // constants for topic
 export const UPDATE_TOPIC_TEXT = 'UPDATE_TOPIC_TEXT';
 export const UPDATE_TOPIC_FONTSIZE = 'UPDATE_TOPIC_FONTSIZE';

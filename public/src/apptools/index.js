@@ -1,13 +1,13 @@
 import * as KeyCode from '../constants/KeyCode';
 
+const appToolsContainer = document.querySelector('#app-tools-container');
+
 export const getTextSize = (() => {
   const div = document.createElement('div');
-  const body = document.querySelector('body');
 
-  div.style.position = 'fixed';
-  div.style.visibility = 'hidden';
+  div.id = 'getTextSize';
 
-  body.appendChild(div);
+  appToolsContainer.appendChild(div);
 
   return (text, fontSize) => {
     div.style.fontSize = fontSize;
@@ -23,14 +23,13 @@ export const getTextSize = (() => {
 
 export const editReceiver = (() => {
   const input = document.createElement('input');
-  const body = document.querySelector('body');
 
   input.id = 'editReceiver';
 
   const minWidth = 100;
   input.style.minWidth = minWidth + 'px';
-  
-  body.appendChild(input);
+
+  appToolsContainer.appendChild(input);
   
 
   let currentComponent;
@@ -76,6 +75,8 @@ export const editReceiver = (() => {
   };
   
   const onBlur = () => {
+    
+    
     !escCancel && currentComponent.onUpdateText(input.value);
     setHideStyle();
   };
@@ -90,25 +91,45 @@ export const editReceiver = (() => {
       case KeyCode.ESCAPE_KEY : {
         return onEscPressed(e);
       }
+        
+      default : {
+        setShowStyle();
+      }
     }
+    
+    console.log('keydown');
   });
 
   input.addEventListener('blur', () => {
     onBlur();
   });
+  
+  input.addEventListener('focus', () => {
+    console.log('focus');
+  });
 
   return {
-    start (targetComponent) {
+    prepare (targetComponent) {
+      console.log('prepare');
       
       currentComponent = targetComponent;
       escCancel = false;
-
+      
+      //input.focus();
+    },
+    
+    show () {
+      
       setShowStyle();
       
       input.value = currentComponent.props.text;
       
       input.focus();
       input.select();
+    },
+    
+    finish () {
+      
     }
     
   }

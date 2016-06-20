@@ -6,11 +6,10 @@ import { getTextSize, editReceiver } from '../apptools';
 import CalcTopicShape from '../calcpath/topicshape';
 
 import { CPT_SELECTED } from '../constants/EventTypes';
-import * as KeyCode from '../constants/KeyCode';
 
 // Topic Shape
 const TopicShape = ({ d }) => {
-  return <path className = "topic-shape" d = { d } fill = "none" stroke="#000"></path>;
+  return <path className = "topic-shape" d = { d } stroke="#000"></path>;
 };
 
 
@@ -134,12 +133,14 @@ class Topic extends Component {
   }
   
   onTopicDoubleClick () {
-    editReceiver.start(this);
+    editReceiver.show();
   }
 
   // lifecycle events
   onSelected () {
     this.setState({ selected : true });
+
+    editReceiver.prepare(this);
   }
   
   onDeselected () {

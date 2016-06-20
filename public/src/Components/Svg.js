@@ -13,7 +13,14 @@ class Svg extends React.Component {
   }
   
   render () {
-    return <svg width="100%" height="100%" onClick = { this.onClick.bind(this) }>
+    
+    const svgProps = {
+      width : '100%',
+      height : '100%',
+      fill : this.props.fillColor
+    };
+    
+    return <svg { ...svgProps } onClick = { this.onClick.bind(this) }>
       <TopicContainer />
     </svg>;
   }

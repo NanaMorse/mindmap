@@ -1,5 +1,13 @@
 import * as types from '../constants/ActionTypes';
 
+// Sheet Action
+export const updateSheetFillColor = (fillColor) => {
+  return {
+    type : types.UPDATE_SHEET_FILLCOLOR,
+    fillColor
+  }
+};
+
 // Topic Action
 export const updateTopicText = (text) => {
   return {
@@ -22,9 +30,9 @@ export const updateTopicShapeClass = (shapeClass) => {
   }
 };
 
-export const updateTopicFillColor = (bgColor) => {
+export const updateTopicFillColor = (fillColor) => {
   return {
     type : types.UPDATE_TOPIC_FILLCOLOR,
-    bgColor
+    fillColor
   }
 };

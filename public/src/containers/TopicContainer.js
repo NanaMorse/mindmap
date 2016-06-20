@@ -9,7 +9,7 @@ const mapStateToProps = (state) => {
     return state.topic;
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch) => {
     return {
         onUpdateTopicText : (newText) => {
             dispatch(actions.updateTopicText(newText));
