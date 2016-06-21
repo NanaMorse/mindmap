@@ -1,7 +1,9 @@
 import { combineReducers } from 'redux'
 
-import topic from './topic';
+import sheetreducer from './sheetreducer';
+import topicreducer from './topicreducer';
 
 export default combineReducers({
-  topic
+  sheet : sheetreducer,
+  topic : topicreducer
 });

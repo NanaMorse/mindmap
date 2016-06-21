@@ -1,4 +1,8 @@
 export default {
+  "sheet" : {
+    "bgColor" : "#fff"
+  },
+
   "topic" : {
     "text" : "Central Topic",
     "fontSize" : "16px",

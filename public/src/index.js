@@ -4,11 +4,11 @@ import { Provider } from 'react-redux'
 
 import store from './store';
 
-import App from './containers/App';
+import SheetContainer from './containers/SheetContainer';
 
 render(
     <Provider store = { store }>
-        <App />
+        <SheetContainer />
     </Provider>,
     document.getElementById('app')
 );

@@ -6,7 +6,7 @@ import { eventEmitter, selectionsManager } from '../managers';
 
 import { CPT_SELECTED } from '../constants/EventTypes';
 
-class Svg extends React.Component {
+class Sheet extends React.Component {
 
   componentDidMount () {
     eventEmitter.on(CPT_SELECTED, selectionsManager.addSelection);
@@ -14,13 +14,14 @@ class Svg extends React.Component {
   
   render () {
     
-    const svgProps = {
-      width : '100%',
-      height : '100%',
-      fill : this.props.fillColor
+    const sheetProps = {
+      id : 'sheet',
+      style : {
+        backgroundColor : this.props.bgColor
+      }
     };
     
-    return <svg { ...svgProps } onClick = { this.onClick.bind(this) }>
+    return <svg { ...sheetProps } onClick = { this.onClick.bind(this) }>
       <TopicContainer />
     </svg>;
   }
@@ -30,4 +31,4 @@ class Svg extends React.Component {
   }
 }
 
-export default Svg;
+export default Sheet;
