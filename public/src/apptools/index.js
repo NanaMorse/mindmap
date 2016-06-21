@@ -58,27 +58,37 @@ export const editReceiver = (() => {
     style.top = top + 'px';
     style.height = height + 'px';
 
-    style.visibility = 'visible';
+    style.zIndex = 1;
+
+    input.value = '';
   };
   
   const setHideStyle = () => {
-    input.style.visibility = 'hidden';
+    input.style.zIndex = -1;
   };
 
   const onEnterPressed = () => {
-    input.blur();
+    currentComponent.onUpdateText(input.value);
+    setHideStyle();
   };
   
   const onEscPressed = () => {
     escCancel = true;
-    input.blur();
   };
   
   const onBlur = () => {
+
+    if (!isVisible()) {
+      return false;
+    }
     
     
     !escCancel && currentComponent.onUpdateText(input.value);
     setHideStyle();
+  };
+
+  const isVisible = () => {
+    return input.style.zIndex > 0;
   };
 
   // add Event
@@ -93,7 +103,7 @@ export const editReceiver = (() => {
       }
         
       default : {
-        setShowStyle();
+        !isVisible() && setShowStyle();
       }
     }
     
@@ -110,12 +120,11 @@ export const editReceiver = (() => {
 
   return {
     prepare (targetComponent) {
-      console.log('prepare');
-      
+
       currentComponent = targetComponent;
       escCancel = false;
       
-      //input.focus();
+      input.focus();
     },
     
     show () {

@@ -24,3 +24,7 @@ text {
 #getTextSize, #editReceiver {
     position: fixed;
 }
+
+#editReceiver {
+    z-index: -1;
+}
