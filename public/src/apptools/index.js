@@ -2,20 +2,32 @@ import * as KeyCode from '../constants/KeyCode';
 
 const appToolsContainer = document.querySelector('#app-tools-container');
 
+const keyMap = {
+  13 : 'Enter',
+  8  : 'Delete',
+  46 : 'Delete',
+  90 : 'Z',
+  38 : "Direct",
+  40 : "Direct",
+  37 : "Direct",
+  39 : "Direct",
+  27 : 'ESC'
+};
+
 export const getTextSize = (() => {
-  const div = document.createElement('div');
+  const p = document.createElement('p');
 
-  div.id = 'getTextSize';
+  p.id = 'getTextSize';
 
-  appToolsContainer.appendChild(div);
+  appToolsContainer.appendChild(p);
 
   return (text, fontSize) => {
-    div.style.fontSize = fontSize;
-    div.innerText = text;
+    p.style.fontSize = fontSize;
+    p.innerText = text;
 
     return {
-      width : div.clientWidth,
-      height : div.clientHeight
+      width : p.clientWidth,
+      height : p.clientHeight
     };
   }
 })();
@@ -30,17 +42,15 @@ export const editReceiver = (() => {
   input.style.minWidth = minWidth + 'px';
 
   appToolsContainer.appendChild(input);
-  
+
 
   let currentComponent;
-
-  let escCancel = false;
-
+  
   // lifeCircle method
   const setShowStyle = () => {
     let { top, left, width, height } = currentComponent.getTextClientRect();
     const style = input.style;
-    
+
     // fix left and top
     if (width < minWidth) {
       left -= (minWidth - width) / 2;
@@ -53,27 +63,22 @@ export const editReceiver = (() => {
     } else {
       style.width = width + 'px';
     }
-    
+
     style.left = left + 'px';
     style.top = top + 'px';
     style.height = height + 'px';
 
     style.zIndex = 1;
+  };
+
+  const setHideStyle = () => {
+    input.style.zIndex = -1;
 
     input.value = '';
   };
-  
-  const setHideStyle = () => {
-    input.style.zIndex = -1;
-  };
 
-  const onEnterPressed = () => {
+  const updateText = () => {
     currentComponent.onUpdateText(input.value);
-    setHideStyle();
-  };
-  
-  const onEscPressed = () => {
-    escCancel = true;
   };
   
   const onBlur = () => {
@@ -81,9 +86,9 @@ export const editReceiver = (() => {
     if (!isVisible()) {
       return false;
     }
-    
-    
-    !escCancel && currentComponent.onUpdateText(input.value);
+
+
+    updateText();
     setHideStyle();
   };
 
@@ -91,55 +96,70 @@ export const editReceiver = (() => {
     return input.style.zIndex > 0;
   };
 
+  const keyDownMap = {
+    'Enter' : function(e){
+      if (isVisible()) {
+        e.stopPropagation();
+        updateText();
+        setHideStyle();
+      }
+    },
+    'ESC' : function(){
+      isVisible() && setHideStyle();
+    },
+    'Delete' : function(e){
+      isVisible() && e.stopPropagation();
+    },
+    'Z' : function (e) {
+      if(e.metaKey){
+        isVisible() ? e.stopPropagation() : e.preventDefault();
+      }
+    },
+    'Direct' : function (e) {
+      isVisible() && e.stopPropagation();
+    }
+  };
+
+
   // add Event
   input.addEventListener('keydown', e => {
-    switch (e.which) {
-      case KeyCode.ENTER_KEY : {
-        return onEnterPressed(e);
-      }
-
-      case KeyCode.ESCAPE_KEY : {
-        return onEscPressed(e);
-      }
-        
-      default : {
-        !isVisible() && setShowStyle();
-      }
-    }
-    
-    console.log('keydown');
+    var which = e.which;
+    which in keyMap && keyDownMap[keyMap[which]].call(this, e);
   });
 
   input.addEventListener('blur', () => {
     onBlur();
   });
-  
+
   input.addEventListener('focus', () => {
     console.log('focus');
+  });
+
+  input.addEventListener('input', () => {
+    !isVisible() && setShowStyle();
   });
 
   return {
     prepare (targetComponent) {
 
       currentComponent = targetComponent;
-      escCancel = false;
       
       input.focus();
     },
-    
+
     show () {
-      
+
       setShowStyle();
-      
+
       input.value = currentComponent.props.text;
-      
+
       input.focus();
       input.select();
     },
-    
+
     finish () {
-      
+
     }
-    
+
   }
 })();
