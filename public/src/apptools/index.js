@@ -132,7 +132,7 @@ export const editReceiver = (() => {
   });
 
   input.addEventListener('focus', () => {
-    console.log('focus');
+    
   });
 
   input.addEventListener('input', () => {
