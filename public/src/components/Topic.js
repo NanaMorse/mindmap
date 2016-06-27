@@ -55,21 +55,23 @@ class Topic extends Component {
   }
   
   render () {
-
-    const props = this.props;
     
     const state = this.state;
 
+    const { topicInfo, defaultStyle } = this.props;
+    
+    const style = Object.assign({}, defaultStyle, topicInfo.style);
+    
     const boxSize = {};
     
-    const textSize = getTextSize(props.text, props.fontSize);
+    const textSize = getTextSize(topicInfo.text, style.fontSize);
     
     const paddingH = 30, paddingV = 20;
     
     boxSize.width = textSize.width + paddingH * 2;
     boxSize.height = textSize.height + paddingV * 2;
     
-    const { topicShapePath, topicSelectBoxPath } = this.getTopicShapePath(boxSize);
+    const { topicShapePath, topicSelectBoxPath } = this.getTopicShapePath(boxSize, style.shapeClass);
     
     
     const gProps = {
@@ -81,7 +83,7 @@ class Topic extends Component {
     
     const TopicFillProps = {
       d : topicShapePath,
-      fillColor : props.fillColor
+      fillColor : style.fillColor
     };
     
     const TopicSelectBoxProps = {
@@ -91,8 +93,8 @@ class Topic extends Component {
     
     const TopicTextProps = {
       ref : 'TopicText',
-      text : props.text,
-      fontSize : props.fontSize,
+      text : topicInfo.text,
+      fontSize : style.fontSize,
       textSize : textSize
     };
     
@@ -107,8 +109,8 @@ class Topic extends Component {
     );
   }
   
-  getTopicShapePath (boxSize) {
-    return CalcTopicShape[this.props.shapeClass](boxSize);
+  getTopicShapePath (boxSize, shapeClass) {
+    return CalcTopicShape[shapeClass](boxSize);
   }
 
   // todo

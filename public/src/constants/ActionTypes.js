@@ -1,5 +1,5 @@
 // constants for sheet
-export const UPDATE_SHEET_FILLCOLOR = 'UPDATE_SHEET_FILLCOLOR';
+export const UPDATE_SHEET_BGCOLOR = 'UPDATE_SHEET_BGCOLOR';
 
 
 // constants for topic

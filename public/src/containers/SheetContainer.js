@@ -13,8 +13,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onUpdateTopicText : (fillColor) => {
-      dispatch(actions.updateSheetFillColor(fillColor));
+    updateSheetBgColor : (bgColor) => {
+      dispatch(actions.updateSheetBgColor(bgColor));
     }
   }
 };

@@ -1,10 +1,10 @@
 import * as types from '../constants/ActionTypes';
 
 // Sheet Action
-export const updateSheetFillColor = (fillColor) => {
+export const updateSheetBgColor = (bgColor) => {
   return {
-    type : types.UPDATE_SHEET_FILLCOLOR,
-    fillColor
+    type : types.UPDATE_SHEET_BGCOLOR,
+    bgColor
   }
 };
 

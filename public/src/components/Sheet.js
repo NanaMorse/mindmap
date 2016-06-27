@@ -1,6 +1,6 @@
 import React from 'react';
 
-import TopicContainer from '../containers/TopicContainer';
+import TopicsContainer from '../containers/TopicsContainer';
 
 import { eventEmitter, selectionsManager } from '../managers';
 
@@ -22,7 +22,7 @@ class Sheet extends React.Component {
     };
     
     return <svg { ...sheetProps } onClick = { this.onClick.bind(this) }>
-      <TopicContainer />
+      <TopicsContainer />
     </svg>;
   }
 
