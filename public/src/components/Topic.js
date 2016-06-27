@@ -115,11 +115,12 @@ class Topic extends Component {
 
   // todo
   getTranslatePosition () {
-    return 'translate(300 300)'
-  }
-  
-  getTextClientRect () {
-    return this.refs.TopicText.refs.text.getBoundingClientRect();
+    // 模拟位置
+    return {
+      '0' : 'translate(300,300)',
+      '1' : 'translate(400,200)',
+      '2' : 'translate(400,400)'
+    }[this.props.topicInfo.id];
   }
   
   // userAgent events
@@ -150,7 +151,20 @@ class Topic extends Component {
   }
 
   onUpdateText (text) {
-    this.props.onUpdateTopicText(text);
+    if (text === this.props.topicInfo.text) {
+      return false;
+    }
+    
+    this.props.onUpdateTopicText(this.props.topicInfo.id, text);
+  }
+  
+  // method for editReceiver
+  getTextClientRect () {
+    return this.refs.TopicText.refs.text.getBoundingClientRect();
+  }
+  
+  getText () {
+    return this.props.topicInfo.text;
   }
 }
 

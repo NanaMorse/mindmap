@@ -13,16 +13,29 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onUpdateTopicText : (newText) => {
-            dispatch(actions.updateTopicText(newText));
+        onUpdateTopicText : (id, newText) => {
+            dispatch(actions.updateTopicText(id, newText));
         }
     }
 };
 
-const Topics = ({defaultStyle, feed, topicById}) => {
+const Topics = (props) => {
+    
+    const { defaultStyle, feed, topicById } = props;
+    
+    const { onUpdateTopicText } = props;
     
     const createTopic = id => {
-        return <Topic key = { id } topicInfo = { topicById[id] } defaultStyle = { defaultStyle }></Topic>;
+        
+        const topicProps = {
+            key : id,
+            topicInfo : topicById[id],
+            defaultStyle,
+            onUpdateTopicText
+        };
+        
+        
+        return <Topic { ...topicProps } ></Topic>;
     };
     
     return <g className = "topics-group" >{ feed.map(createTopic) }</g>;

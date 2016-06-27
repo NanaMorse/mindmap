@@ -49,21 +49,23 @@ export const editReceiver = (() => {
   // lifeCircle method
   const setShowStyle = () => {
     let { top, left, width, height } = currentComponent.getTextClientRect();
+    
     const style = input.style;
 
     // fix left and top
     if (width < minWidth) {
+
       left -= (minWidth - width) / 2;
       if (width === 0) {
-        const defaultHeight = parseInt(currentComponent.props.fontSize) || 16;
+        const defaultHeight = 16;
 
         height = defaultHeight;
         top -= defaultHeight / 2;
       }
-    } else {
-      style.width = width + 'px';
+      width = minWidth;
     }
 
+    style.width = width + 'px';
     style.left = left + 'px';
     style.top = top + 'px';
     style.height = height + 'px';
@@ -151,7 +153,7 @@ export const editReceiver = (() => {
 
       setShowStyle();
 
-      input.value = currentComponent.props.text;
+      input.value = currentComponent.getText();
 
       input.focus();
       input.select();

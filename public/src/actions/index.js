@@ -9,9 +9,10 @@ export const updateSheetBgColor = (bgColor) => {
 };
 
 // Topic Action
-export const updateTopicText = (text) => {
+export const updateTopicText = (id, text) => {
   return {
     type : types.UPDATE_TOPIC_TEXT,
+    id,
     text
   }
 };

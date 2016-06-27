@@ -19,12 +19,12 @@ export default {
       "1" : {
         "id" : "1",
         "parentId" : "0",
-        "text" : "Child Topic 1"
+        "text" : "Child 1"
       },
       "2" : {
         "id" : "2",
         "parentId" : "0",
-        "text" : "Child Topic 2"
+        "text" : "I'm Child Topic 2"
       }
     }
   }
