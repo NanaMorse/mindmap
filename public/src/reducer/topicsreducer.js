@@ -1,6 +1,6 @@
 import * as types from '../constants/ActionTypes';
 
-const deepAssign = require('deep-assign');
+import { deepAssign } from '../apptools';
 
 export default (currentState = {}, action) => {
   switch (action.type) {

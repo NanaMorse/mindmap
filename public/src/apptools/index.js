@@ -1,5 +1,3 @@
-import * as KeyCode from '../constants/KeyCode';
-
 const appToolsContainer = document.querySelector('#app-tools-container');
 
 const keyMap = {
@@ -31,7 +29,6 @@ export const getTextSize = (() => {
     };
   }
 })();
-
 
 export const editReceiver = (() => {
   const input = document.createElement('input');
@@ -165,3 +162,36 @@ export const editReceiver = (() => {
 
   }
 })();
+
+export const deepAssign = (target, ...options) => {
+  options.forEach(opt => {
+    for (let key in opt) {
+      if (opt.hasOwnProperty(key)) {
+
+        const aim = target[key];
+        const src = opt[key];
+
+        if (aim === src) {
+          return true;
+        }
+
+        if (src && typeof src === 'object') {
+          let clone;
+
+          if (Array.isArray(src)) {
+            clone = Array.isArray(aim) ? aim : [];
+          } else {
+            clone = typeof aim === 'object' ? aim : {};
+          }
+
+          target[key] = deepAssign(clone, src);
+        } else {
+          target[key] = src;
+        }
+
+      }
+    }
+  });
+
+  return target;
+};

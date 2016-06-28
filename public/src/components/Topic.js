@@ -60,7 +60,7 @@ class Topic extends Component {
 
     const { topicInfo, defaultStyle } = this.props;
     
-    const style = Object.assign({}, defaultStyle, topicInfo.style);
+    const style = Object.assign({}, defaultStyle, topicInfo.style || {});
     
     const boxSize = {};
     
