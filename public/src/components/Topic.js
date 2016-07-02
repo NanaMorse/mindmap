@@ -4,6 +4,7 @@ import { selectionsManager } from '../managers';
 import { getTextSize, editReceiver } from '../apptools';
 
 import CalcTopicShape from '../calcpath/topicshape';
+import CalcPosition from '../calcposition';
 
 // Topic Shape
 const TopicShape = ({ d }) => {
@@ -114,11 +115,7 @@ class Topic extends Component {
   // todo
   getTranslatePosition () {
     // 模拟位置
-    return {
-      '0' : 'translate(300,300)',
-      '1' : 'translate(400,200)',
-      '2' : 'translate(400,400)'
-    }[this.props.topicInfo.id];
+    return CalcPosition[this.props.topicInfo.structureClass](this.props.topicInfo.id);
   }
   
   // userAgent events

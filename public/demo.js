@@ -14,16 +14,19 @@ export default {
       "0" : {
         "id" : "0",
         "parentId" : null,
+        "structureClass" : "logictoright",
         "text" : "Central Topic"
       },
       "1" : {
         "id" : "1",
         "parentId" : "0",
+        "structureClass" : "logictoright",
         "text" : "Child 1"
       },
       "2" : {
         "id" : "2",
         "parentId" : "0",
+        "structureClass" : "logictoright",
         "text" : "I'm Child Topic 2"
       }
     }

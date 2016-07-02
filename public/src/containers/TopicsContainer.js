@@ -6,6 +6,8 @@ import * as actions from '../actions';
 
 import Topic from '../components/Topic';
 
+import { mindTree } from '../managers';
+
 const mapStateToProps = (state) => {
     
     return state.topics;
@@ -34,7 +36,8 @@ const Topics = (props) => {
             onUpdateTopicText
         };
         
-        
+        mindTree.addNode(topicById[id].parentId, id);
+             
         return <Topic { ...topicProps } ></Topic>;
     };
     
