@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 
-import { eventEmitter } from '../managers';
+import { selectionsManager } from '../managers';
 import { getTextSize, editReceiver } from '../apptools';
 
 import CalcTopicShape from '../calcpath/topicshape';
-
-import { CPT_SELECTED } from '../constants/EventTypes';
 
 // Topic Shape
 const TopicShape = ({ d }) => {
@@ -129,8 +127,8 @@ class Topic extends Component {
     
     if (this.state.selected === false) {
       this.onSelected();
-      
-      eventEmitter.emit(CPT_SELECTED, this);
+      e.metaKey ? selectionsManager.addSelection(this)
+        : selectionsManager.selectSingle(this);
     }
     
   }

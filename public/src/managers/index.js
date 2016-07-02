@@ -1,8 +1,3 @@
-const EventEmitter = require('events');
-
-export const eventEmitter = new EventEmitter;
-
-
 export const selectionsManager = (() => {
 
   const selections = [];
@@ -17,6 +12,11 @@ export const selectionsManager = (() => {
 
   };
   
+  const selectSingle = (selection) => {
+    clearSelection();
+    addSelection(selection);
+  };
+  
   const clearSelection = () => {
     
     if (!selections.length) return false;
@@ -28,5 +28,5 @@ export const selectionsManager = (() => {
     selections.splice(0, selections.length);
   };
   
-  return { getSelectionsArray, addSelection, clearSelection }
+  return { getSelectionsArray, addSelection, selectSingle, clearSelection }
 })();

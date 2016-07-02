@@ -2,15 +2,9 @@ import React from 'react';
 
 import TopicsContainer from '../containers/TopicsContainer';
 
-import { eventEmitter, selectionsManager } from '../managers';
-
-import { CPT_SELECTED } from '../constants/EventTypes';
+import { selectionsManager } from '../managers';
 
 class Sheet extends React.Component {
-
-  componentDidMount () {
-    eventEmitter.on(CPT_SELECTED, selectionsManager.addSelection);
-  }
   
   render () {
     
@@ -26,7 +20,7 @@ class Sheet extends React.Component {
     </svg>;
   }
 
-  onClick (e) {
+  onClick () {
     selectionsManager.clearSelection();
   }
 }
