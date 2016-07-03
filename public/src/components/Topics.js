@@ -1,22 +1,21 @@
 import React, { Component } from 'react';
 
-import { selectionsManager } from '../managers';
+import { selectionsManager, mindTree } from '../managers';
 import { getTextSize, editReceiver } from '../apptools';
 
 import CalcTopicShape from '../calcpath/topicshape';
-import CalcPosition from '../calcposition';
+
+import layoutTopics from '../layout';
 
 // Topic Shape
 const TopicShape = ({ d }) => {
   return <path className = "topic-shape" d = { d } stroke="#000"></path>;
 };
 
-
 // Topic Fill
 const TopicFill = ({ d, fillColor }) => {
   return <path d = { d } fill = { fillColor } stroke = "none"></path>;
 };
-
 
 // Topic Select Box
 const TopicSelectBox = ({ d, display }) => {
@@ -26,7 +25,6 @@ const TopicSelectBox = ({ d, display }) => {
 
   return <path d = { d } fill = "none" stroke="#000" style = { style }></path>;
 };
-
 
 // Topic Text
 class TopicText extends Component {
@@ -74,8 +72,8 @@ class Topic extends Component {
     
     
     const gProps = {
+      ref : 'TopicGroup',
       className : 'topic-group',
-      transform : this.getTranslatePosition(),
       onClick : (e) => this.onTopicClick(e),
       onDoubleClick : (e) => this.onTopicDoubleClick(e)
     };
@@ -96,8 +94,10 @@ class Topic extends Component {
       fontSize : style.fontSize,
       textSize : textSize
     };
-    
-    
+
+    mindTree.addNode(topicInfo.parentId, topicInfo.id, this);
+
+
     return (
       <g {...gProps} >
         <TopicShape d = { topicShapePath } />
@@ -112,10 +112,8 @@ class Topic extends Component {
     return CalcTopicShape[shapeClass](boxSize);
   }
 
-  // todo
-  getTranslatePosition () {
-    // 模拟位置
-    return CalcPosition[this.props.topicInfo.structureClass](this.props.topicInfo.id);
+  setPosition (position) {
+    this.refs.TopicGroup.setAttribute('transform', position);
   }
   
   // userAgent events
@@ -163,4 +161,41 @@ class Topic extends Component {
   }
 }
 
-export default Topic;
+class Topics extends Component {
+
+  render () {
+    const { defaultStyle, feed, topicById } = this.props;
+
+    const { onUpdateTopicText } = this.props;
+
+    const createTopic = id => {
+
+      const topicProps = {
+        key : id,
+        topicInfo : topicById[id],
+        defaultStyle,
+        onUpdateTopicText
+      };
+
+      const topicComponent = <Topic { ...topicProps } ></Topic>;
+      
+      return topicComponent;
+    };
+
+    return <g className = "topics-group" >{ feed.map(createTopic) }</g>;
+  }
+
+  componentDidMount () {
+
+    console.log('Topics mount!');
+
+    layoutTopics();
+  }
+
+  componentWillUpdate () {
+    console.log('Topics update!');
+  }
+}
+
+
+export default Topics;

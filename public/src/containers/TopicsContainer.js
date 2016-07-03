@@ -1,48 +1,24 @@
 import { connect } from 'react-redux';
 
-import React from 'react';
+import React, { Component } from 'react';
 
 import * as actions from '../actions';
 
-import Topic from '../components/Topic';
-
-import { mindTree } from '../managers';
+import Topics from '../components/Topics';
 
 const mapStateToProps = (state) => {
-    
-    return state.topics;
+
+  return state.topics;
 };
 
 const mapDispatchToProps = (dispatch) => {
-    return {
-        onUpdateTopicText : (id, newText) => {
-            dispatch(actions.updateTopicText(id, newText));
-        }
+  return {
+    onUpdateTopicText : (id, newText) => {
+      dispatch(actions.updateTopicText(id, newText));
     }
+  }
 };
 
-const Topics = (props) => {
-    
-    const { defaultStyle, feed, topicById } = props;
-    
-    const { onUpdateTopicText } = props;
-    
-    const createTopic = id => {
-        
-        const topicProps = {
-            key : id,
-            topicInfo : topicById[id],
-            defaultStyle,
-            onUpdateTopicText
-        };
-        
-        mindTree.addNode(topicById[id].parentId, id);
-             
-        return <Topic { ...topicProps } ></Topic>;
-    };
-    
-    return <g className = "topics-group" >{ feed.map(createTopic) }</g>;
-};
 
 const TopicsContainer = connect(mapStateToProps, mapDispatchToProps)(Topics);
 

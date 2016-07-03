@@ -34,6 +34,8 @@ export const selectionsManager = (() => {
 export const mindTree = (() => {
   const tree = {};
   
+  const componentMap = {};
+  
   const findNode = (id, targetTree) => {
     if (!targetTree) {
       for (const treeNode in tree) {
@@ -55,7 +57,7 @@ export const mindTree = (() => {
     }
   };
   
-  const addNode = (parentId, id) => {
+  const addNode = (parentId, id, component) => {
     if (!parentId) {
       tree[id] = [];
     } else {
@@ -64,8 +66,12 @@ export const mindTree = (() => {
       });
     }
     
-    console.log(tree);
+    componentMap[id] = component;
   };
   
-  return { addNode };
+  const getTree = () => tree;
+  
+  const getMap = () => componentMap;
+  
+  return { getTree, getMap, addNode };
 })();
