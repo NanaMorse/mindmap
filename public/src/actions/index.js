@@ -17,9 +17,10 @@ export const updateTopicText = (id, text) => {
   }
 };
 
-export const updateTopicFontSize = (fontSize) => {
+export const updateTopicFontSize = (id, fontSize) => {
   return {
     type : types.UPDATE_TOPIC_FONTSIZE,
+    id,
     fontSize
   }
 };
@@ -31,9 +32,10 @@ export const updateTopicShapeClass = (shapeClass) => {
   }
 };
 
-export const updateTopicFillColor = (fillColor) => {
+export const updateTopicFillColor = (id, fillColor) => {
   return {
     type : types.UPDATE_TOPIC_FILLCOLOR,
+    id,
     fillColor
   }
 };

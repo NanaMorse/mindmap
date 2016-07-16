@@ -13,8 +13,16 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onUpdateTopicText : (id, newText) => {
+    onUpdateText : (id, newText) => {
       dispatch(actions.updateTopicText(id, newText));
+    },
+    
+    onUpdateFontSize : (id, newFontSize) => {
+      dispatch(actions.updateTopicFontSize(id, newFontSize))
+    },
+    
+    onUpdateFillColor : (id, newFillColor) => {
+      dispatch(actions.updateTopicFillColor(id, newFillColor))
     }
   }
 };

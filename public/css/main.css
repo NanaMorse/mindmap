@@ -2,7 +2,7 @@
     box-sizing: border-box;
 }
 
-body, #app {
+body, #sheet-container {
     width: 100vw;
     height: 100vh;
     overflow: hidden;

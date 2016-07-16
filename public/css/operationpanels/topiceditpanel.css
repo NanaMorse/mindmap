@@ -1,0 +1,11 @@
+#operation-panel-container {
+    position: fixed;
+    right: 0;
+    top: 0;
+}
+
+.topic-edit-panel {
+    width: 300px;
+    height: 100vh;
+    border: 1px solid;
+}

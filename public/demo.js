@@ -15,7 +15,10 @@ export default {
         "id" : "0",
         "parentId" : null,
         "structureClass" : "logictoright",
-        "text" : "Central Topic"
+        "text" : "Central Topic",
+        "style" : {
+          "fontSize" : "20px"
+        }
       },
       "1" : {
         "id" : "1",

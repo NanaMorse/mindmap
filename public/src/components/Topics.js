@@ -32,9 +32,13 @@ class TopicText extends Component {
     
     const { text } = this.props;
     
+    const style = {
+      fontSize : this.props.fontSize
+    };
+    
     return  (
       <g ref = 'text'>
-        <text>{ text }</text>
+        <text style = { style } >{ text }</text>
       </g>
     );
   }
@@ -61,12 +65,12 @@ class Topic extends Component {
     
     const boxSize = {};
     
-    const textSize = getTextSize(topicInfo.text, style.fontSize);
+    const textAreaSize = getTextSize(topicInfo.text, style.fontSize);
     
     const paddingH = 30, paddingV = 20;
     
-    boxSize.width = textSize.width + paddingH * 2;
-    boxSize.height = textSize.height + paddingV * 2;
+    boxSize.width = textAreaSize.width + paddingH * 2;
+    boxSize.height = textAreaSize.height + paddingV * 2;
     
     const { topicShapePath, topicSelectBoxPath } = this.getTopicShapePath(boxSize, style.shapeClass);
     
@@ -91,8 +95,7 @@ class Topic extends Component {
     const TopicTextProps = {
       ref : 'TopicText',
       text : topicInfo.text,
-      fontSize : style.fontSize,
-      textSize : textSize
+      fontSize : style.fontSize
     };
 
     mindTree.addNode(topicInfo.parentId, topicInfo.id, this);
@@ -122,7 +125,7 @@ class Topic extends Component {
     
     if (this.state.selected === false) {
       this.onSelected();
-      e.metaKey ? selectionsManager.addSelection(this)
+      e.ctrlKey ? selectionsManager.addSelection(this)
         : selectionsManager.selectSingle(this);
     }
     
@@ -148,7 +151,7 @@ class Topic extends Component {
       return false;
     }
     
-    this.props.onUpdateTopicText(this.props.topicInfo.id, text);
+    this.props.onUpdateText(this.props.topicInfo.id, text);
   }
   
   // method for editReceiver
@@ -159,6 +162,15 @@ class Topic extends Component {
   getText () {
     return this.props.topicInfo.text;
   }
+  
+  // method for reducer
+  onUpdateFontSize (fontSize) {
+    this.props.onUpdateFontSize(this.props.topicInfo.id, fontSize);
+  }
+
+  onUpdateFillColor (fillColor) {
+    this.props.onUpdateFillColor(this.props.topicInfo.id, fillColor);
+  }
 }
 
 class Topics extends Component {
@@ -166,7 +178,7 @@ class Topics extends Component {
   render () {
     const { defaultStyle, feed, topicById } = this.props;
 
-    const { onUpdateTopicText } = this.props;
+    const { onUpdateText, onUpdateFontSize, onUpdateFillColor } = this.props;
 
     const createTopic = id => {
 
@@ -174,12 +186,12 @@ class Topics extends Component {
         key : id,
         topicInfo : topicById[id],
         defaultStyle,
-        onUpdateTopicText
+        onUpdateText,
+        onUpdateFontSize,
+        onUpdateFillColor
       };
 
-      const topicComponent = <Topic { ...topicProps } ></Topic>;
-      
-      return topicComponent;
+      return <Topic { ...topicProps } ></Topic>;
     };
 
     return <g className = "topics-group" >{ feed.map(createTopic) }</g>;
