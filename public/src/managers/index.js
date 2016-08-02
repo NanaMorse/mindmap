@@ -36,33 +36,24 @@ export const mindTree = (() => {
   
   const componentMap = {};
   
-  const findNode = (id, targetTree) => {
-    if (!targetTree) {
-      for (const treeNode in tree) {
-        if (tree.hasOwnProperty(treeNode)) {
-          if (id === treeNode) {
-            return tree[treeNode];
-          } else {
-            const result = findNode(id, treeNode[treeNode]);
-            if (result) return result;
-          }
-        }
-      }
+  const findNode = (id, targetTree = tree) => {
+    if (targetTree.id === id) {
+      return targetTree;
     } else {
-      return targetTree.filter((child) => {
-        if (child.hasOwnProperty(id)) {
-          return true;
-        }
-      })[id]
+      for (const childTree of targetTree.children) {
+        const result = findNode(id, childTree);
+        if (result) return result;
+      }
     }
   };
   
   const addNode = (parentId, id, component) => {
     if (!parentId) {
-      tree[id] = [];
+      tree.id = id;
+      tree.children = [];
     } else {
-      findNode(parentId).push({
-        [id] : []
+      findNode(parentId).children.push({
+        id, children : []
       });
     }
     

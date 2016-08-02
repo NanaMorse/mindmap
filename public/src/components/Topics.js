@@ -63,7 +63,7 @@ class Topic extends Component {
     
     const style = Object.assign({}, defaultStyle, topicInfo.style || {});
     
-    const boxSize = {};
+    const boxSize = this.boxSize = {};
     
     const textAreaSize = getTextSize(topicInfo.text, style.fontSize);
     
@@ -116,6 +116,8 @@ class Topic extends Component {
   }
 
   setPosition (position) {
+    if (Array.isArray(position)) position = `translate(${position[0]},${position[1]})`;
+    
     this.refs.TopicGroup.setAttribute('transform', position);
   }
   
