@@ -1,10 +1,10 @@
 import { createStore } from 'redux';
 
-import demo from '../../demo';
+import demo, { testData } from '../../demo';
 
 import reducer from '../reducer';
 
-const initialState = JSON.parse(localStorage.getItem('mindmap')) || demo;
+const initialState = JSON.parse(localStorage.getItem('mindmap')) || testData;
 
 const store = createStore(reducer, initialState);
 

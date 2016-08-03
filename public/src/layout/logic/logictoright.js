@@ -1,20 +1,38 @@
+const paddingLeft = 20;
+
 export default function logicToRight(parentTree, positionMap) {
-  const position = parentTree.position;
-  const bounds = parentTree.bounds;
+  const { position, boxSize, children } = parentTree;
+
+  let topHeight = 0;
   
-  const middlePositionHeight = bounds.height / 2;
+  const childrenMiddleHeight = getChildrenMiddleHeight();
   
-  let top = 0;
   parentTree.children.forEach((childTree) => {
     const childTreeBounds = childTree.bounds;
-    const childComponentSize = childTree.boxSize;
+    const halfChildBoxWidth = childTree.boxSize.width / 2;
     
-    const x = childComponentSize.width + 20 + position[0];
-    const y = top + childTreeBounds.height / 2 - middlePositionHeight + position[1];
+    const x = position[0] + boxSize.width / 2 + paddingLeft + halfChildBoxWidth;
+    const y = position[1] + topHeight + childTreeBounds.height / 2 - childrenMiddleHeight;
 
     childTree.position = positionMap[childTree.id] = [x, y];
     
-    top += childTreeBounds.height;
+    topHeight += childTreeBounds.height;
   });
   
+  function getChildrenMiddleHeight() {
+    const length = children.length;
+
+    let childrenMiddleHeight = 0;
+    const halfLen = parseInt(length / 2);
+    for (let i = 0; i < halfLen; i++) {
+      childrenMiddleHeight += children[i].bounds.height;
+    }
+    
+    if (length % 2 !== 0) {
+      const halfIndex = halfLen && halfLen + 1;
+      childrenMiddleHeight += children[halfIndex].bounds.height / 2;
+    }
+    
+    return childrenMiddleHeight;
+  }
 }

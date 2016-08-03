@@ -54,12 +54,16 @@ export default () => {
       width : component.boxSize.width + paddingHor,
       height : component.boxSize.height + paddingVer
     };
-
+    
+    const childrenBounds = { width : 0, height : 0 };
     parentTree.children.forEach((childTree) => {
       const childBounds = calcComponentsBounds(childTree);
-      bounds.width += childBounds.width;
-      bounds.height += childBounds.height;
+      if (childBounds.width > childrenBounds.width) childrenBounds.width = childBounds.width;
+      childrenBounds.height += childBounds.height;
     });
+    
+    if (childrenBounds.width > bounds.width) bounds.width = childrenBounds.width;
+    if (childrenBounds.height > bounds.height) bounds.height = childrenBounds.height;
 
     parentTree.bounds = bounds;
     parentTree.boxSize = component.boxSize;
