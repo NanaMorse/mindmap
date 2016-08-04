@@ -44,6 +44,8 @@ class TopicText extends Component {
   }
 }
 
+let topicBoxSizeChanged = false;
+
 class Topic extends Component {
 
   constructor () {
@@ -73,7 +75,13 @@ class Topic extends Component {
     boxSize.height = textAreaSize.height + paddingV * 2;
     
     const { topicShapePath, topicSelectBoxPath } = this.getTopicShapePath(boxSize, style.shapeClass);
-    
+
+    // 检测是否有topic的size发生了改变
+    const { preBoxSize = {} } = this;
+    if (preBoxSize.width !== boxSize.width || preBoxSize.height !== boxSize.height) {
+      this.preBoxSize = boxSize;
+      topicBoxSizeChanged = true;
+    }
     
     const gProps = {
       ref : 'TopicGroup',
@@ -117,7 +125,10 @@ class Topic extends Component {
 
   setPosition (position) {
     if (Array.isArray(position)) position = `translate(${position[0]},${position[1]})`;
-    
+
+    if (this.prePosition === position) return;
+
+    this.prePosition = position;
     this.refs.TopicGroup.setAttribute('transform', position);
   }
   
@@ -201,13 +212,20 @@ class Topics extends Component {
 
   componentDidMount () {
 
-    console.log('Topics mount!');
+    console.log('Topics did mount!');
 
     layoutTopics();
+
+    topicBoxSizeChanged = false;
   }
 
-  componentWillUpdate () {
-    console.log('Topics update!');
+  componentDidUpdate () {
+    console.log('Topics did update!');
+
+    if (topicBoxSizeChanged) {
+      layoutTopics();
+      topicBoxSizeChanged = false;
+    }
   }
 }
 

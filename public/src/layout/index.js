@@ -1,12 +1,3 @@
-/*
-import * as structureClasses from '../constants/StructureClasses';
-
-import logicToRight from './logic/logictoright';
-
-export default {
-  [structureClasses.LOGICTORIGHT] : logicToRight
-};*/
-
 import { mindTree } from '../managers';
 
 import logicToRight from './logic/logictoright';
@@ -48,11 +39,11 @@ export default () => {
   });
 
   function calcComponentsBounds(parentTree) {
-    const component = componentMap[parentTree.id];
-
+    const boxSize = componentMap[parentTree.id].boxSize;
+    
     const bounds = {
-      width : component.boxSize.width + paddingHor,
-      height : component.boxSize.height + paddingVer
+      width : boxSize.width + paddingHor,
+      height : boxSize.height + paddingVer
     };
     
     const childrenBounds = { width : 0, height : 0 };
@@ -66,7 +57,7 @@ export default () => {
     if (childrenBounds.height > bounds.height) bounds.height = childrenBounds.height;
 
     parentTree.bounds = bounds;
-    parentTree.boxSize = component.boxSize;
+    parentTree.boxSize = boxSize;
     
     return bounds;
   }

@@ -50,11 +50,14 @@ export const mindTree = (() => {
   const addNode = (parentId, id, component) => {
     if (!parentId) {
       tree.id = id;
-      tree.children = [];
+      tree.children = ( tree.children || []);
     } else {
-      findNode(parentId).children.push({
-        id, children : []
-      });
+      // todo 如何在这里保证总是能找到parentNode
+      const childrenArray = findNode(parentId).children;
+
+      if (childrenArray.find(child => child.id === id)) return;
+
+      childrenArray.push({ id, children : [] });
     }
     
     componentMap[id] = component;
