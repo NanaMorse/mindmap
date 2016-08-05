@@ -5,45 +5,26 @@ import {deepAssign} from '../apptools';
 export default (currentState = {}, action) => {
 
   const feedCopy = deepAssign({}, currentState.feed);
-
-  const _findTopicInfoById = findTopicInfoById.bind(null, feedCopy);
+  
+  const targetTopicFeed = findTopicInfoById(feedCopy, action.id);
 
   switch (action.type) {
     case types.UPDATE_TOPIC_TITLE :
     {
-      _findTopicInfoById(action.id).title = action.title;
-
-      console.log('test');
-      
-      return deepAssign({}, currentState, {
-        feed : feedCopy
-      });
+      targetTopicFeed.title = action.title;
+      break;
     }
 
     case types.UPDATE_TOPIC_FONTSIZE :
     {
-      return deepAssign({}, currentState, {
-        topicById: {
-          [action.id]: {
-            style: {
-              fontSize: action.fontSize
-            }
-          }
-        }
-      });
+      targetTopicFeed.style.fontSize = action.fontSize;
+      break;
     }
 
     case types.UPDATE_TOPIC_FILLCOLOR :
     {
-      return deepAssign({}, currentState, {
-        topicById: {
-          [action.id]: {
-            style: {
-              fillColor: action.fillColor
-            }
-          }
-        }
-      });
+      targetTopicFeed.style.fillColor = action.fillColor;
+      break;
     }
 
     default :
@@ -51,6 +32,10 @@ export default (currentState = {}, action) => {
       return currentState;
     }
   }
+
+  return deepAssign({}, currentState, {
+    feed : feedCopy
+  });
 };
 
 function findTopicInfoById(feed, id) {

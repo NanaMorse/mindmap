@@ -172,7 +172,7 @@ export const deepAssign = (target, ...options) => {
         const src = opt[key];
 
         if (aim === src) {
-          return true;
+          continue;
         }
 
         if (src && typeof src === 'object') {
