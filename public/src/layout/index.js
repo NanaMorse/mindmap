@@ -47,7 +47,7 @@ export default () => {
     };
     
     const childrenBounds = { width : 0, height : 0 };
-    parentTree.children.forEach((childTree) => {
+    parentTree.children && parentTree.children.forEach((childTree) => {
       const childBounds = calcComponentsBounds(childTree);
       if (childBounds.width > childrenBounds.width) childrenBounds.width = childBounds.width;
       childrenBounds.height += childBounds.height;
@@ -72,7 +72,7 @@ export default () => {
     
     logicToRight(parentTree, positionMap);
 
-    children.forEach((childTree) => {
+    children && children.forEach((childTree) => {
       calcChildrenPosition(childTree);
     });
   }

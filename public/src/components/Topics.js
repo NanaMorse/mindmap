@@ -1,44 +1,44 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
-import { selectionsManager, mindTree } from '../managers';
-import { getTextSize, editReceiver } from '../apptools';
+import {selectionsManager, mindTree} from '../managers';
+import {getTextSize, editReceiver} from '../apptools';
 
 import CalcTopicShape from '../calcpath/topicshape';
 
 import layoutTopics from '../layout';
 
 // Topic Shape
-const TopicShape = ({ d }) => {
-  return <path className = "topic-shape" d = { d } stroke="#000"></path>;
+const TopicShape = ({d}) => {
+  return <path className="topic-shape" d={ d } stroke="#000"></path>;
 };
 
 // Topic Fill
-const TopicFill = ({ d, fillColor }) => {
-  return <path d = { d } fill = { fillColor } stroke = "none"></path>;
+const TopicFill = ({d, fillColor}) => {
+  return <path d={ d } fill={ fillColor } stroke="none"></path>;
 };
 
 // Topic Select Box
-const TopicSelectBox = ({ d, display }) => {
-  const style = { 
-    display : display ? 'block' : 'none'
+const TopicSelectBox = ({d, display}) => {
+  const style = {
+    display: display ? 'block' : 'none'
   };
 
-  return <path d = { d } fill = "none" stroke="#000" style = { style }></path>;
+  return <path d={ d } fill="none" stroke="#000" style={ style }></path>;
 };
 
 // Topic Text
 class TopicText extends Component {
-  render () {
-    
-    const { text } = this.props;
-    
+  render() {
+
+    const {text} = this.props;
+
     const style = {
-      fontSize : this.props.fontSize
+      fontSize: this.props.fontSize
     };
-    
-    return  (
-      <g ref = 'text'>
-        <text style = { style } >{ text }</text>
+
+    return (
+      <g ref='text'>
+        <text style={ style }>{ text }</text>
       </g>
     );
   }
@@ -48,82 +48,81 @@ let topicBoxSizeChanged = false;
 
 class Topic extends Component {
 
-  constructor () {
+  constructor() {
     super();
-    
+
     this.state = {
-      selected : false
+      selected: false
     };
-    
+
   }
-  
-  render () {
-    
+
+  render() {
+
     const state = this.state;
 
-    const { topicInfo, defaultStyle } = this.props;
-    
+    const {topicInfo, defaultStyle} = this.props;
+
     const style = Object.assign({}, defaultStyle, topicInfo.style || {});
-    
+
     const boxSize = this.boxSize = {};
-    
+
     const textAreaSize = getTextSize(topicInfo.text, style.fontSize);
-    
+
     const paddingH = 30, paddingV = 20;
-    
+
     boxSize.width = textAreaSize.width + paddingH * 2;
     boxSize.height = textAreaSize.height + paddingV * 2;
-    
-    const { topicShapePath, topicSelectBoxPath } = this.getTopicShapePath(boxSize, style.shapeClass);
+
+    const {topicShapePath, topicSelectBoxPath} = this.getTopicShapePath(boxSize, style.shapeClass);
 
     // 检测是否有topic的size发生了改变
-    const { preBoxSize = {} } = this;
+    const {preBoxSize = {}} = this;
     if (preBoxSize.width !== boxSize.width || preBoxSize.height !== boxSize.height) {
       this.preBoxSize = boxSize;
       topicBoxSizeChanged = true;
     }
-    
+
     const gProps = {
-      ref : 'TopicGroup',
-      className : 'topic-group',
-      onClick : (e) => this.onTopicClick(e),
-      onDoubleClick : (e) => this.onTopicDoubleClick(e)
+      ref: 'TopicGroup',
+      className: 'topic-group',
+      onClick: (e) => this.onTopicClick(e),
+      onDoubleClick: (e) => this.onTopicDoubleClick(e)
     };
-    
+
     const TopicFillProps = {
-      d : topicShapePath,
-      fillColor : style.fillColor
+      d: topicShapePath,
+      fillColor: style.fillColor
     };
-    
+
     const TopicSelectBoxProps = {
-      d : topicSelectBoxPath,
-      display : state.selected
+      d: topicSelectBoxPath,
+      display: state.selected
     };
-    
+
     const TopicTextProps = {
-      ref : 'TopicText',
-      text : topicInfo.text,
-      fontSize : style.fontSize
+      ref: 'TopicText',
+      text: topicInfo.text,
+      fontSize: style.fontSize
     };
 
-    mindTree.addNode(topicInfo.parentId, topicInfo.id, this);
-
+    mindTree.addNode(this.props.id, this);
 
     return (
       <g {...gProps} >
-        <TopicShape d = { topicShapePath } />
+        <TopicShape d={ topicShapePath }/>
         <TopicFill { ...TopicFillProps } />
         <TopicSelectBox { ...TopicSelectBoxProps } />
         <TopicText { ...TopicTextProps }/>
       </g>
     );
   }
-  
-  getTopicShapePath (boxSize, shapeClass) {
+
+  getTopicShapePath(boxSize, shapeClass) {
     return CalcTopicShape[shapeClass](boxSize);
   }
 
-  setPosition (position) {
+  setPosition(position) {
     if (Array.isArray(position)) position = `translate(${position[0]},${position[1]})`;
 
     if (this.prePosition === position) return;
@@ -131,73 +130,74 @@ class Topic extends Component {
     this.prePosition = position;
     this.refs.TopicGroup.setAttribute('transform', position);
   }
-  
+
   // userAgent events
-  onTopicClick (e) {
+  onTopicClick(e) {
     e.stopPropagation();
-    
+
     if (this.state.selected === false) {
       this.onSelected();
       e.ctrlKey ? selectionsManager.addSelection(this)
         : selectionsManager.selectSingle(this);
     }
-    
+
   }
-  
-  onTopicDoubleClick () {
+
+  onTopicDoubleClick() {
     editReceiver.show();
   }
 
   // lifecycle events
-  onSelected () {
-    this.setState({ selected : true });
+  onSelected() {
+    this.setState({selected: true});
 
     editReceiver.prepare(this);
   }
-  
-  onDeselected () {
-    this.setState({ selected : false });
+
+  onDeselected() {
+    this.setState({selected: false});
   }
 
-  onUpdateText (text) {
+  onUpdateText(text) {
     if (text === this.props.topicInfo.text) {
       return false;
     }
-    
+
     this.props.onUpdateText(this.props.topicInfo.id, text);
   }
-  
+
   // method for editReceiver
-  getTextClientRect () {
+  getTextClientRect() {
     return this.refs.TopicText.refs.text.getBoundingClientRect();
   }
-  
-  getText () {
+
+  getText() {
     return this.props.topicInfo.text;
   }
-  
+
   // method for reducer
-  onUpdateFontSize (fontSize) {
+  onUpdateFontSize(fontSize) {
     this.props.onUpdateFontSize(this.props.topicInfo.id, fontSize);
   }
 
-  onUpdateFillColor (fillColor) {
+  onUpdateFillColor(fillColor) {
     this.props.onUpdateFillColor(this.props.topicInfo.id, fillColor);
   }
 }
 
 class Topics extends Component {
 
-  render () {
-    const { defaultStyle, feed, topicById } = this.props;
+  render() {
+    const {defaultStyle, feed, topicById} = this.props;
 
-    const { onUpdateText, onUpdateFontSize, onUpdateFillColor } = this.props;
+    const {onUpdateText, onUpdateFontSize, onUpdateFillColor} = this.props;
 
     const createTopic = id => {
 
       const topicProps = {
-        key : id,
-        topicInfo : topicById[id],
+        key: id,
+        id: id,
+        topicInfo: topicById[id],
         defaultStyle,
         onUpdateText,
         onUpdateFontSize,
@@ -207,10 +207,21 @@ class Topics extends Component {
       return <Topic { ...topicProps } ></Topic>;
     };
 
-    return <g className = "topics-group" >{ feed.map(createTopic) }</g>;
+    mindTree.tree = feed;
+
+    const topicsArray = [];
+
+    const setTopicArrayData = (feedTree) => {
+      topicsArray.push(createTopic(feedTree.id));
+      feedTree.children && feedTree.children.forEach(childTree => setTopicArrayData(childTree));
+    };
+
+    setTopicArrayData(feed);
+
+    return <g className="topics-group">{ topicsArray }</g>;
   }
 
-  componentDidMount () {
+  componentDidMount() {
 
     console.log('Topics did mount!');
 
@@ -219,7 +230,7 @@ class Topics extends Component {
     topicBoxSizeChanged = false;
   }
 
-  componentDidUpdate () {
+  componentDidUpdate() {
     console.log('Topics did update!');
 
     if (topicBoxSizeChanged) {

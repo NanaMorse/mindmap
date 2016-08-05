@@ -3,7 +3,7 @@ import * as types from '../constants/ActionTypes';
 // Sheet Action
 export const updateSheetBgColor = (bgColor) => {
   return {
-    type : types.UPDATE_SHEET_BGCOLOR,
+    type: types.UPDATE_SHEET_BGCOLOR,
     bgColor
   }
 };
@@ -11,7 +11,7 @@ export const updateSheetBgColor = (bgColor) => {
 // Topic Action
 export const updateTopicText = (id, text) => {
   return {
-    type : types.UPDATE_TOPIC_TEXT,
+    type: types.UPDATE_TOPIC_TEXT,
     id,
     text
   }
@@ -19,7 +19,7 @@ export const updateTopicText = (id, text) => {
 
 export const updateTopicFontSize = (id, fontSize) => {
   return {
-    type : types.UPDATE_TOPIC_FONTSIZE,
+    type: types.UPDATE_TOPIC_FONTSIZE,
     id,
     fontSize
   }
@@ -27,14 +27,14 @@ export const updateTopicFontSize = (id, fontSize) => {
 
 export const updateTopicShapeClass = (shapeClass) => {
   return {
-    type : types.UPDATE_TOPIC_SHAPECLASS,
+    type: types.UPDATE_TOPIC_SHAPECLASS,
     shapeClass
   }
 };
 
 export const updateTopicFillColor = (id, fillColor) => {
   return {
-    type : types.UPDATE_TOPIC_FILLCOLOR,
+    type: types.UPDATE_TOPIC_FILLCOLOR,
     id,
     fillColor
   }

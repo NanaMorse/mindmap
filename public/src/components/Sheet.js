@@ -30,12 +30,15 @@ class Sheet extends React.Component {
   }
 
   onWheel(e) {
+    e.preventDefault();
     this.moveTopicsContainer(e.deltaX, e.deltaY);
     this.moveEditReceiver(e.deltaX, e.deltaY);
   }
 
   // todo try svg animation
   moveTopicsContainer(deltaX, deltaY) {
+    if (deltaX === 0 && deltaY === 0) return false;
+    
     const {topicsContainer} = this;
     const transformAttr = topicsContainer.getAttribute('transform');
     const execResult = /translate\(\s*([^\s,)]+)[ ,]([^\s,)]+)/.exec(transformAttr);
@@ -46,6 +49,8 @@ class Sheet extends React.Component {
   }
 
   moveEditReceiver(deltaX, deltaY) {
+    if (deltaX === 0 && deltaY === 0) return false;
+    
     const {editReceiver} = this;
 
     if (editReceiver.style.zIndex < 0) return false;

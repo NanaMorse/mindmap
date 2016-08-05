@@ -6,8 +6,8 @@ export default function logicToRight(parentTree, positionMap) {
   let topHeight = 0;
   
   const childrenMiddleHeight = getChildrenMiddleHeight();
-  
-  parentTree.children.forEach((childTree) => {
+
+  children && children.forEach((childTree) => {
     const childTreeBounds = childTree.bounds;
     const halfChildBoxWidth = childTree.boxSize.width / 2;
     
@@ -20,9 +20,12 @@ export default function logicToRight(parentTree, positionMap) {
   });
   
   function getChildrenMiddleHeight() {
-    const length = children.length;
-
     let childrenMiddleHeight = 0;
+    
+    if (!children) return childrenMiddleHeight;
+    
+    const length = children.length;
+    
     const halfLen = parseInt(length / 2);
     for (let i = 0; i < halfLen; i++) {
       childrenMiddleHeight += children[i].bounds.height;
