@@ -7,14 +7,13 @@ import * as actions from '../actions';
 import Topics from '../components/Topics';
 
 const mapStateToProps = (state) => {
-
   return state.topics;
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onUpdateText : (id, newText) => {
-      dispatch(actions.updateTopicText(id, newText));
+    onUpdateTitle : (id, newTitle) => {
+      dispatch(actions.updateTopicTitle(id, newTitle));
     },
     
     onUpdateFontSize : (id, newFontSize) => {

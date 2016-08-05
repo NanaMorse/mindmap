@@ -45,7 +45,7 @@ export const editReceiver = (() => {
   
   // lifeCircle method
   const setShowStyle = () => {
-    let { top, left, width, height } = currentComponent.getTextClientRect();
+    let { top, left, width, height } = currentComponent.getTitleClientRect();
     
     const style = input.style;
 
@@ -77,7 +77,7 @@ export const editReceiver = (() => {
   };
 
   const updateText = () => {
-    currentComponent.onUpdateText(input.value);
+    currentComponent.onUpdateTitle(input.value);
   };
   
   const onBlur = () => {
@@ -150,7 +150,7 @@ export const editReceiver = (() => {
 
       setShowStyle();
 
-      input.value = currentComponent.getText();
+      input.value = currentComponent.getTitle();
 
       input.focus();
       input.select();

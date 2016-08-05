@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 import {selectionsManager, mindTree} from '../managers';
-import {getTextSize, editReceiver} from '../apptools';
+import {getTextSize, editReceiver, deepAssign} from '../apptools';
 
 import CalcTopicShape from '../calcpath/topicshape';
 
@@ -26,19 +26,19 @@ const TopicSelectBox = ({d, display}) => {
   return <path d={ d } fill="none" stroke="#000" style={ style }></path>;
 };
 
-// Topic Text
-class TopicText extends Component {
+// Topic Title
+class TopicTitle extends Component {
   render() {
 
-    const {text} = this.props;
+    const {title} = this.props;
 
     const style = {
       fontSize: this.props.fontSize
     };
 
     return (
-      <g ref='text'>
-        <text style={ style }>{ text }</text>
+      <g ref='title'>
+        <text style={ style }>{ title }</text>
       </g>
     );
   }
@@ -67,12 +67,12 @@ class Topic extends Component {
 
     const boxSize = this.boxSize = {};
 
-    const textAreaSize = getTextSize(topicInfo.text, style.fontSize);
+    const titleAreaSize = getTextSize(topicInfo.title, style.fontSize);
 
     const paddingH = 30, paddingV = 20;
 
-    boxSize.width = textAreaSize.width + paddingH * 2;
-    boxSize.height = textAreaSize.height + paddingV * 2;
+    boxSize.width = titleAreaSize.width + paddingH * 2;
+    boxSize.height = titleAreaSize.height + paddingV * 2;
 
     const {topicShapePath, topicSelectBoxPath} = this.getTopicShapePath(boxSize, style.shapeClass);
 
@@ -100,9 +100,9 @@ class Topic extends Component {
       display: state.selected
     };
 
-    const TopicTextProps = {
-      ref: 'TopicText',
-      text: topicInfo.text,
+    const TopicTitleProps = {
+      ref: 'TopicTitle',
+      title: topicInfo.title,
       fontSize: style.fontSize
     };
 
@@ -113,7 +113,7 @@ class Topic extends Component {
         <TopicShape d={ topicShapePath }/>
         <TopicFill { ...TopicFillProps } />
         <TopicSelectBox { ...TopicSelectBoxProps } />
-        <TopicText { ...TopicTextProps }/>
+        <TopicTitle { ...TopicTitleProps }/>
       </g>
     );
   }
@@ -158,21 +158,21 @@ class Topic extends Component {
     this.setState({selected: false});
   }
 
-  onUpdateText(text) {
-    if (text === this.props.topicInfo.text) {
+  onUpdateTitle(title) {
+    if (title === this.props.topicInfo.title) {
       return false;
     }
 
-    this.props.onUpdateText(this.props.topicInfo.id, text);
+    this.props.onUpdateTitle(this.props.topicInfo.id, title);
   }
 
   // method for editReceiver
-  getTextClientRect() {
-    return this.refs.TopicText.refs.text.getBoundingClientRect();
+  getTitleClientRect() {
+    return this.refs.TopicTitle.refs.title.getBoundingClientRect();
   }
 
-  getText() {
-    return this.props.topicInfo.text;
+  getTitle() {
+    return this.props.topicInfo.title;
   }
 
   // method for reducer
@@ -188,18 +188,22 @@ class Topic extends Component {
 class Topics extends Component {
 
   render() {
-    const {defaultStyle, feed, topicById} = this.props;
+    const {defaultStyle, feed} = this.props;
+    
+    const feedCopy = deepAssign({}, feed);
 
-    const {onUpdateText, onUpdateFontSize, onUpdateFillColor} = this.props;
+    const {onUpdateTitle, onUpdateFontSize, onUpdateFillColor} = this.props;
 
-    const createTopic = id => {
+    const createTopic = selfFeed => {
+
+      const id = selfFeed.id;
 
       const topicProps = {
         key: id,
         id: id,
-        topicInfo: topicById[id],
+        topicInfo: selfFeed,
         defaultStyle,
-        onUpdateText,
+        onUpdateTitle,
         onUpdateFontSize,
         onUpdateFillColor
       };
@@ -207,17 +211,17 @@ class Topics extends Component {
       return <Topic { ...topicProps } ></Topic>;
     };
 
-    mindTree.tree = feed;
+    mindTree.tree = feedCopy;
 
     const topicsArray = [];
 
     const setTopicArrayData = (feedTree) => {
-      topicsArray.push(createTopic(feedTree.id));
+      topicsArray.push(createTopic(feedTree));
       feedTree.children && feedTree.children.forEach(childTree => setTopicArrayData(childTree));
     };
 
-    setTopicArrayData(feed);
-
+    setTopicArrayData(feedCopy);
+    
     return <g className="topics-group">{ topicsArray }</g>;
   }
 

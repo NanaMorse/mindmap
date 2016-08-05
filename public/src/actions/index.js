@@ -9,11 +9,11 @@ export const updateSheetBgColor = (bgColor) => {
 };
 
 // Topic Action
-export const updateTopicText = (id, text) => {
+export const updateTopicTitle = (id, title) => {
   return {
-    type: types.UPDATE_TOPIC_TEXT,
+    type: types.UPDATE_TOPIC_TITLE,
     id,
-    text
+    title
   }
 };
 
@@ -37,5 +37,12 @@ export const updateTopicFillColor = (id, fillColor) => {
     type: types.UPDATE_TOPIC_FILLCOLOR,
     id,
     fillColor
+  }
+};
+
+export const addChildTopic = (id) => {
+  return {
+    type: types.ADD_CHILD_TOPIC,
+    id
   }
 };
