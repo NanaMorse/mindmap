@@ -9,6 +9,11 @@ export default (currentState = {}, action) => {
   const targetTopicFeed = findTopicInfoById(feedCopy, action.id);
 
   switch (action.type) {
+    case types.UNDO :
+    {
+      return deepAssign({}, currentState, action.pastState);
+    }
+
     case types.UPDATE_TOPIC_TITLE :
     {
       targetTopicFeed.title = action.title;

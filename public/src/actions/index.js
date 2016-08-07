@@ -1,5 +1,13 @@
 import * as types from '../constants/ActionTypes';
 
+// Undo Action
+export const undo = (pastState) => {
+  return {
+    type: types.UNDO,
+    pastState
+  }
+};
+
 // Sheet Action
 export const updateSheetBgColor = (bgColor) => {
   return {
