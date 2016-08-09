@@ -13,6 +13,11 @@ export default (currentState = {}, action) => {
     {
       return deepAssign({}, currentState, action.pastState);
     }
+      
+    case types.REDO :
+    {
+      return deepAssign({}, currentState, action.futureState);
+    }
 
     case types.UPDATE_TOPIC_TITLE :
     {
@@ -22,12 +27,14 @@ export default (currentState = {}, action) => {
 
     case types.UPDATE_TOPIC_FONTSIZE :
     {
+      targetTopicFeed.style = targetTopicFeed.style || {};
       targetTopicFeed.style.fontSize = action.fontSize;
       break;
     }
 
     case types.UPDATE_TOPIC_FILLCOLOR :
     {
+      targetTopicFeed.style = targetTopicFeed.style || {};
       targetTopicFeed.style.fillColor = action.fillColor;
       break;
     }

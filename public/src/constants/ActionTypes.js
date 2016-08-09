@@ -1,5 +1,6 @@
 // constants for undo and redo
 export const UNDO = 'UNDO';
+export const REDO = 'REDO';
 
 // constants for sheet
 export const UPDATE_SHEET_BGCOLOR = 'UPDATE_SHEET_BGCOLOR';

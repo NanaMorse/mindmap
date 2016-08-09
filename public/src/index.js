@@ -4,6 +4,8 @@ import { Provider } from 'react-redux';
 
 import store from './store';
 
+import './components/KeyBind';
+
 import SheetContainer from './containers/SheetContainer';
 import OperationPanels from './operationpanels';
 
@@ -14,4 +16,4 @@ render(
     document.getElementById('sheet-container')
 );
 
-//render(<OperationPanels />, document.getElementById('operation-panel-container'));
+render(<OperationPanels />, document.getElementById('operation-panel-container'));

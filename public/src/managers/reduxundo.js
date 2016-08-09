@@ -2,39 +2,57 @@ import store from '../store';
 
 import {deepAssign} from '../apptools';
 
-import {undo} from '../actions'
+import {undo, redo} from '../actions'
 
-const undoStack = [];
+const pastDispatchStack = [];
+
+const futureDispatchStack = [];
 
 const reduxUndo = (mapDispatchToProps, reducerKey) => {
 
-    return function (dispatch) {
-        const dispatchMap = mapDispatchToProps(dispatch);
+  return function (dispatch) {
+    const dispatchMap = mapDispatchToProps(dispatch);
 
-        const undoDispatchMap = {};
+    const undoDispatchMap = {};
 
-        Object.keys(dispatchMap).forEach(function (dispatchKey) {
-            undoDispatchMap[dispatchKey] = (...args) => {
+    Object.keys(dispatchMap).forEach(function (dispatchKey) {
+      undoDispatchMap[dispatchKey] = (...args) => {
+        // todo undo register here
+        const lastState = deepAssign({}, store.getState());
 
-                // todo undo register here
-                const lastState = deepAssign({}, store.getState());
-
-                undoStack.push(() => dispatch(undo(lastState[reducerKey])));
-
-                dispatchMap[dispatchKey](...args);
-
-                console.log(store.getState());
-            }
+        pastDispatchStack.push(() => {
+          dispatch(undo(lastState[reducerKey]));
+          return {dispatch, reducerKey};
         });
+        
+        futureDispatchStack.splice(0);
 
-        return undoDispatchMap;
-    };
+        dispatchMap[dispatchKey](...args);
+      }
+    });
+
+    return undoDispatchMap;
+  };
 };
 
-window.reduxUndo = reduxUndo;
-
 reduxUndo.undo = () => {
-    undoStack.pop()();
+  const pastDispatch = pastDispatchStack.pop();
+
+  const futureState = deepAssign({}, store.getState());
+
+  if (pastDispatch) {
+    const {dispatch, reducerKey} = pastDispatch();
+    
+    futureDispatchStack.push(() => {
+      dispatch(redo(futureState[reducerKey]));
+      pastDispatchStack.push(pastDispatch);
+    });
+  }
+};
+
+reduxUndo.redo = () => {
+  const futureDispatch = futureDispatchStack.pop();
+  futureDispatch && futureDispatch();
 };
 
 export default reduxUndo;

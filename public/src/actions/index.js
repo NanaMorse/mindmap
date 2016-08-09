@@ -8,6 +8,13 @@ export const undo = (pastState) => {
   }
 };
 
+export const redo = (futureState) => {
+  return {
+    type: types.REDO,
+    futureState
+  }
+};
+
 // Sheet Action
 export const updateSheetBgColor = (bgColor) => {
   return {
