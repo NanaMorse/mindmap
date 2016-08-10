@@ -11,12 +11,12 @@ export default (currentState = {}, action) => {
   switch (action.type) {
     case types.UNDO :
     {
-      return deepAssign({}, currentState, action.pastState);
+      return action.pastState;
     }
       
     case types.REDO :
     {
-      return deepAssign({}, currentState, action.futureState);
+      return action.futureState;
     }
 
     case types.UPDATE_TOPIC_TITLE :
