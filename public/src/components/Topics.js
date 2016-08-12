@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 import {selectionsManager, mindTree} from '../managers';
-import {getTextSize, editReceiver, deepAssign} from '../apptools';
+import {getTextSize, editReceiver, deepAssign, generateUUID} from '../apptools';
 
 import CalcTopicShape from '../calcpath/topicshape';
 
@@ -66,6 +66,8 @@ class Topic extends Component {
     const style = Object.assign({}, defaultStyle, topicInfo.style || {});
 
     const boxSize = this.boxSize = {};
+
+    topicInfo.title = topicInfo.title == null ? 'Topic' : topicInfo.title;
 
     const titleAreaSize = getTextSize(topicInfo.title, style.fontSize);
 
@@ -183,6 +185,14 @@ class Topic extends Component {
   onUpdateFillColor(fillColor) {
     this.props.onUpdateFillColor(this.props.topicInfo.id, fillColor);
   }
+
+  onAddChildTopic() {
+    this.props.onAddChildTopic(this.props.topicInfo.id, generateUUID());
+  }
+
+  onRemoveSelfTopic() {
+    this.props.onRemoveSelfTopic(this.props.topicInfo.id);
+  }
 }
 
 class Topics extends Component {
@@ -192,7 +202,13 @@ class Topics extends Component {
     
     const feedCopy = deepAssign({}, feed);
 
-    const {onUpdateTitle, onUpdateFontSize, onUpdateFillColor} = this.props;
+    const {
+      onUpdateTitle, 
+      onUpdateFontSize, 
+      onUpdateFillColor, 
+      onAddChildTopic, 
+      onRemoveSelfTopic
+    } = this.props;
 
     const createTopic = selfFeed => {
 
@@ -205,7 +221,9 @@ class Topics extends Component {
         defaultStyle,
         onUpdateTitle,
         onUpdateFontSize,
-        onUpdateFillColor
+        onUpdateFillColor,
+        onAddChildTopic,
+        onRemoveSelfTopic
       };
 
       return <Topic { ...topicProps } ></Topic>;

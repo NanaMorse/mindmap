@@ -5,15 +5,15 @@ import {deepAssign} from '../apptools';
 export default (currentState = {}, action) => {
 
   const feedCopy = deepAssign({}, currentState.feed);
-  
-  const targetTopicFeed = findTopicInfoById(feedCopy, action.id);
+
+  const {topicInfo: targetTopicInfo, parentInfo: targetParentInfo} = findTopicInfoById(feedCopy, action.id);
 
   switch (action.type) {
     case types.UNDO :
     {
       return action.pastState;
     }
-      
+
     case types.REDO :
     {
       return action.futureState;
@@ -21,21 +21,34 @@ export default (currentState = {}, action) => {
 
     case types.UPDATE_TOPIC_TITLE :
     {
-      targetTopicFeed.title = action.title;
+      targetTopicInfo.title = action.title;
       break;
     }
 
     case types.UPDATE_TOPIC_FONTSIZE :
     {
-      targetTopicFeed.style = targetTopicFeed.style || {};
-      targetTopicFeed.style.fontSize = action.fontSize;
+      targetTopicInfo.style = targetTopicInfo.style || {};
+      targetTopicInfo.style.fontSize = action.fontSize;
       break;
     }
 
     case types.UPDATE_TOPIC_FILLCOLOR :
     {
-      targetTopicFeed.style = targetTopicFeed.style || {};
-      targetTopicFeed.style.fillColor = action.fillColor;
+      targetTopicInfo.style = targetTopicInfo.style || {};
+      targetTopicInfo.style.fillColor = action.fillColor;
+      break;
+    }
+
+    case types.ADD_CHILD_TOPIC :
+    {
+      targetTopicInfo.children = targetTopicInfo.children || [];
+      targetTopicInfo.children.push({id: action.childId});
+      break;
+    }
+
+    case types.REM_SELF_TOPIC :
+    {
+      console.log(targetTopicInfo, targetParentInfo);
       break;
     }
 
@@ -46,17 +59,17 @@ export default (currentState = {}, action) => {
   }
 
   return deepAssign({}, currentState, {
-    feed : feedCopy
+    feed: feedCopy
   });
 };
 
-function findTopicInfoById(feed, id) {
-  if (feed.id === id) return feed;
+function findTopicInfoById(feed, id, parentInfo) {
+  if (feed.id === id) return {topicInfo: feed, parentInfo};
 
   if (feed.children) {
     for (const childFeed of feed.children) {
-      const topicInfo = findTopicInfoById(childFeed, id);
-      if (topicInfo) return topicInfo;
+      const {topicInfo, parentInfo} = findTopicInfoById(childFeed, id, feed) || {};
+      if (topicInfo) return {topicInfo, parentInfo};
     }
   }
 }

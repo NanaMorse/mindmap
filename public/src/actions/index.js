@@ -55,9 +55,17 @@ export const updateTopicFillColor = (id, fillColor) => {
   }
 };
 
-export const addChildTopic = (id) => {
+export const addChildTopic = (id, childId) => {
   return {
     type: types.ADD_CHILD_TOPIC,
+    id,
+    childId
+  }
+};
+
+export const removeSelfTopic = (id) => {
+  return {
+    type: types.REM_SELF_TOPIC,
     id
   }
 };

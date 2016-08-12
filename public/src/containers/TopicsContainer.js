@@ -21,11 +21,19 @@ const mapDispatchToProps = (dispatch) => {
     },
 
     onUpdateFontSize : (id, newFontSize) => {
-      dispatch(actions.updateTopicFontSize(id, newFontSize))
+      dispatch(actions.updateTopicFontSize(id, newFontSize));
     },
 
     onUpdateFillColor : (id, newFillColor) => {
-      dispatch(actions.updateTopicFillColor(id, newFillColor))
+      dispatch(actions.updateTopicFillColor(id, newFillColor));
+    },
+    
+    onAddChildTopic : (id, childId) => {
+      dispatch(actions.addChildTopic(id, childId));
+    },
+    
+    onRemoveSelfTopic : (id) => {
+      dispatch(actions.removeSelfTopic(id));
     }
   }
 };
