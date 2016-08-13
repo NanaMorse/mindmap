@@ -8,8 +8,11 @@ export const selectionsManager = (() => {
 
   const addSelection = (selection) => {
 
-    selections.push(selection);
-
+    if (selections.indexOf(selection) < 0) {
+      selections.push(selection);
+    }
+    
+    console.log(selections);
   };
   
   const selectSingle = (selection) => {
@@ -25,10 +28,14 @@ export const selectionsManager = (() => {
       selection.onDeselected();
     });
 
-    selections.splice(0, selections.length);
+    selections.splice(0);
   };
   
-  return { getSelectionsArray, addSelection, selectSingle, clearSelection }
+  const removeSelection = (selection) => {
+    selections.splice(selections.indexOf(selection), 1);
+  };
+  
+  return { getSelectionsArray, addSelection, selectSingle, clearSelection, removeSelection }
 })();
 
 export const mindTree = (() => {
@@ -39,6 +46,7 @@ export const mindTree = (() => {
   };
   
   const removeNode = (id) => {
+    selectionsManager.removeSelection(componentMap[id]);
     delete componentMap[id];
   };
   

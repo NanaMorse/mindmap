@@ -26,9 +26,9 @@ const operatorMap = {
   [KeyCode.DELETE_KEY] (e) {
     e.preventDefault();
 
-    const selectionsArray = selectionsManager.getSelectionsArray();
-    // todo 多选删除的undo问题？
-    selectionsArray.forEach((selection) => {
+    const selectionsArrayCopy = selectionsManager.getSelectionsArray().slice();
+    
+    selectionsArrayCopy.forEach((selection) => {
       selection.onRemoveSelfTopic();
     });
   }

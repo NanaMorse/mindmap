@@ -203,3 +203,19 @@ export const generateUUID = () => {
     return v.toString(16);
   });
 };
+
+export const delayInvoking = (() => {
+
+  let firstInvoke;
+  
+  return (invokeToDelay) => {
+    firstInvoke = firstInvoke || invokeToDelay;
+
+    setTimeout(() => {
+      if (firstInvoke) {
+        firstInvoke();
+        firstInvoke = null;
+      }
+    }, 0);
+  }
+})();

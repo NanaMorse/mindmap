@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 import {selectionsManager, mindTree} from '../managers';
-import {getTextSize, editReceiver, deepAssign, generateUUID} from '../apptools';
+import {getTextSize, editReceiver, deepAssign, generateUUID, delayInvoking} from '../apptools';
 
 import CalcTopicShape from '../calcpath/topicshape';
 
