@@ -5,7 +5,7 @@ import reduxUndo from '../managers/reduxundo';
 
 const operatorMap = {
   [KeyCode.Z_KEY] (e) {
-    if (e.metaKey) {
+    if (e.metaKey || e.ctrlKey) {
       if (e.shiftKey) {
         reduxUndo.redo();
       } else {

@@ -38,9 +38,13 @@ export const mindTree = (() => {
     componentMap[id] = component;
   };
   
+  const removeNode = (id) => {
+    delete componentMap[id];
+  };
+  
   const getTree = () => mindTree.tree;
   
   const getMap = () => componentMap;
   
-  return { getTree, getMap, addNode };
+  return { getTree, getMap, addNode, removeNode };
 })();

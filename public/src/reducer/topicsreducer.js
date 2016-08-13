@@ -5,8 +5,8 @@ import {deepAssign} from '../apptools';
 export default (currentState = {}, action) => {
 
   const feedCopy = deepAssign({}, currentState.feed);
-
-  const {topicInfo: targetTopicInfo, parentInfo: targetParentInfo} = findTopicInfoById(feedCopy, action.id);
+  
+  const {topicInfo: targetTopicInfo, parentInfo: targetParentInfo} = findTopicInfoById(feedCopy, action.id) || {};
 
   switch (action.type) {
     case types.UNDO :

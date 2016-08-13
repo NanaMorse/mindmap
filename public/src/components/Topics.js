@@ -193,6 +193,10 @@ class Topic extends Component {
   onRemoveSelfTopic() {
     this.props.onRemoveSelfTopic(this.props.topicInfo.id);
   }
+
+  componentWillUnmount() {
+    mindTree.removeNode(this.props.id);
+  }
 }
 
 class Topics extends Component {
@@ -255,10 +259,12 @@ class Topics extends Component {
   componentDidUpdate() {
     console.log('Topics did update!');
 
-    if (topicBoxSizeChanged) {
+/*    if (topicBoxSizeChanged) {
       layoutTopics();
       topicBoxSizeChanged = false;
-    }
+    }*/
+
+    layoutTopics();
   }
 }
 
