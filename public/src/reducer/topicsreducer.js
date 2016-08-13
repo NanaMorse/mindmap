@@ -3,8 +3,10 @@ import * as types from '../constants/ActionTypes';
 import {deepAssign} from '../apptools';
 
 export default (currentState = {}, action) => {
+  
+  const stateCopy = deepAssign({}, currentState);
 
-  const feedCopy = deepAssign({}, currentState.feed);
+  const feedCopy = stateCopy.feed;
   
   const {topicInfo: targetTopicInfo, parentInfo: targetParentInfo} = findTopicInfoById(feedCopy, action.id) || {};
 
@@ -48,7 +50,7 @@ export default (currentState = {}, action) => {
 
     case types.REM_SELF_TOPIC :
     {
-      console.log(targetTopicInfo, targetParentInfo);
+      targetParentInfo.children.splice(targetParentInfo.children.indexOf(targetTopicInfo), 1);
       break;
     }
 
@@ -57,13 +59,13 @@ export default (currentState = {}, action) => {
       return currentState;
     }
   }
-
-  return deepAssign({}, currentState, {
-    feed: feedCopy
-  });
+  
+  return stateCopy;
 };
 
 function findTopicInfoById(feed, id, parentInfo) {
+  if (!feed || !id) return;
+  
   if (feed.id === id) return {topicInfo: feed, parentInfo};
 
   if (feed.children) {

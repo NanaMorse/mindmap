@@ -27,6 +27,7 @@ const operatorMap = {
     e.preventDefault();
 
     const selectionsArray = selectionsManager.getSelectionsArray();
+    // todo 多选删除的undo问题？
     selectionsArray.forEach((selection) => {
       selection.onRemoveSelfTopic();
     });
