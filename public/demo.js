@@ -5,47 +5,21 @@ export default {
 
   "topics": {
     "defaultStyle": {
-      "fontSize": "16px",
-      "shapeClass": "rect",
-      "fillColor": "rgb(203, 222, 253)"
-    },
-    "feed": ["0", "1", "2"],
-    "topicById": {
-      "0": {
-        "id": "0",
-        "parentId": null,
-        "structureClass": "logictoright",
-        "text": "Central Topic",
-        "style": {
-          "fontSize": "20px"
-        }
+      "ROOTTOPIC": {
+        "fontSize": "18px",
+        "shapeClass": "rect",
+        "fillColor": "rgb(203, 222, 253)"
       },
-      "1": {
-        "id": "1",
-        "parentId": "0",
-        "structureClass": "logictoright",
-        "text": "Child 1"
+      "MAINTOPIC": {
+        "fontSize": "13px",
+        "shapeClass": "rect",
+        "fillColor": "rgb(254, 244, 236)"
       },
-      "2": {
-        "id": "2",
-        "parentId": "0",
-        "structureClass": "logictoright",
-        "text": "I'm Child Topic 2"
+      "SUBTOPIC": {
+        "fontSize": "10px",
+        "shapeClass": "rect",
+        "fillColor": "rgb(254, 244, 236)"
       }
-    }
-  }
-};
-
-export const testData = {
-  "sheet": {
-    "bgColor": "#fff"
-  },
-
-  "topics": {
-    "defaultStyle": {
-      "fontSize": "16px",
-      "shapeClass": "rect",
-      "fillColor": "rgb(203, 222, 253)"
     },
     "feed": {
       "id": "300af847dec8435975135bc737",
@@ -81,4 +55,4 @@ export const testData = {
       ]
     }
   }
-};
+}

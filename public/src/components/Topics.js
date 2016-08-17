@@ -3,6 +3,8 @@ import React, {Component} from 'react';
 import {selectionsManager, mindTree} from '../managers';
 import {getTextSize, editReceiver, deepAssign, generateUUID, delayInvoking} from '../apptools';
 
+import * as CommonConstant from '../constants/Common';
+
 import CalcTopicShape from '../calcpath/topicshape';
 
 import layoutTopics from '../layout';
@@ -46,6 +48,23 @@ class TopicTitle extends Component {
 
 let topicBoxSizeChanged = false;
 
+const paddingSet = {
+  [CommonConstant.ROOTTOPIC]: {
+    paddingH: 30,
+    paddingV: 20
+  },
+
+  [CommonConstant.MAINTOPIC]: {
+    paddingH: 25,
+    paddingV: 16
+  },
+
+  [CommonConstant.SUBTOPIC]: {
+    paddingH: 20,
+    paddingV: 13
+  }
+};
+
 class Topic extends Component {
 
   constructor() {
@@ -61,9 +80,9 @@ class Topic extends Component {
 
     const state = this.state;
 
-    const {topicInfo, defaultStyle} = this.props;
+    const {topicInfo, defaultStyle, type} = this.props;
 
-    const style = Object.assign({}, defaultStyle, topicInfo.style || {});
+    const style = Object.assign({}, defaultStyle[type], topicInfo.style || {});
 
     const boxSize = this.boxSize = {};
 
@@ -71,7 +90,7 @@ class Topic extends Component {
 
     const titleAreaSize = getTextSize(topicInfo.title, style.fontSize);
 
-    const paddingH = 30, paddingV = 20;
+    const {paddingH, paddingV} = paddingSet[type];
 
     boxSize.width = titleAreaSize.width + paddingH * 2;
     boxSize.height = titleAreaSize.height + paddingV * 2;
@@ -214,13 +233,38 @@ class Topics extends Component {
       onRemoveSelfTopic
     } = this.props;
 
+    const findTopicParent = (topicTree, treeToCheck = feedCopy) => {
+      if (topicTree === treeToCheck) return;
+
+      const children = treeToCheck.children;
+      if (children) {
+        for (const childTreeToCheck of children) {
+          if (topicTree === childTreeToCheck) return treeToCheck;
+          
+          const parentResult = findTopicParent(topicTree, childTreeToCheck);
+          if (parentResult) return parentResult;
+        }
+      }
+    };
+
     const createTopic = selfFeed => {
+
+      let topicType;
+
+      const parent = findTopicParent(selfFeed);
+
+      if (parent == null) topicType = CommonConstant.ROOTTOPIC;
+
+      else if (findTopicParent(parent) == null) topicType = CommonConstant.MAINTOPIC;
+
+      else topicType = CommonConstant.SUBTOPIC;
 
       const id = selfFeed.id;
 
       const topicProps = {
         key: id,
         id: id,
+        type: topicType,
         topicInfo: selfFeed,
         defaultStyle,
         onUpdateTitle,
@@ -236,6 +280,7 @@ class Topics extends Component {
     mindTree.tree = feedCopy;
 
     const topicsArray = [];
+
 
     const setTopicArrayData = (feedTree) => {
       topicsArray.push(createTopic(feedTree));
