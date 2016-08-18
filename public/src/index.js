@@ -16,4 +16,4 @@ render(
     document.getElementById('sheet-container')
 );
 
-render(<OperationPanels />, document.getElementById('operation-panel-container'));
+//render(<OperationPanels />, document.getElementById('operation-panel-container'));

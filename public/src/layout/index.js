@@ -42,21 +42,28 @@ export default () => {
     const boxSize = componentMap[parentTree.id].boxSize;
     
     const bounds = {
-      width : boxSize.width + paddingHor,
-      height : boxSize.height + paddingVer
+      width : boxSize.width,
+      height : boxSize.height
     };
     
     const childrenBounds = { width : 0, height : 0 };
-    parentTree.children && parentTree.children.forEach((childTree) => {
-      const childBounds = calcComponentsBounds(childTree);
-      if (childBounds.width > childrenBounds.width) childrenBounds.width = childBounds.width;
-      childrenBounds.height += childBounds.height;
-    });
     
-    if (childrenBounds.width > bounds.width) bounds.width = childrenBounds.width;
+    if (parentTree.children && parentTree.children.length) {
+      parentTree.children.forEach((childTree) => {
+        const childBounds = calcComponentsBounds(childTree);
+        if (childBounds.width > childrenBounds.width) childrenBounds.width = childBounds.width;
+        childrenBounds.height += childBounds.height + paddingTop;
+      });
+
+      childrenBounds.width += paddingLeft;
+      childrenBounds.height -= paddingTop;
+    }
+    
+    bounds.width += childrenBounds.width;
     if (childrenBounds.height > bounds.height) bounds.height = childrenBounds.height;
 
     parentTree.bounds = bounds;
+    parentTree.childrenBounds = childrenBounds;
     parentTree.boxSize = boxSize;
     
     return bounds;

@@ -11,8 +11,7 @@ export const selectionsManager = (() => {
     if (selections.indexOf(selection) < 0) {
       selections.push(selection);
     }
-    
-    console.log(selections);
+
   };
   
   const selectSingle = (selection) => {

@@ -158,7 +158,7 @@ class Topic extends Component {
 
     if (this.state.selected === false) {
       this.onSelected();
-      e.ctrlKey ? selectionsManager.addSelection(this)
+      (e.ctrlKey || e.metaKey) ? selectionsManager.addSelection(this)
         : selectionsManager.selectSingle(this);
     }
 
