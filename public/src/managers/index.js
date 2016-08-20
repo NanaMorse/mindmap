@@ -36,22 +36,3 @@ export const selectionsManager = (() => {
   
   return { getSelectionsArray, addSelection, selectSingle, clearSelection, removeSelection }
 })();
-
-export const mindTree = (() => {
-  const componentMap = {};
-  
-  const addNode = (id, component) => {
-    componentMap[id] = component;
-  };
-  
-  const removeNode = (id) => {
-    selectionsManager.removeSelection(componentMap[id]);
-    delete componentMap[id];
-  };
-  
-  const getTree = () => mindTree.tree;
-  
-  const getMap = () => componentMap;
-  
-  return { getTree, getMap, addNode, removeNode };
-})();

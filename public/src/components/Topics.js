@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import {selectionsManager, mindTree} from '../managers';
+import {selectionsManager} from '../managers';
 import {getTextSize, editReceiver, deepAssign, generateUUID, delayInvoking} from '../apptools';
 
 import * as CommonConstant from '../constants/Common';
@@ -77,24 +77,15 @@ class Topic extends Component {
   }
 
   render() {
+    
+    const {topicInfo, defaultStyle} = this.props;
 
-    const state = this.state;
-
-    const {topicInfo, defaultStyle, type} = this.props;
-
-    const style = Object.assign({}, defaultStyle[type], topicInfo.style || {});
-
-    const boxSize = this.boxSize = {};
-
+    const style = Object.assign({}, defaultStyle[topicInfo.type], topicInfo.style || {});
+    
     topicInfo.title = topicInfo.title == null ? 'Topic' : topicInfo.title;
-
-    const titleAreaSize = getTextSize(topicInfo.title, style.fontSize);
-
-    const {paddingH, paddingV} = paddingSet[type];
-
-    boxSize.width = titleAreaSize.width + paddingH * 2;
-    boxSize.height = titleAreaSize.height + paddingV * 2;
-
+    
+    const boxSize = topicInfo.boxSize;
+    
     const {topicShapePath, topicSelectBoxPath} = this.getTopicShapePath(boxSize, style.shapeClass);
 
     // 检测是否有topic的size发生了改变
@@ -105,10 +96,10 @@ class Topic extends Component {
     }
 
     const gProps = {
-      ref: 'TopicGroup',
       className: 'topic-group',
       onClick: (e) => this.onTopicClick(e),
-      onDoubleClick: (e) => this.onTopicDoubleClick(e)
+      onDoubleClick: (e) => this.onTopicDoubleClick(e),
+      transform: `translate(${topicInfo.position[0]},${topicInfo.position[1]})`
     };
 
     const TopicFillProps = {
@@ -118,7 +109,7 @@ class Topic extends Component {
 
     const TopicSelectBoxProps = {
       d: topicSelectBoxPath,
-      display: state.selected
+      display: this.state.selected
     };
 
     const TopicTitleProps = {
@@ -126,9 +117,7 @@ class Topic extends Component {
       title: topicInfo.title,
       fontSize: style.fontSize
     };
-
-    mindTree.addNode(this.props.id, this);
-
+    
     return (
       <g {...gProps} >
         <TopicShape d={ topicShapePath }/>
@@ -142,16 +131,7 @@ class Topic extends Component {
   getTopicShapePath(boxSize, shapeClass) {
     return CalcTopicShape[shapeClass](boxSize);
   }
-
-  setPosition(position) {
-    if (Array.isArray(position)) position = `translate(${position[0]},${position[1]})`;
-
-    if (this.prePosition === position) return;
-
-    this.prePosition = position;
-    this.refs.TopicGroup.setAttribute('transform', position);
-  }
-
+  
   // userAgent events
   onTopicClick(e) {
     e.stopPropagation();
@@ -211,20 +191,16 @@ class Topic extends Component {
 
   onRemoveSelfTopic() {
     this.props.onRemoveSelfTopic(this.props.topicInfo.id);
-  }
-
-  componentWillUnmount() {
-    mindTree.removeNode(this.props.id);
+    selectionsManager.removeSelection(this);
   }
 }
 
 class Topics extends Component {
 
   render() {
-    const {defaultStyle, feed} = this.props;
+    // calculate layout position first
+    const feedExtend = this.calculateFeedExtendInfo();
     
-    const feedCopy = deepAssign({}, feed);
-
     const {
       onUpdateTitle, 
       onUpdateFontSize, 
@@ -233,40 +209,17 @@ class Topics extends Component {
       onRemoveSelfTopic
     } = this.props;
 
-    const findTopicParent = (topicTree, treeToCheck = feedCopy) => {
-      if (topicTree === treeToCheck) return;
+    const topicsArray = [];
 
-      const children = treeToCheck.children;
-      if (children) {
-        for (const childTreeToCheck of children) {
-          if (topicTree === childTreeToCheck) return treeToCheck;
-          
-          const parentResult = findTopicParent(topicTree, childTreeToCheck);
-          if (parentResult) return parentResult;
-        }
-      }
-    };
+    const createTopic = feedInfo => {
 
-    const createTopic = selfFeed => {
-
-      let topicType;
-
-      const parent = findTopicParent(selfFeed);
-
-      if (parent == null) topicType = CommonConstant.ROOTTOPIC;
-
-      else if (findTopicParent(parent) == null) topicType = CommonConstant.MAINTOPIC;
-
-      else topicType = CommonConstant.SUBTOPIC;
-
-      const id = selfFeed.id;
+      const id = feedInfo.id;
 
       const topicProps = {
         key: id,
         id: id,
-        type: topicType,
-        topicInfo: selfFeed,
-        defaultStyle,
+        topicInfo: feedInfo,
+        defaultStyle: this.props.defaultStyle,
         onUpdateTitle,
         onUpdateFontSize,
         onUpdateFillColor,
@@ -277,39 +230,70 @@ class Topics extends Component {
       return <Topic { ...topicProps } ></Topic>;
     };
 
-    mindTree.tree = feedCopy;
-
-    const topicsArray = [];
-
-
     const setTopicArrayData = (feedTree) => {
       topicsArray.push(createTopic(feedTree));
       feedTree.children && feedTree.children.forEach(childTree => setTopicArrayData(childTree));
     };
 
-    setTopicArrayData(feedCopy);
+    setTopicArrayData(feedExtend);
     
     return <g className="topics-group">{ topicsArray }</g>;
   }
+  
+  // calculate feed info, include boxSize and topic type
+  calculateFeedExtendInfo () {
+    const {defaultStyle, feed} = this.props;
 
-  componentDidMount() {
+    const feedCopy = deepAssign({}, feed);
+    
+    _calculate();
 
-    console.log('Topics did mount!');
+    return feedCopy;
+    
+    function _calculate(feedTree = feedCopy) {
+      // get Topic type
+      let topicType;
 
-    layoutTopics();
+      const parent = findTopicParent(feedTree);
 
-    topicBoxSizeChanged = false;
-  }
+      if (parent == null) topicType = CommonConstant.ROOTTOPIC;
 
-  componentDidUpdate() {
-    console.log('Topics did update!');
+      else if (findTopicParent(parent) == null) topicType = CommonConstant.MAINTOPIC;
 
-/*    if (topicBoxSizeChanged) {
-      layoutTopics();
-      topicBoxSizeChanged = false;
-    }*/
+      else topicType = CommonConstant.SUBTOPIC;
 
-    layoutTopics();
+      feedTree.type = topicType;
+
+      // get boxSize
+      const fontSize = Object.assign({}, defaultStyle[topicType], feedTree.style).fontSize;
+      const titleAreaSize = getTextSize(feedTree.title, fontSize);
+      
+      const boxSize = {};
+      const {paddingH, paddingV} = paddingSet[topicType];
+      boxSize.width = titleAreaSize.width + paddingH * 2;
+      boxSize.height = titleAreaSize.height + paddingV * 2;
+      
+      feedTree.boxSize = boxSize;
+
+      feedTree.children && feedTree.children.forEach(childTree => _calculate(childTree));
+
+      // get bounds and position
+      layoutTopics(feedTree);
+    }
+
+    function findTopicParent (topicTree, treeToCheck = feedCopy)  {
+      if (topicTree === treeToCheck) return;
+
+      const children = treeToCheck.children;
+      if (children) {
+        for (const childTreeToCheck of children) {
+          if (topicTree === childTreeToCheck) return treeToCheck;
+
+          const parentResult = findTopicParent(topicTree, childTreeToCheck);
+          if (parentResult) return parentResult;
+        }
+      }
+    }
   }
 }
 

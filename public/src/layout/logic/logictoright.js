@@ -15,7 +15,7 @@ export default function logicToRight(parentTree, positionMap) {
     const x = position[0] + boxSize.width / 2 + paddingLeft + halfChildBoxWidth;
     const y = position[1] + topHeight + childTreeBounds.height / 2 - childrenMiddleHeight;
 
-    childTree.position = positionMap[childTree.id] = [x, y];
+    childTree.position = [x, y];
     
     topHeight += childTreeBounds.height + paddingTop;
   });

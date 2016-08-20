@@ -1,5 +1,3 @@
-import { mindTree } from '../managers';
-
 import logicToRight from './logic/logictoright';
 
 
@@ -20,26 +18,15 @@ const paddingTop = 10;
 const paddingBottom = 10;
 const paddingVer = paddingTop + paddingBottom;
 
-export default () => {
-  const positionMap = {};
-  
-  const componentMap = mindTree.getMap();
+export default (feedTree) => {
+  feedTree.position = [300, 300];
 
-  const tree = mindTree.getTree();
+  calcComponentsBounds(feedTree);
   
-  positionMap[tree.id] = tree.position = [300, 300];
-
-  calcComponentsBounds(tree);
-  
-  calcChildrenPosition(tree);
-
-  Object.keys(componentMap).forEach((id) => {
-    const position = positionMap[id];
-    componentMap[id].setPosition(position);
-  });
+  calcChildrenPosition(feedTree);
 
   function calcComponentsBounds(parentTree) {
-    const boxSize = componentMap[parentTree.id].boxSize;
+    const boxSize = parentTree.boxSize;
     
     const bounds = {
       width : boxSize.width,
@@ -73,11 +60,10 @@ export default () => {
     const parentId = parentTree.id;
 
     // todo 根据structure决定摆放位置的方式
-    const structure = componentMap[parentId].props.topicInfo.structureClass;
 
     const children = parentTree.children;
     
-    logicToRight(parentTree, positionMap);
+    logicToRight(parentTree);
 
     children && children.forEach((childTree) => {
       calcChildrenPosition(childTree);
