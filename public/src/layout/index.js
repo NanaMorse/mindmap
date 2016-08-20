@@ -1,4 +1,6 @@
 import logicToRight from './logic/logictoright';
+import * as Distance from '../constants/Distance';
+import * as CommonConstant from '../constants/Common';
 
 
 // 保存一个map，map应该记录每个id对应的组件应该所在的位置，供最后setPosition使用
@@ -10,13 +12,6 @@ import logicToRight from './logic/logictoright';
 /**
  * 每个组件应该由它的直接子后代的bounds信息算出它本身的bounds，若该组件没有直接子后代，则它本身的bounds等于boxSize + 各个边的内补
  **/
-
-const paddingLeft = 20;
-const paddingRight = 20;
-const paddingHor = paddingLeft + paddingRight;
-const paddingTop = 10;
-const paddingBottom = 10;
-const paddingVer = paddingTop + paddingBottom;
 
 export default (feedTree) => {
   feedTree.position = [300, 300];
@@ -34,16 +29,18 @@ export default (feedTree) => {
     };
     
     const childrenBounds = { width : 0, height : 0 };
-    
+
+    const {marginLeft, marginTop} = Distance.TopicMargin[CommonConstant.LOGICTORIGHT];
+
     if (parentTree.children && parentTree.children.length) {
       parentTree.children.forEach((childTree) => {
         const childBounds = calcComponentsBounds(childTree);
         if (childBounds.width > childrenBounds.width) childrenBounds.width = childBounds.width;
-        childrenBounds.height += childBounds.height + paddingTop;
+        childrenBounds.height += childBounds.height + marginTop;
       });
-
-      childrenBounds.width += paddingLeft;
-      childrenBounds.height -= paddingTop;
+      
+      childrenBounds.width += marginLeft;
+      childrenBounds.height -= marginTop;
     }
     
     bounds.width += childrenBounds.width;
