@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 
-import {selectionsManager} from '../managers';
+import {events, selectionsManager} from '../managers';
 import {getTextSize, editReceiver, deepAssign, generateUUID} from '../apptools';
 
 import * as CommonConstant from '../constants/Common';
 import * as Distance from '../constants/Distance';
+import * as EventTags from '../constants/EventTags';
 
 import CalcTopicShape from '../calcpath/topicshape';
 
@@ -108,8 +109,8 @@ class Topic extends Component {
     
     const {topicInfo, defaultStyle} = this.props;
 
-    const style = Object.assign({}, defaultStyle[topicInfo.type], topicInfo.style || {});
-    
+    const style = this.style = Object.assign({}, defaultStyle[topicInfo.type], topicInfo.style || {});
+
     topicInfo.title = topicInfo.title == null ? 'Topic' : topicInfo.title;
     
     const boxSize = topicInfo.boxSize;
@@ -159,9 +160,9 @@ class Topic extends Component {
     e.stopPropagation();
 
     if (this.state.selected === false) {
-      this.onSelected();
       (e.ctrlKey || e.metaKey) ? selectionsManager.addSelection(this)
         : selectionsManager.selectSingle(this);
+      this.onSelected();
     }
 
   }
@@ -173,12 +174,15 @@ class Topic extends Component {
   // lifecycle events
   onSelected() {
     this.setState({selected: true});
-
     editReceiver.prepare(this);
+
+    events.emit(EventTags.TOPICSELECTED, this.style);
   }
 
   onDeselected() {
     this.setState({selected: false});
+    
+    events.emit(EventTags.TOPICDESELECTED);
   }
 
   onUpdateTitle(title) {
@@ -288,7 +292,7 @@ class Topics extends Component {
 
       // get boxSize
       const fontSize = Object.assign({}, defaultStyle[topicType], feedTree.style).fontSize;
-      const titleAreaSize = getTextSize(feedTree.title, fontSize);
+      const titleAreaSize = getTextSize(feedTree.title || 'Topic', fontSize);
       
       const boxSize = {};
       const {paddingLeft, paddingRight, paddingTop, paddingBottom} = Distance.TopicPadding[topicType];

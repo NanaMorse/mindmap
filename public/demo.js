@@ -8,26 +8,23 @@ export default {
       "ROOTTOPIC": {
         "fontSize": "18px",
         "shapeClass": "rect",
-        "fillColor": "rgb(203, 222, 253)"
+        "fillColor": "#cbdefd"
       },
       "MAINTOPIC": {
         "fontSize": "13px",
         "shapeClass": "rect",
-        "fillColor": "rgb(254, 244, 236)"
+        "fillColor": "#fef4ec"
       },
       "SUBTOPIC": {
         "fontSize": "10px",
         "shapeClass": "rect",
-        "fillColor": "rgb(254, 244, 236)"
+        "fillColor": "#fef4ec"
       }
     },
     "feed": {
       "id": "300af847dec8435975135bc737",
       "title": "Central Topic",
       "structureClass": 'logictoright',
-      "style": {
-        "fontSize": "20px"
-      },
       "children": [
         {
           "id": "cf99d952d6a99bab2cba9b1def",

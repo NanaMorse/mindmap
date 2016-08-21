@@ -1,3 +1,7 @@
+const Events = require('events');
+
+export const events = new Events();
+
 export const selectionsManager = (() => {
 
   const selections = [];
