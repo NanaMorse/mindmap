@@ -202,6 +202,10 @@ class Topic extends Component {
     return this.props.topicInfo.title;
   }
 
+  getType() {
+    return this.props.topicInfo.type;
+  }
+
   // method for reducer
   onUpdateFontSize(fontSize) {
     this.props.onUpdateFontSize(this.props.topicInfo.id, fontSize);
@@ -217,6 +221,10 @@ class Topic extends Component {
 
   onRemoveSelfTopic() {
     this.props.onRemoveSelfTopic(this.props.topicInfo.id);
+    selectionsManager.removeSelection(this);
+  }
+
+  componentWillUnmount() {
     selectionsManager.removeSelection(this);
   }
 }

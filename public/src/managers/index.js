@@ -35,7 +35,9 @@ export const selectionsManager = (() => {
   };
   
   const removeSelection = (selection) => {
-    selections.splice(selections.indexOf(selection), 1);
+    if (selections.includes(selection)) {
+      selections.splice(selections.indexOf(selection), 1);
+    }
   };
   
   return { getSelectionsArray, addSelection, selectSingle, clearSelection, removeSelection }
