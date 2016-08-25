@@ -23,6 +23,18 @@ export function selectorGenerator(label, id, selectorOptions = {}) {
   }
 }
 
+export function buttonGenerator(innerText, id) {
+  return function (props) {
+    const onClickListener = props.onClick;
+
+    return (
+      <div>
+        <button id={ id } onClick={ onClickListener }>{ innerText }</button>
+      </div>
+    )
+  }
+}
+
 /**
  * @param {string} label -- selector's label name
  * @param {string} id -- selector's wrapper id

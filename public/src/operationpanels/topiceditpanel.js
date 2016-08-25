@@ -2,22 +2,25 @@ import React, {Component} from 'react';
 
 import {events, selectionsManager} from '../managers';
 
-import {selectorGenerator, colorPickerGenerator} from './widgetgenerator';
+import * as widgetGenerator from './widgetgenerator';
 
 import * as EventTags from '../constants/EventTags';
 
 const widgetIdToOperatorMap = {
   'updateFontSize': 'onUpdateFontSize',
-  'updateFillColor': 'onUpdateFillColor'
+  'updateFillColor': 'onUpdateFillColor',
+  'addChildTopic': 'onAddChildTopic'
 };
 
-const UpdateFontSizeSelector = selectorGenerator('font size', 'updateFontSize', {
+const UpdateFontSizeSelector = widgetGenerator.selectorGenerator('font size', 'updateFontSize', {
   '10px': '10',
   '13px': '13',
   '18px': '18'
 });
 
-const UpdateFillColorPicker = colorPickerGenerator('fill color', 'updateFillColor');
+const UpdateFillColorPicker = widgetGenerator.colorPickerGenerator('fill color', 'updateFillColor');
+
+const AddChildTopicButton = widgetGenerator.buttonGenerator('add child topic', 'addChildTopic');
 
 class TopicEditPanel extends Component {
   constructor() {
@@ -38,12 +41,14 @@ class TopicEditPanel extends Component {
         display: this.state.show ? 'block' : 'none'
       }
     };
-
+    
     // todo sync value when invoke undo and redo
     return (
       <div { ...panelProps } >
-        <UpdateFontSizeSelector initValue={this.state.fontSize} onChange={ this.onUpdateFontSize.bind(this) }/>
-        <UpdateFillColorPicker initValue={this.state.fillColor} onChange={ this.onUpdateFillColor.bind(this) }/>
+        <UpdateFontSizeSelector initValue={ this.state.fontSize } onChange={ this.onUpdateFontSize.bind(this) }/>
+        <UpdateFillColorPicker initValue={ this.state.fillColor } onChange={ this.onUpdateFillColor.bind(this) }/>
+        <hr/>
+        <AddChildTopicButton onClick={ this.onWidgetClick.bind(this) }/>
       </div>
     );
   }
@@ -68,6 +73,14 @@ class TopicEditPanel extends Component {
 
     selectionsManager.getSelectionsArray().forEach((component) => {
       component[widgetIdToOperatorMap[widgetId]](widgetValue);
+    });
+  }
+
+  onWidgetClick(e) {
+    const widgetId = e.target.id;
+    
+    selectionsManager.getSelectionsArray().forEach((component) => {
+      component[widgetIdToOperatorMap[widgetId]]();
     });
   }
 
