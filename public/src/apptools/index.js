@@ -36,7 +36,9 @@ export const editReceiver = (() => {
   input.id = 'editReceiver';
 
   const minWidth = 100;
+  const minHeight = 20;
   input.style.minWidth = minWidth + 'px';
+  input.style.minHeight = minHeight + 'px';
 
   appToolsContainer.appendChild(input);
 
@@ -61,7 +63,7 @@ export const editReceiver = (() => {
       }
       width = minWidth;
     }
-
+    
     style.width = width + 'px';
     style.left = left + 'px';
     style.top = top + 'px';
