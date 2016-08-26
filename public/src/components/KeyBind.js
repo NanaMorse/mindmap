@@ -1,5 +1,6 @@
 import * as KeyCode from '../constants/KeyCode';
-import {selectionsManager} from '../managers';
+import {selectionsManager, events} from '../managers';
+import * as EventTags from '../constants/EventTags';
 
 import reduxUndo from '../managers/reduxundo';
 import store from '../store';
@@ -9,8 +10,10 @@ const operatorMap = {
     if (e.metaKey || e.ctrlKey) {
       if (e.shiftKey) {
         reduxUndo.redo();
+        events.emit(EventTags.UNDO_OR_REDO_TRIGGERED);
       } else {
         reduxUndo.undo();
+        events.emit(EventTags.UNDO_OR_REDO_TRIGGERED);
       }
     }
   },

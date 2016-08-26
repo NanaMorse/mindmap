@@ -84,19 +84,28 @@ class TopicEditPanel extends Component {
     });
   }
 
+  setPanelWidgetValue(topicStyle) {
+    this.setState({
+      fontSize: topicStyle.fontSize,
+      fillColor: topicStyle.fillColor
+    });
+  }
+
   componentDidMount() {
     events.on(EventTags.TOPICSELECTED, (topicStyle) => {
-      this.setState({
-        show: true,
-        fontSize: topicStyle.fontSize,
-        fillColor: topicStyle.fillColor
-      });
+      this.setState({show: true});
+      this.setPanelWidgetValue(topicStyle)
     });
     
     events.on(EventTags.TOPICDESELECTED, () => {
-      this.setState({
-        show: false
-      });
+      this.setState({show: false});
+    });
+    
+    events.on(EventTags.UNDO_OR_REDO_TRIGGERED, () => {
+      if (!this.state.show) return;
+
+      const selections = selectionsManager.getSelectionsArray();
+      this.setPanelWidgetValue(selections[selections.length - 1].style);
     });
   }
 }
