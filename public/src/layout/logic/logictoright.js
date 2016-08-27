@@ -3,8 +3,8 @@ import * as CommonConstant from '../../constants/Common';
 
 export default function logicToRight(parentTree) {
   const { position, boxSize, children } = parentTree;
-
-  const {marginLeft, marginTop} = Distance.TopicMargin[CommonConstant.LOGICTORIGHT];
+  
+  const {marginLeft, marginTop} = Distance.TopicMargin[CommonConstant.LOGIC_TO_RIGHT];
 
   let topHeight = 0;
   
@@ -15,11 +15,19 @@ export default function logicToRight(parentTree) {
     const halfChildBoxWidth = childTree.boxSize.width / 2;
     
     const x = position[0] + boxSize.width / 2 + marginLeft + halfChildBoxWidth;
-    const y = position[1] + topHeight + childTreeBounds.height / 2 - childrenMiddleHeight;
+    
+    let y = position[1] + topHeight + childTreeBounds.height / 2 - childrenMiddleHeight;
+
+    topHeight += childTreeBounds.height + marginTop;
+
+    // fix label height
+    if (childTree.labelBoxSize && children.length !== 1) {
+      y -= childTree.labelBoxSize.height / 2;
+      topHeight -= childTree.labelBoxSize.height / 2;
+    }
 
     childTree.position = [x, y];
-    
-    topHeight += childTreeBounds.height + marginTop;
+
   });
   
 }

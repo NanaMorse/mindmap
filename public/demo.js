@@ -5,17 +5,17 @@ export default {
 
   "topics": {
     "defaultStyle": {
-      "ROOTTOPIC": {
+      "ROOT_TOPIC": {
         "fontSize": "18px",
         "shapeClass": "rect",
         "fillColor": "#cbdefd"
       },
-      "MAINTOPIC": {
+      "MAIN_TOPIC": {
         "fontSize": "13px",
         "shapeClass": "rect",
         "fillColor": "#fef4ec"
       },
-      "SUBTOPIC": {
+      "SUB_TOPIC": {
         "fontSize": "10px",
         "shapeClass": "rect",
         "fillColor": "#fef4ec"
@@ -24,11 +24,12 @@ export default {
     "feed": {
       "id": "300af847dec8435975135bc737",
       "title": "Central Topic",
-      "structureClass": 'logictoright',
+      "structureClass": 'LOGIC_TO_RIGHT',
       "children": [
         {
           "id": "cf99d952d6a99bab2cba9b1def",
           "title": "Child 1",
+          "label": "I am label!",
           "children": [
             {
               "id": "9ada471a507a3ca16951db8cc2",

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 import {events, selectionsManager} from '../managers';
-import {getTextSize, editReceiver, deepAssign, generateUUID} from '../apptools';
+import {getTextSize, editReceiver, deepAssign, generateUUID, wrapTextWithEllipsis} from '../apptools';
 
 import * as CommonConstant from '../constants/Common';
 import * as Distance from '../constants/Distance';
@@ -10,52 +10,6 @@ import * as EventTags from '../constants/EventTags';
 import CalcTopicShape from '../calcpath/topicshape';
 
 import layoutTopics from '../layout';
-
-// Connect line
-const ConnectLine = ({topicInfo}) => {
-  // todo
-  if (!topicInfo.children || !topicInfo.children.length) return <path></path>;
-
-  // need startPoint, centerPoint, and endPoints
-  // set as logicright structure(right direction)
-  const {position: parentPosition, boxSize} = topicInfo;
-  
-  const marginLeft = Distance.TopicMargin[CommonConstant.LOGICTORIGHT].marginLeft;
-
-  // startPoint
-  const startPoint = [boxSize.width / 2, 0];
-  
-  // centerPoint
-  const centerPoint = [startPoint[0] + marginLeft / 2, startPoint[1]];
-
-  // endPoints
-  const endPoints = topicInfo.children.map((childInfo) => {
-    const {position, boxSize} = childInfo;
-    
-    const fixedPosition = [position[0] - parentPosition[0], position[1] - parentPosition[1]];
-    
-    return [fixedPosition[0] - boxSize.width / 2, fixedPosition[1]];
-  });
-
-  // draw line path
-  let path = '';
-
-  // start to center
-  path += `M ${startPoint[0]} ${startPoint[1]} ${centerPoint[0]} ${centerPoint[1]} `;
-
-  // center to each end
-  endPoints.forEach((endPoint) => {
-    path += `M ${centerPoint[0]} ${endPoint[1]} ${endPoint[0]} ${endPoint[1]} `
-  });
-  
-  // center line
-  const endPointYs = endPoints.map(endPoint => endPoint[1]);
-  const minY = Math.min(...endPointYs);
-  const maxY = Math.max(...endPointYs);
-  path += `M ${centerPoint[0]} ${minY} ${centerPoint[0]} ${maxY}`;
-  
-  return <path className="connect-line" d={path} stroke="#000" fill="none"></path>
-};
 
 // Topic Shape
 const TopicShape = ({d}) => {
@@ -93,6 +47,74 @@ class TopicTitle extends Component {
     );
   }
 }
+
+// Connect line
+const ConnectLine = ({topicInfo}) => {
+  // need startPoint, centerPoint, and endPoints
+  // set as logicright structure(right direction)
+  const {position: parentPosition, boxSize} = topicInfo;
+
+  const marginLeft = Distance.TopicMargin[CommonConstant.LOGIC_TO_RIGHT].marginLeft;
+
+  // startPoint
+  const startPoint = [boxSize.width / 2, 0];
+
+  // centerPoint
+  const centerPoint = [startPoint[0] + marginLeft / 2, startPoint[1]];
+
+  // endPoints
+  const endPoints = topicInfo.children.map((childInfo) => {
+    const {position, boxSize} = childInfo;
+
+    const fixedPosition = [position[0] - parentPosition[0], position[1] - parentPosition[1]];
+
+    return [fixedPosition[0] - boxSize.width / 2, fixedPosition[1]];
+  });
+
+  // draw line path
+  let path = '';
+
+  // start to center
+  path += `M ${startPoint[0]} ${startPoint[1]} ${centerPoint[0]} ${centerPoint[1]} `;
+
+  // center to each end
+  endPoints.forEach((endPoint) => {
+    path += `M ${centerPoint[0]} ${endPoint[1]} ${endPoint[0]} ${endPoint[1]} `
+  });
+
+  // center line
+  const endPointYs = endPoints.map(endPoint => endPoint[1]);
+  const minY = Math.min(...endPointYs);
+  const maxY = Math.max(...endPointYs);
+  path += `M ${centerPoint[0]} ${minY} ${centerPoint[0]} ${maxY}`;
+
+  return <path className="connect-line" d={path} stroke="#000" fill="none"></path>
+};
+
+// Label
+const Label = ({topicInfo}) => {
+  let {boxSize: {width: parentWidth, height: parentHeight}, labelBoxSize, label: labelText} = topicInfo;
+  
+  const halfParentWidth = parentWidth / 2;
+  const halfParentHeight = parentHeight / 2;
+
+  let {width: labelWidth, height: labelHeight} = labelBoxSize;
+  if (labelWidth > parentWidth) labelWidth = parentWidth;
+
+  let path = `M ${-halfParentWidth} ${halfParentHeight + 1} h ${labelWidth} v ${labelHeight} h ${-labelWidth} v ${-labelHeight} z`;
+
+  const labelTextStartX = -halfParentWidth + Distance.LabelPadding.paddingLeft;
+  const labelTextStartY = halfParentHeight + 1 + labelHeight / 2;
+
+  labelText = wrapTextWithEllipsis(labelText, CommonConstant.LABEL_TEXT_SIZE, labelWidth);
+
+  return (
+    <g className="label">
+      <path className="label-shape" d={path} stroke="none" fill={CommonConstant.LABEL_FILL_COLOR}/>
+      <text style={{fontSize: CommonConstant.LABEL_TEXT_SIZE}} x={labelTextStartX} y={labelTextStartY}>{labelText}</text>
+    </g>
+  )
+};
 
 class Topic extends Component {
 
@@ -139,14 +161,18 @@ class Topic extends Component {
       title: topicInfo.title,
       fontSize: style.fontSize
     };
+
+    const needConnectLine = topicInfo.children && topicInfo.children.length;
+    const needLabel = topicInfo.label;
     
     return (
       <g {...gProps} >
-        <TopicShape d={ topicShapePath }/>
-        <TopicFill { ...TopicFillProps } />
-        <TopicSelectBox { ...TopicSelectBoxProps } />
-        <TopicTitle { ...TopicTitleProps }/>
-        <ConnectLine topicInfo={topicInfo}/>
+        <TopicShape d={topicShapePath}/>
+        <TopicFill {...TopicFillProps}/>
+        <TopicSelectBox {...TopicSelectBoxProps}/>
+        <TopicTitle {...TopicTitleProps}/>
+        {needLabel ? <Label topicInfo={topicInfo}/> : []}
+        {needConnectLine ? <ConnectLine topicInfo={topicInfo}/> : []}
       </g>
     );
   }
@@ -176,13 +202,13 @@ class Topic extends Component {
     this.setState({selected: true});
     editReceiver.prepare(this);
 
-    events.emit(EventTags.TOPICSELECTED, this.style);
+    events.emit(EventTags.TOPIC_SELECTED, this.style);
   }
 
   onDeselected() {
     this.setState({selected: false});
     
-    events.emit(EventTags.TOPICDESELECTED);
+    events.emit(EventTags.TOPIC_DESELECTED);
   }
 
   onUpdateTitle(title) {
@@ -222,6 +248,7 @@ class Topic extends Component {
   onRemoveSelfTopic() {
     this.props.onRemoveSelfTopic(this.props.topicInfo.id);
     selectionsManager.removeSelection(this);
+    events.emit(EventTags.TOPIC_DESELECTED);
   }
 
   componentWillUnmount() {
@@ -282,6 +309,9 @@ class Topics extends Component {
     
     _calculate();
 
+    // get bounds and position
+    layoutTopics(feedCopy);
+
     return feedCopy;
     
     function _calculate(feedTree = feedCopy) {
@@ -290,29 +320,39 @@ class Topics extends Component {
 
       const parent = findTopicParent(feedTree);
 
-      if (parent == null) topicType = CommonConstant.ROOTTOPIC;
+      if (parent == null) topicType = CommonConstant.ROOT_TOPIC;
 
-      else if (findTopicParent(parent) == null) topicType = CommonConstant.MAINTOPIC;
+      else if (findTopicParent(parent) == null) topicType = CommonConstant.MAIN_TOPIC;
 
-      else topicType = CommonConstant.SUBTOPIC;
+      else topicType = CommonConstant.SUB_TOPIC;
 
       feedTree.type = topicType;
 
       // get boxSize
       const fontSize = Object.assign({}, defaultStyle[topicType], feedTree.style).fontSize;
+
       const titleAreaSize = getTextSize(feedTree.title || 'Topic', fontSize);
-      
+
       const boxSize = {};
       const {paddingLeft, paddingRight, paddingTop, paddingBottom} = Distance.TopicPadding[topicType];
       boxSize.width = titleAreaSize.width + paddingLeft + paddingRight;
       boxSize.height = titleAreaSize.height + paddingTop + paddingBottom;
+
+      // if has label
+      if (feedTree.label) {
+        const {width: labelTextWidth, height: labelTextHeight} = getTextSize(feedTree.label, CommonConstant.LABEL_TEXT_SIZE);
+
+        const labelPadding = Distance.LabelPadding;
+        const labelWidth = labelPadding.paddingLeft + labelTextWidth + labelPadding.paddingRight;
+        const labelHeight = labelPadding.paddingTop + labelTextHeight + labelPadding.paddingBottom;
+        
+        feedTree.labelBoxSize = {width: labelWidth, height: labelHeight};
+      }
       
       feedTree.boxSize = boxSize;
 
       feedTree.children && feedTree.children.forEach(childTree => _calculate(childTree));
-
-      // get bounds and position
-      layoutTopics(feedTree);
+      
     }
 
     function findTopicParent (topicTree, treeToCheck = feedCopy)  {

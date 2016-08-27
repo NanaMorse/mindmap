@@ -221,3 +221,26 @@ export const delayInvoking = (() => {
     }, 0);
   }
 })();
+
+export const wrapTextWithEllipsis  = (text, fontSize, maxWidth) => {
+  if (getTextSize(text, fontSize).width < maxWidth - 20) return text + '...';
+
+  let wrapResult = '';
+  
+  sliceText();
+
+  return wrapResult + '...';
+
+  function sliceText(textToSlice = text) {
+    if (textToSlice.length === 1) return textToSlice;
+    
+    const slicePart1 = textToSlice.slice(0, parseInt(textToSlice.length / 2));
+    const slicePart2 = textToSlice.replace(slicePart1, '');
+    
+    if (getTextSize(wrapResult + slicePart1 + '...', fontSize).width > maxWidth - 20) sliceText(slicePart1);
+    else {
+      wrapResult += slicePart1;
+      sliceText(slicePart2);
+    }
+  }
+};

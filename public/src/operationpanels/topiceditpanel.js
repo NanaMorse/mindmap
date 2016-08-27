@@ -92,12 +92,12 @@ class TopicEditPanel extends Component {
   }
 
   componentDidMount() {
-    events.on(EventTags.TOPICSELECTED, (topicStyle) => {
+    events.on(EventTags.TOPIC_SELECTED, (topicStyle) => {
       this.setState({show: true});
       this.setPanelWidgetValue(topicStyle)
     });
     
-    events.on(EventTags.TOPICDESELECTED, () => {
+    events.on(EventTags.TOPIC_DESELECTED, () => {
       this.setState({show: false});
     });
     

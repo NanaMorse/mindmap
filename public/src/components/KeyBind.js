@@ -37,7 +37,7 @@ const operatorMap = {
     const selectionsArrayCopy = selectionsArray.filter((selectionB) => {
       return !selectionsArray.some((selectionA) => {
         return isAAncestorOfB(selectionA, selectionB);
-      }) && selectionB.getType() !== 'ROOTTOPIC';
+      }) && selectionB.getType() !== 'ROOT_TOPIC';
     });
     
     selectionsArrayCopy.forEach((selection) => {

@@ -27,10 +27,15 @@ export default (feedTree) => {
       width : boxSize.width,
       height : boxSize.height
     };
+
+    // if has label
+    if (parentTree.labelBoxSize) {
+      bounds.height += parentTree.labelBoxSize.height;
+    }
     
     const childrenBounds = { width : 0, height : 0 };
 
-    const {marginLeft, marginTop} = Distance.TopicMargin[CommonConstant.LOGICTORIGHT];
+    const {marginLeft, marginTop} = Distance.TopicMargin[CommonConstant.LOGIC_TO_RIGHT];
 
     if (parentTree.children && parentTree.children.length) {
       parentTree.children.forEach((childTree) => {
