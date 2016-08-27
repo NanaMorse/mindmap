@@ -9,7 +9,8 @@ import * as EventTags from '../constants/EventTags';
 const widgetIdToOperatorMap = {
   'updateFontSize': 'onUpdateFontSize',
   'updateFillColor': 'onUpdateFillColor',
-  'addChildTopic': 'onAddChildTopic'
+  'addChildTopic': 'onAddChildTopic',
+  'updateLabel': 'onUpdateLabel'
 };
 
 const UpdateFontSizeSelector = widgetGenerator.selectorGenerator('font size', 'updateFontSize', {
@@ -22,6 +23,8 @@ const UpdateFillColorPicker = widgetGenerator.colorPickerGenerator('fill color',
 
 const AddChildTopicButton = widgetGenerator.buttonGenerator('add child topic', 'addChildTopic');
 
+const UpdateLabelTextInput = widgetGenerator.textInputGenerator('update label', 'updateLabel');
+
 class TopicEditPanel extends Component {
   constructor() {
     super();
@@ -29,7 +32,8 @@ class TopicEditPanel extends Component {
     this.state = {
       show: false,
       fontSize: '10',
-      fillColor: '#fef4ec'
+      fillColor: '#fef4ec',
+      labelText: ''
     }
   }
 
@@ -41,14 +45,21 @@ class TopicEditPanel extends Component {
         display: this.state.show ? 'block' : 'none'
       }
     };
+
+    const updateLabelProps = {
+      value: this.state.labelText,
+      onChange: e => this.setState({labelText: e.target.value}),
+      onBlur: e => this.onWidgetBlur(e)
+    };
     
-    // todo sync value when invoke undo and redo
     return (
       <div { ...panelProps } >
-        <UpdateFontSizeSelector initValue={ this.state.fontSize } onChange={ this.onUpdateFontSize.bind(this) }/>
-        <UpdateFillColorPicker initValue={ this.state.fillColor } onChange={ this.onUpdateFillColor.bind(this) }/>
+        <UpdateFontSizeSelector initValue={this.state.fontSize} onChange={this.onUpdateFontSize.bind(this)}/>
+        <UpdateFillColorPicker initValue={this.state.fillColor} onChange={this.onUpdateFillColor.bind(this)}/>
         <hr/>
-        <AddChildTopicButton onClick={ this.onWidgetClick.bind(this) }/>
+        <AddChildTopicButton onClick={this.onWidgetClick.bind(this)}/>
+        <hr/>
+        <UpdateLabelTextInput {...updateLabelProps}/>
       </div>
     );
   }
@@ -83,18 +94,31 @@ class TopicEditPanel extends Component {
       component[widgetIdToOperatorMap[widgetId]]();
     });
   }
+  
+  onWidgetBlur(e) {
+    const widgetId = e.target.id;
+    const widgetValue = e.target.value;
 
-  setPanelWidgetValue(topicStyle) {
+    selectionsManager.getSelectionsArray().forEach((component) => {
+      component[widgetIdToOperatorMap[widgetId]](widgetValue);
+    });
+  }
+
+  setPanelWidgetValue(topic) {
+    const topicStyle = topic.style;
+    const topicInfo = topic.props.topicInfo;
+
     this.setState({
       fontSize: topicStyle.fontSize,
-      fillColor: topicStyle.fillColor
+      fillColor: topicStyle.fillColor,
+      labelText: topicInfo.label || ''
     });
   }
 
   componentDidMount() {
-    events.on(EventTags.TOPIC_SELECTED, (topicStyle) => {
+    events.on(EventTags.TOPIC_SELECTED, (topic) => {
       this.setState({show: true});
-      this.setPanelWidgetValue(topicStyle)
+      this.setPanelWidgetValue(topic);
     });
     
     events.on(EventTags.TOPIC_DESELECTED, () => {
@@ -105,7 +129,7 @@ class TopicEditPanel extends Component {
       if (!this.state.show) return;
 
       const selections = selectionsManager.getSelectionsArray();
-      this.setPanelWidgetValue(selections[selections.length - 1].style);
+      this.setPanelWidgetValue(selections[selections.length - 1]);
     });
   }
 }

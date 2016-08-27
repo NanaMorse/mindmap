@@ -223,7 +223,7 @@ export const delayInvoking = (() => {
 })();
 
 export const wrapTextWithEllipsis  = (text, fontSize, maxWidth) => {
-  if (getTextSize(text, fontSize).width < maxWidth - 20) return text + '...';
+  if (getTextSize(text, fontSize).width < maxWidth) return text;
 
   let wrapResult = '';
   

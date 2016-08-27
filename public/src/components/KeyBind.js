@@ -5,6 +5,8 @@ import * as EventTags from '../constants/EventTags';
 import reduxUndo from '../managers/reduxundo';
 import store from '../store';
 
+const elementsIdToStopPropagation = ['updateLabel'];
+
 const operatorMap = {
   [KeyCode.Z_KEY] (e) {
     if (e.metaKey || e.ctrlKey) {
@@ -88,6 +90,8 @@ function getAncestorCheckMethod(store, selections) {
 }
 
 document.querySelector('body').addEventListener('keydown', function (e) {
+  if (elementsIdToStopPropagation.includes(e.target.id)) return true;
+
   const keyCode = e.keyCode;
   keyCode in operatorMap && operatorMap[keyCode](e);
 });

@@ -35,6 +35,17 @@ export function buttonGenerator(innerText, id) {
   }
 }
 
+export function textInputGenerator(label, id) {
+  return function (props) {
+    return (
+      <div>
+        <label>{label + ': '}</label>
+        <input {...props} id={id}/>
+      </div>
+    );
+  }
+}
+
 /**
  * @param {string} label -- selector's label name
  * @param {string} id -- selector's wrapper id

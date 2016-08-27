@@ -40,11 +40,7 @@ class TopicTitle extends Component {
       fontSize: this.props.fontSize
     };
 
-    return (
-      <g ref='title'>
-        <text style={ style }>{ title }</text>
-      </g>
-    );
+    return <text ref='title' style={ style }>{ title }</text>;
   }
 }
 
@@ -139,9 +135,8 @@ class Topic extends Component {
     
     const {topicShapePath, topicSelectBoxPath} = this.getTopicShapePath(boxSize, style.shapeClass);
 
-    const gProps = {
+    const TopicGroupProps = {
       className: 'topic-group',
-      onClick: (e) => this.onTopicClick(e),
       onDoubleClick: (e) => this.onTopicDoubleClick(e),
       transform: `translate(${topicInfo.position[0]},${topicInfo.position[1]})`
     };
@@ -151,27 +146,34 @@ class Topic extends Component {
       fillColor: style.fillColor
     };
 
-    const TopicSelectBoxProps = {
-      d: topicSelectBoxPath,
-      display: this.state.selected
-    };
-
     const TopicTitleProps = {
       ref: 'TopicTitle',
       title: topicInfo.title,
       fontSize: style.fontSize
+    };
+    
+    const TopicBoxGroupProps = {
+      className: 'topic-box-group',
+      onClick: (e) => this.onTopicClick(e)
+    };
+
+    const TopicSelectBoxProps = {
+      d: topicSelectBoxPath,
+      display: this.state.selected
     };
 
     const needConnectLine = topicInfo.children && topicInfo.children.length;
     const needLabel = topicInfo.label;
     
     return (
-      <g {...gProps} >
-        <TopicShape d={topicShapePath}/>
-        <TopicFill {...TopicFillProps}/>
-        <TopicSelectBox {...TopicSelectBoxProps}/>
-        <TopicTitle {...TopicTitleProps}/>
+      <g {...TopicGroupProps} >
         {needLabel ? <Label topicInfo={topicInfo}/> : []}
+        <g {...TopicBoxGroupProps}>
+          <TopicShape d={topicShapePath}/>
+          <TopicFill {...TopicFillProps}/>
+          <TopicTitle {...TopicTitleProps}/>
+        </g>
+        <TopicSelectBox {...TopicSelectBoxProps}/>
         {needConnectLine ? <ConnectLine topicInfo={topicInfo}/> : []}
       </g>
     );
@@ -202,7 +204,7 @@ class Topic extends Component {
     this.setState({selected: true});
     editReceiver.prepare(this);
 
-    events.emit(EventTags.TOPIC_SELECTED, this.style);
+    events.emit(EventTags.TOPIC_SELECTED, this);
   }
 
   onDeselected() {
@@ -241,6 +243,10 @@ class Topic extends Component {
     this.props.onUpdateFillColor(this.props.topicInfo.id, fillColor);
   }
 
+  onUpdateLabel(labelText) {
+    this.props.onUpdateLabel(this.props.topicInfo.id, labelText);
+  }
+
   onAddChildTopic() {
     this.props.onAddChildTopic(this.props.topicInfo.id, generateUUID());
   }
@@ -267,7 +273,8 @@ class Topics extends Component {
       onUpdateFontSize, 
       onUpdateFillColor, 
       onAddChildTopic, 
-      onRemoveSelfTopic
+      onRemoveSelfTopic,
+      onUpdateLabel
     } = this.props;
 
     const topicsArray = [];
@@ -285,7 +292,8 @@ class Topics extends Component {
         onUpdateFontSize,
         onUpdateFillColor,
         onAddChildTopic,
-        onRemoveSelfTopic
+        onRemoveSelfTopic,
+        onUpdateLabel
       };
 
       return <Topic { ...topicProps } ></Topic>;

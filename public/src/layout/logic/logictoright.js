@@ -23,7 +23,6 @@ export default function logicToRight(parentTree) {
     // fix label height
     if (childTree.labelBoxSize && children.length !== 1) {
       y -= childTree.labelBoxSize.height / 2;
-      topHeight -= childTree.labelBoxSize.height / 2;
     }
 
     childTree.position = [x, y];

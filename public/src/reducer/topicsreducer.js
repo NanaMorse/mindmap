@@ -40,6 +40,13 @@ export default (currentState = {}, action) => {
       targetTopicInfo.style.fillColor = action.fillColor;
       break;
     }
+      
+    case types.UPDATE_TOPIC_LABEL :
+    {
+      if (action.labelText) targetTopicInfo.label = action.labelText;
+      else delete targetTopicInfo.label;
+      break;
+    }
 
     case types.ADD_CHILD_TOPIC :
     {

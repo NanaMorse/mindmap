@@ -28,6 +28,10 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(actions.updateTopicFillColor(id, newFillColor));
     },
     
+    onUpdateLabel: (id, labelText) => {
+      dispatch(actions.updateTopicLabel(id, labelText));
+    },
+    
     onAddChildTopic : (id, childId) => {
       dispatch(actions.addChildTopic(id, childId));
     },

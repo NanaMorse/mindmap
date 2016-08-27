@@ -55,6 +55,14 @@ export const updateTopicFillColor = (id, fillColor) => {
   }
 };
 
+export const updateTopicLabel = (id, labelText) => {
+  return {
+    type: types.UPDATE_TOPIC_LABEL,
+    id,
+    labelText
+  }
+};
+
 export const addChildTopic = (id, childId) => {
   return {
     type: types.ADD_CHILD_TOPIC,
