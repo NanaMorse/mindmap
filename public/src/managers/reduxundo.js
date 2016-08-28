@@ -4,9 +4,7 @@ import {deepAssign, delayInvoking} from '../apptools';
 
 import {undo, redo} from '../actions'
 
-const pastDispatchStack = global.pastStack = [];
-
-global.pastStateStack = [];
+const pastDispatchStack = [];
 
 const futureDispatchStack = [];
 
@@ -19,7 +17,6 @@ const reduxUndo = (mapDispatchToProps, reducerKey) => {
 
     Object.keys(dispatchMap).forEach(function (dispatchKey) {
       undoDispatchMap[dispatchKey] = (...args) => {
-        // todo undo register here
         const lastState = deepAssign({}, store.getState());
 
         delayInvoking(() => {
@@ -28,7 +25,6 @@ const reduxUndo = (mapDispatchToProps, reducerKey) => {
             return {dispatch, reducerKey};
           });
 
-          global.pastStateStack.push(lastState[reducerKey]);
         });
         
         futureDispatchStack.splice(0);

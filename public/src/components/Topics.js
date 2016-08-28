@@ -244,6 +244,7 @@ class Topic extends Component {
   }
 
   onUpdateLabel(labelText) {
+    if (labelText === this.props.topicInfo.label) return;
     this.props.onUpdateLabel(this.props.topicInfo.id, labelText);
   }
 

@@ -6,11 +6,14 @@ import * as widgetGenerator from './widgetgenerator';
 
 import * as EventTags from '../constants/EventTags';
 
+import {NOT_UNDO_END_FIX} from '../constants/Common';
+
 const widgetIdToOperatorMap = {
   'updateFontSize': 'onUpdateFontSize',
   'updateFillColor': 'onUpdateFillColor',
   'addChildTopic': 'onAddChildTopic',
-  'updateLabel': 'onUpdateLabel'
+  'updateLabel': 'onUpdateLabel',
+  ['updateLabel' + NOT_UNDO_END_FIX]: 'onUpdateLabelNotUndo'
 };
 
 const UpdateFontSizeSelector = widgetGenerator.selectorGenerator('font size', 'updateFontSize', {
@@ -23,7 +26,7 @@ const UpdateFillColorPicker = widgetGenerator.colorPickerGenerator('fill color',
 
 const AddChildTopicButton = widgetGenerator.buttonGenerator('add child topic', 'addChildTopic');
 
-const UpdateLabelTextInput = widgetGenerator.textInputGenerator('update label', 'updateLabel');
+const UpdateLabelTextInput = widgetGenerator.textInputGenerator('label text', 'updateLabel');
 
 class TopicEditPanel extends Component {
   constructor() {
@@ -49,7 +52,11 @@ class TopicEditPanel extends Component {
     const updateLabelProps = {
       value: this.state.labelText,
       onChange: e => this.setState({labelText: e.target.value}),
-      onBlur: e => this.onWidgetBlur(e)
+      onBlur: e => this.dispatchOperator(e),
+      onKeyDown: e => {
+        const which = e.which;
+        which === 13 && this.dispatchOperator(e);
+      }
     };
     
     return (
@@ -57,7 +64,7 @@ class TopicEditPanel extends Component {
         <UpdateFontSizeSelector initValue={this.state.fontSize} onChange={this.onUpdateFontSize.bind(this)}/>
         <UpdateFillColorPicker initValue={this.state.fillColor} onChange={this.onUpdateFillColor.bind(this)}/>
         <hr/>
-        <AddChildTopicButton onClick={this.onWidgetClick.bind(this)}/>
+        <AddChildTopicButton onClick={e => this.dispatchOperator(e)}/>
         <hr/>
         <UpdateLabelTextInput {...updateLabelProps}/>
       </div>
@@ -65,37 +72,20 @@ class TopicEditPanel extends Component {
   }
   
   onUpdateFontSize(e) {
-    this.onWidgetValueChange(e);
+    this.dispatchOperator(e);
     this.setState({
       fontSize: e.target.value
     });
   }
   
   onUpdateFillColor(e) {
-    this.onWidgetValueChange(e);
+    this.dispatchOperator(e);
     this.setState({
       fillColor: e.target.value
     });
   }
-
-  onWidgetValueChange(e) {
-    const widgetId = e.target.id;
-    const widgetValue = e.target.value;
-
-    selectionsManager.getSelectionsArray().forEach((component) => {
-      component[widgetIdToOperatorMap[widgetId]](widgetValue);
-    });
-  }
-
-  onWidgetClick(e) {
-    const widgetId = e.target.id;
-    
-    selectionsManager.getSelectionsArray().forEach((component) => {
-      component[widgetIdToOperatorMap[widgetId]]();
-    });
-  }
   
-  onWidgetBlur(e) {
+  dispatchOperator(e) {
     const widgetId = e.target.id;
     const widgetValue = e.target.value;
 
