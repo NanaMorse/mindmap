@@ -2,7 +2,11 @@ import store from '../store';
 
 import {deepAssign, delayInvoking} from '../apptools';
 
-import {undo, redo} from '../actions'
+import {events} from '../managers';
+
+import {undo, redo} from '../actions';
+
+import * as EventTags from '../constants/EventTags';
 
 const pastDispatchStack = [];
 
@@ -24,7 +28,6 @@ const reduxUndo = (mapDispatchToProps, reducerKey) => {
             dispatch(undo(lastState[reducerKey]));
             return {dispatch, reducerKey};
           });
-
         });
         
         futureDispatchStack.splice(0);
@@ -50,11 +53,15 @@ reduxUndo.undo = () => {
       pastDispatchStack.push(pastDispatch);
     });
   }
+
+  events.emit(EventTags.UNDO_OR_REDO_TRIGGERED);
 };
 
 reduxUndo.redo = () => {
   const futureDispatch = futureDispatchStack.pop();
   futureDispatch && futureDispatch();
+
+  events.emit(EventTags.UNDO_OR_REDO_TRIGGERED);
 };
 
 export default reduxUndo;

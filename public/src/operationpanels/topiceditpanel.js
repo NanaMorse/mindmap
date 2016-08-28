@@ -6,27 +6,19 @@ import * as widgetGenerator from './widgetgenerator';
 
 import * as EventTags from '../constants/EventTags';
 
-import {NOT_UNDO_END_FIX} from '../constants/Common';
-
-const widgetIdToOperatorMap = {
-  'updateFontSize': 'onUpdateFontSize',
-  'updateFillColor': 'onUpdateFillColor',
-  'addChildTopic': 'onAddChildTopic',
-  'updateLabel': 'onUpdateLabel',
-  ['updateLabel' + NOT_UNDO_END_FIX]: 'onUpdateLabelNotUndo'
-};
-
-const UpdateFontSizeSelector = widgetGenerator.selectorGenerator('font size', 'updateFontSize', {
+const UpdateFontSizeSelector = widgetGenerator.selectorGenerator('font size', 'onUpdateFontSize', {
   '10px': '10',
   '13px': '13',
   '18px': '18'
 });
 
-const UpdateFillColorPicker = widgetGenerator.colorPickerGenerator('fill color', 'updateFillColor');
+const UpdateFillColorPicker = widgetGenerator.colorPickerGenerator('fill color', 'onUpdateFillColor');
 
-const AddChildTopicButton = widgetGenerator.buttonGenerator('add child topic', 'addChildTopic');
+const AddChildTopicButton = widgetGenerator.buttonGenerator('add child topic', 'onAddChildTopic');
 
-const UpdateLabelTextInput = widgetGenerator.textInputGenerator('label text', 'updateLabel');
+const RemoveTopicButton = widgetGenerator.buttonGenerator('remove topic', 'onRemoveSelfTopic');
+
+const UpdateLabelTextInput = widgetGenerator.textInputGenerator('label text', 'onUpdateLabel');
 
 class TopicEditPanel extends Component {
   constructor() {
@@ -65,6 +57,7 @@ class TopicEditPanel extends Component {
         <UpdateFillColorPicker initValue={this.state.fillColor} onChange={this.onUpdateFillColor.bind(this)}/>
         <hr/>
         <AddChildTopicButton onClick={e => this.dispatchOperator(e)}/>
+        <RemoveTopicButton onClick={e => this.dispatchOperator(e, selectionsManager.getSelectionsArrayWithoutChild())}/>
         <hr/>
         <UpdateLabelTextInput {...updateLabelProps}/>
       </div>
@@ -85,12 +78,12 @@ class TopicEditPanel extends Component {
     });
   }
   
-  dispatchOperator(e) {
+  dispatchOperator(e, operatorTargetArray = selectionsManager.getSelectionsArray()) {
     const widgetId = e.target.id;
     const widgetValue = e.target.value;
 
-    selectionsManager.getSelectionsArray().forEach((component) => {
-      component[widgetIdToOperatorMap[widgetId]](widgetValue);
+    operatorTargetArray.forEach((component) => {
+      component[widgetId](widgetValue);
     });
   }
 

@@ -1,3 +1,5 @@
+import * as KeyCode from '../constants/KeyCode';
+
 const appToolsContainer = document.querySelector('#app-tools-container');
 
 const keyMap = {
