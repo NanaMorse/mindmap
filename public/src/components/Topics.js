@@ -18,16 +18,19 @@ const TopicShape = ({d}) => {
 
 // Topic Fill
 const TopicFill = ({d, fillColor}) => {
-  return <path d={ d } fill={ fillColor } stroke="none"></path>;
+  return <path className="topic-fill" d={ d } fill={ fillColor } stroke="none"></path>;
 };
 
 // Topic Select Box
-const TopicSelectBox = ({d, display}) => {
+const TopicSelectBox = ({d, selected, hovered}) => {
   const style = {
-    display: display ? 'block' : 'none'
+    display: selected || hovered ? 'block' : 'none'
   };
 
-  return <path d={ d } fill="none" stroke="#000" style={ style }></path>;
+  const hoveredStroke = 'rgb(199, 217, 231)';
+  const selectedStroke = 'rgb(75, 111, 189)';
+  
+  return <path d={ d } fill="none" stroke={selected ? selectedStroke : hoveredStroke} strokeWidth="3" style={ style }></path>;
 };
 
 // Topic Title
@@ -118,7 +121,8 @@ class Topic extends Component {
     super();
 
     this.state = {
-      selected: false
+      selected: false,
+      hovered: false
     };
 
   }
@@ -154,12 +158,15 @@ class Topic extends Component {
     
     const TopicBoxGroupProps = {
       className: 'topic-box-group',
-      onClick: (e) => this.onTopicClick(e)
+      onClick: (e) => this.onTopicClick(e),
+      onMouseEnter: (e) => this.onTopicMouseEnter(e),
+      onMouseOut: (e) => this.onTopicMouseOut(e)
     };
 
     const TopicSelectBoxProps = {
       d: topicSelectBoxPath,
-      display: this.state.selected
+      selected: this.state.selected,
+      hovered: this.state.hovered
     };
 
     const needConnectLine = topicInfo.children && topicInfo.children.length;
@@ -198,12 +205,25 @@ class Topic extends Component {
   onTopicDoubleClick() {
     editReceiver.show();
   }
+  
+  onTopicMouseEnter(e) {
+    // if not selected, show hovered box
+    if (!this.state.selected) {
+      this.setState({hovered: true});
+    }
+  }
+
+  onTopicMouseOut(e) {
+    if (e.target.classList.value.includes('topic-fill') && this.state.hovered) {
+      this.setState({hovered: false});
+    }
+  }
 
   // lifecycle events
   onSelected() {
-    this.setState({selected: true});
+    this.setState({selected: true, hovered: false});
     editReceiver.prepare(this);
-
+    
     events.emit(EventTags.TOPIC_SELECTED, this);
   }
 
