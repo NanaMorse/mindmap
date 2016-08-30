@@ -1,5 +1,6 @@
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
+  font-family: "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, Verdana, sans-serif;
 }
 
 body, #sheet-container {
