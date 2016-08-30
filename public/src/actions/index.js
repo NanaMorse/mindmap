@@ -40,9 +40,10 @@ export const updateTopicFontSize = (id, fontSize) => {
   }
 };
 
-export const updateTopicShapeClass = (shapeClass) => {
+export const updateTopicShapeClass = (id, shapeClass) => {
   return {
     type: types.UPDATE_TOPIC_SHAPECLASS,
+    id,
     shapeClass
   }
 };

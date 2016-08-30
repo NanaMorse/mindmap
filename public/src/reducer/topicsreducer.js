@@ -34,6 +34,13 @@ export default (currentState = {}, action) => {
       break;
     }
 
+    case types.UPDATE_TOPIC_SHAPECLASS :
+    {
+      targetTopicInfo.style = targetTopicInfo.style || {};
+      targetTopicInfo.style.shapeClass = action.shapeClass;
+      break;
+    }
+
     case types.UPDATE_TOPIC_FILLCOLOR :
     {
       targetTopicInfo.style = targetTopicInfo.style || {};

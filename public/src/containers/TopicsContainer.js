@@ -16,16 +16,20 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onUpdateTitle : (id, newTitle) => {
-      dispatch(actions.updateTopicTitle(id, newTitle));
+    onUpdateTitle : (id, title) => {
+      dispatch(actions.updateTopicTitle(id, title));
     },
 
-    onUpdateFontSize : (id, newFontSize) => {
-      dispatch(actions.updateTopicFontSize(id, newFontSize));
+    onUpdateFontSize : (id, fontSize) => {
+      dispatch(actions.updateTopicFontSize(id, fontSize));
     },
 
-    onUpdateFillColor : (id, newFillColor) => {
-      dispatch(actions.updateTopicFillColor(id, newFillColor));
+    onUpdateFillColor : (id, fillColor) => {
+      dispatch(actions.updateTopicFillColor(id, fillColor));
+    },
+    
+    onUpdateShapeClass: (id, shapeClass) => {
+      dispatch(actions.updateTopicShapeClass(id, shapeClass));
     },
     
     onUpdateLabel: (id, labelText) => {

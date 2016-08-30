@@ -5,6 +5,10 @@ export const ROOT_TOPIC = 'ROOT_TOPIC';
 export const MAIN_TOPIC = 'MAIN_TOPIC';
 export const SUB_TOPIC = 'SUB_TOPIC';
 
+// Topic Shape Types
+export const SHAPE_RECT = 'SHAPE_RECT';
+export const SHAPE_ROUNDED_RECT = 'SHAPE_ROUNDED_RECT';
+
 // Topic binds component constants
 export const LABEL_TEXT_SIZE = '12px';
 export const LABEL_FILL_COLOR = '#EDF9CC';

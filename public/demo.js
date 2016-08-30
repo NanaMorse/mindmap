@@ -7,17 +7,17 @@ export default {
     "defaultStyle": {
       "ROOT_TOPIC": {
         "fontSize": "18px",
-        "shapeClass": "rect",
+        "shapeClass": "SHAPE_ROUNDED_RECT",
         "fillColor": "#cbdefd"
       },
       "MAIN_TOPIC": {
         "fontSize": "13px",
-        "shapeClass": "rect",
+        "shapeClass": "SHAPE_ROUNDED_RECT",
         "fillColor": "#fef4ec"
       },
       "SUB_TOPIC": {
         "fontSize": "10px",
-        "shapeClass": "rect",
+        "shapeClass": "SHAPE_ROUNDED_RECT",
         "fillColor": "#fef4ec"
       }
     },

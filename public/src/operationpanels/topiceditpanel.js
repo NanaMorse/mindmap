@@ -5,11 +5,18 @@ import {events, selectionsManager} from '../managers';
 import * as widgetGenerator from './widgetgenerator';
 
 import * as EventTags from '../constants/EventTags';
+import * as CommonConstant from '../constants/Common';
+
 
 const UpdateFontSizeSelector = widgetGenerator.selectorGenerator('font size', 'onUpdateFontSize', {
   '10px': '10',
   '13px': '13',
   '18px': '18'
+});
+
+const UpdateShapeClassSelector = widgetGenerator.selectorGenerator('shape class', 'onUpdateShapeClass', {
+  [CommonConstant.SHAPE_RECT]: 'rect',
+  [CommonConstant.SHAPE_ROUNDED_RECT]: 'Rounded Rectangle'
 });
 
 const UpdateFillColorPicker = widgetGenerator.colorPickerGenerator('fill color', 'onUpdateFillColor');
@@ -28,6 +35,7 @@ class TopicEditPanel extends Component {
       show: false,
       fontSize: '10',
       fillColor: '#fef4ec',
+      shapeClass: 'rect',
       labelText: ''
     }
   }
@@ -39,6 +47,19 @@ class TopicEditPanel extends Component {
       style: {
         display: this.state.show ? 'block' : 'none'
       }
+    };
+    
+    const updateFontSizeProps = {
+      value: this.state.fontSize,
+      onChange: e => this.onUpdateFontSize(e)
+    };
+    const updateShapeClassProps = {
+      value: this.state.shapeClass,
+      onChange: e => this.onUpdateShapeClass(e)
+    };
+    const updateFillColorProps = {
+      value: this.state.fillColor,
+      onChange: e => this.onUpdateFillColor(e)
     };
 
     const updateLabelProps = {
@@ -53,8 +74,9 @@ class TopicEditPanel extends Component {
     
     return (
       <div { ...panelProps } >
-        <UpdateFontSizeSelector initValue={this.state.fontSize} onChange={this.onUpdateFontSize.bind(this)}/>
-        <UpdateFillColorPicker initValue={this.state.fillColor} onChange={this.onUpdateFillColor.bind(this)}/>
+        <UpdateFontSizeSelector {...updateFontSizeProps}/>
+        <UpdateShapeClassSelector {...updateShapeClassProps}/>
+        <UpdateFillColorPicker {...updateFillColorProps}/>
         <hr/>
         <AddChildTopicButton onClick={e => this.dispatchOperator(e)}/>
         <RemoveTopicButton onClick={e => this.dispatchOperator(e, selectionsManager.getSelectionsArrayWithoutChild())}/>
@@ -68,6 +90,13 @@ class TopicEditPanel extends Component {
     this.dispatchOperator(e);
     this.setState({
       fontSize: e.target.value
+    });
+  }
+  
+  onUpdateShapeClass(e) {
+    this.dispatchOperator(e);
+    this.setState({
+      shapeClass: e.target.value
     });
   }
   
@@ -94,7 +123,8 @@ class TopicEditPanel extends Component {
     this.setState({
       fontSize: topicStyle.fontSize,
       fillColor: topicStyle.fillColor,
-      labelText: topicInfo.label || ''
+      labelText: topicInfo.label || '',
+      shapeClass: topicStyle.shapeClass
     });
   }
 

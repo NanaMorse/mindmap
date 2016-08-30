@@ -268,6 +268,10 @@ class Topic extends Component {
     this.props.onUpdateLabel(this.props.topicInfo.id, labelText);
   }
 
+  onUpdateShapeClass(shapeClass) {
+    this.props.onUpdateShapeClass(this.props.topicInfo.id, shapeClass);
+  }
+
   onAddChildTopic() {
     this.props.onAddChildTopic(this.props.topicInfo.id, generateUUID());
   }
@@ -295,7 +299,8 @@ class Topics extends Component {
       onUpdateFillColor, 
       onAddChildTopic, 
       onRemoveSelfTopic,
-      onUpdateLabel
+      onUpdateLabel,
+      onUpdateShapeClass
     } = this.props;
 
     const topicsArray = [];
@@ -314,7 +319,8 @@ class Topics extends Component {
         onUpdateFillColor,
         onAddChildTopic,
         onRemoveSelfTopic,
-        onUpdateLabel
+        onUpdateLabel,
+        onUpdateShapeClass
       };
 
       return <Topic { ...topicProps } ></Topic>;

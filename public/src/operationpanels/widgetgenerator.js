@@ -11,13 +11,10 @@ export function selectorGenerator(label, id, selectorOptions = {}) {
   });
 
   return function (props) {
-    const onChangeListener = props.onChange;
-    const initValue = props.initValue;
-
     return (
       <div>
         <label>{ label + ': ' }</label>
-        <select value={ initValue } id={ id } onChange={ onChangeListener }>{ options }</select>
+        <select id={ id } {...props}>{ options }</select>
       </div>
     );
   }
@@ -50,12 +47,10 @@ export function textInputGenerator(label, id) {
  **/
 export function colorPickerGenerator(label, id) {
   return function (props) {
-    const onChangeListener = props.onChange;
-    const initValue = props.initValue;
     return (
       <div>
         <label>{ label + ': ' }</label>
-        <input value={ initValue } id={ id } type="color" onChange={ onChangeListener }/>
+        <input id={ id } type="color" {...props}/>
       </div>
     );
   }

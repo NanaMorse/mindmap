@@ -3,7 +3,7 @@ import {selectionsManager} from '../managers';
 
 import reduxUndo from '../managers/reduxundo';
 
-const elementsIdToStopPropagation = ['updateLabel'];
+const elementsIdToStopPropagation = ['onUpdateLabel'];
 
 const operatorMap = {
   [KeyCode.Z_KEY] (e) {
