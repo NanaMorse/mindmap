@@ -28,6 +28,8 @@ const reduxUndo = (mapDispatchToProps, reducerKey) => {
             dispatch(undo(lastState[reducerKey]));
             return {dispatch, reducerKey};
           });
+          
+          events.emit(EventTags.PUSH_UNDO_STACK);
         });
         
         futureDispatchStack.splice(0);
@@ -63,5 +65,9 @@ reduxUndo.redo = () => {
 
   events.emit(EventTags.UNDO_OR_REDO_TRIGGERED);
 };
+
+reduxUndo.hasUndo = () => !!pastDispatchStack.length;
+
+reduxUndo.hasRedo = () => !!futureDispatchStack.length;
 
 export default reduxUndo;

@@ -6,8 +6,11 @@ import store from './store';
 
 import './components/KeyBind';
 
+import Header from './components/Header';
+
 import SheetContainer from './containers/SheetContainer';
-import OperationPanels from './operationpanels';
+
+import TopicEditPanel from './operationpanels/topiceditpanel';
 
 render(
         <Provider store = { store }>
@@ -16,4 +19,6 @@ render(
     document.getElementById('sheet-container')
 );
 
-render(<OperationPanels />, document.getElementById('operation-panel-container'));
+
+render(<Header />, document.getElementById('header-container'));
+render(<TopicEditPanel />, document.getElementById('operation-panel-container'));

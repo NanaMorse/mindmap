@@ -227,6 +227,8 @@ export const delayInvoking = (() => {
 export const wrapTextWithEllipsis  = (text, fontSize, maxWidth) => {
   if (getTextSize(text, fontSize).width < maxWidth) return text;
 
+  const ellipsisLength = this.getTextSize('...', fontSize);
+
   let wrapResult = '';
   
   sliceText();
@@ -239,7 +241,7 @@ export const wrapTextWithEllipsis  = (text, fontSize, maxWidth) => {
     const slicePart1 = textToSlice.slice(0, parseInt(textToSlice.length / 2));
     const slicePart2 = textToSlice.replace(slicePart1, '');
     
-    if (getTextSize(wrapResult + slicePart1 + '...', fontSize).width > maxWidth - 20) sliceText(slicePart1);
+    if (getTextSize(wrapResult + slicePart1, fontSize).width > maxWidth - ellipsisLength) sliceText(slicePart1);
     else {
       wrapResult += slicePart1;
       sliceText(slicePart2);

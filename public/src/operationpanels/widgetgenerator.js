@@ -28,7 +28,7 @@ export function buttonGenerator(innerText, id) {
     const onClickListener = props.onClick;
 
     return (
-      <button id={ id } onClick={ onClickListener }>{ innerText }</button>
+      <button className="primary-button" id={ id } onClick={ onClickListener }>{ innerText }</button>
     )
   }
 }
