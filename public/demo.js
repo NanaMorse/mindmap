@@ -8,16 +8,19 @@ export default {
       "ROOT_TOPIC": {
         "fontSize": "18px",
         "shapeClass": "SHAPE_ROUNDED_RECT",
+        "lineClass": "LINE_ROUNDED",
         "fillColor": "#cbdefd"
       },
       "MAIN_TOPIC": {
         "fontSize": "13px",
         "shapeClass": "SHAPE_ROUNDED_RECT",
+        "lineClass": "LINE_RIGHT_ANGLE",
         "fillColor": "#fef4ec"
       },
       "SUB_TOPIC": {
         "fontSize": "10px",
         "shapeClass": "SHAPE_ROUNDED_RECT",
+        "lineClass": "LINE_RIGHT_ANGLE",
         "fillColor": "#fef4ec"
       }
     },

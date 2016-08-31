@@ -8,6 +8,7 @@ import * as Distance from '../constants/Distance';
 import * as EventTags from '../constants/EventTags';
 
 import CalcTopicShape from '../calcpath/topicshape';
+import CalcConnectLine from '../calcpath/connectline';
 
 import layoutTopics from '../layout';
 
@@ -48,44 +49,8 @@ class TopicTitle extends Component {
 }
 
 // Connect line
-const ConnectLine = ({topicInfo}) => {
-  // need startPoint, centerPoint, and endPoints
-  // set as logicright structure(right direction)
-  const {position: parentPosition, boxSize} = topicInfo;
-
-  const marginLeft = Distance.TopicMargin[CommonConstant.LOGIC_TO_RIGHT].marginLeft;
-
-  // startPoint
-  const startPoint = [boxSize.width / 2, 0];
-
-  // centerPoint
-  const centerPoint = [startPoint[0] + marginLeft / 2, startPoint[1]];
-
-  // endPoints
-  const endPoints = topicInfo.children.map((childInfo) => {
-    const {position, boxSize} = childInfo;
-
-    const fixedPosition = [position[0] - parentPosition[0], position[1] - parentPosition[1]];
-
-    return [fixedPosition[0] - boxSize.width / 2, fixedPosition[1]];
-  });
-
-  // draw line path
-  let path = '';
-
-  // start to center
-  path += `M ${startPoint[0]} ${startPoint[1]} ${centerPoint[0]} ${centerPoint[1]} `;
-
-  // center to each end
-  endPoints.forEach((endPoint) => {
-    path += `M ${centerPoint[0]} ${endPoint[1]} ${endPoint[0]} ${endPoint[1]} `
-  });
-
-  // center line
-  const endPointYs = endPoints.map(endPoint => endPoint[1]);
-  const minY = Math.min(...endPointYs);
-  const maxY = Math.max(...endPointYs);
-  path += `M ${centerPoint[0]} ${minY} ${centerPoint[0]} ${maxY}`;
+const ConnectLine = ({topicInfo, lineClass}) => {
+  const path = CalcConnectLine[lineClass](topicInfo);
 
   return <path className="connect-line" d={path} stroke="#000" fill="none"></path>
 };
@@ -181,7 +146,7 @@ class Topic extends Component {
           <TopicTitle {...TopicTitleProps}/>
         </g>
         <TopicSelectBox {...TopicSelectBoxProps}/>
-        {needConnectLine ? <ConnectLine topicInfo={topicInfo}/> : []}
+        {needConnectLine ? <ConnectLine topicInfo={topicInfo} lineClass={style.lineClass}/> : []}
       </g>
     );
   }
