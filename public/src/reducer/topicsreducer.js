@@ -40,6 +40,13 @@ export default (currentState = {}, action) => {
       targetTopicInfo.style.shapeClass = action.shapeClass;
       break;
     }
+      
+    case types.UPDATE_TOPIC_LINECLASS :
+    {
+      targetTopicInfo.style = targetTopicInfo.style || {};
+      targetTopicInfo.style.lineClass = action.lineClass;
+      break;
+    }
 
     case types.UPDATE_TOPIC_FILLCOLOR :
     {

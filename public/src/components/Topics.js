@@ -237,6 +237,10 @@ class Topic extends Component {
     this.props.onUpdateShapeClass(this.props.topicInfo.id, shapeClass);
   }
 
+  onUpdateLineClass(lineClass) {
+    this.props.onUpdateLineClass(this.props.topicInfo.id, lineClass);
+  }
+
   onAddChildTopic() {
     this.props.onAddChildTopic(this.props.topicInfo.id, generateUUID());
   }
@@ -265,7 +269,8 @@ class Topics extends Component {
       onAddChildTopic, 
       onRemoveSelfTopic,
       onUpdateLabel,
-      onUpdateShapeClass
+      onUpdateShapeClass,
+      onUpdateLineClass
     } = this.props;
 
     const topicsArray = [];
@@ -285,7 +290,8 @@ class Topics extends Component {
         onAddChildTopic,
         onRemoveSelfTopic,
         onUpdateLabel,
-        onUpdateShapeClass
+        onUpdateShapeClass,
+        onUpdateLineClass
       };
 
       return <Topic { ...topicProps } ></Topic>;

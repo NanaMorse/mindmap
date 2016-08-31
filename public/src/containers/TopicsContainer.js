@@ -32,6 +32,10 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(actions.updateTopicShapeClass(id, shapeClass));
     },
     
+    onUpdateLineClass: (id, lineClass) => {
+      dispatch(actions.updateTopicLineClass(id, lineClass));
+    },
+    
     onUpdateLabel: (id, labelText) => {
       dispatch(actions.updateTopicLabel(id, labelText));
     },

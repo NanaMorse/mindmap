@@ -15,8 +15,13 @@ const UpdateFontSizeSelector = widgetGenerator.selectorGenerator('font size', 'o
 });
 
 const UpdateShapeClassSelector = widgetGenerator.selectorGenerator('shape class', 'onUpdateShapeClass', {
-  [CommonConstant.SHAPE_RECT]: 'rect',
+  [CommonConstant.SHAPE_RECT]: 'Rect',
   [CommonConstant.SHAPE_ROUNDED_RECT]: 'Rounded Rectangle'
+});
+
+const UpdateLineClassSelector = widgetGenerator.selectorGenerator('line class', 'onUpdateLineClass', {
+  [CommonConstant.LINE_RIGHT_ANGLE]: 'Right Angle',
+  [CommonConstant.LINE_ROUNDED]: 'Rounded'
 });
 
 const UpdateFillColorPicker = widgetGenerator.colorPickerGenerator('fill color', 'onUpdateFillColor');
@@ -33,9 +38,10 @@ class TopicEditPanel extends Component {
 
     this.state = {
       show: false,
-      fontSize: '10',
-      fillColor: '#fef4ec',
-      shapeClass: 'rect',
+      fontSize: '',
+      fillColor: '',
+      shapeClass: '',
+      lineClass: '',
       labelText: ''
     }
   }
@@ -57,6 +63,10 @@ class TopicEditPanel extends Component {
       value: this.state.shapeClass,
       onChange: e => this.onUpdateShapeClass(e)
     };
+    const updateLineClassProps = {
+      value: this.state.lineClass,
+      onChange: e => this.onUpdateLineClass(e)
+    };
     const updateFillColorProps = {
       value: this.state.fillColor,
       onChange: e => this.onUpdateFillColor(e)
@@ -76,6 +86,7 @@ class TopicEditPanel extends Component {
       <div { ...panelProps } >
         <UpdateFontSizeSelector {...updateFontSizeProps}/>
         <UpdateShapeClassSelector {...updateShapeClassProps}/>
+        <UpdateLineClassSelector {...updateLineClassProps}/>
         <UpdateFillColorPicker {...updateFillColorProps}/>
         <hr/>
         <AddChildTopicButton onClick={e => this.dispatchOperator(e)}/>
@@ -97,6 +108,13 @@ class TopicEditPanel extends Component {
     this.dispatchOperator(e);
     this.setState({
       shapeClass: e.target.value
+    });
+  }
+
+  onUpdateLineClass(e) {
+    this.dispatchOperator(e);
+    this.setState({
+      lineClass: e.target.value
     });
   }
   
@@ -124,7 +142,8 @@ class TopicEditPanel extends Component {
       fontSize: topicStyle.fontSize,
       fillColor: topicStyle.fillColor,
       labelText: topicInfo.label || '',
-      shapeClass: topicStyle.shapeClass
+      shapeClass: topicStyle.shapeClass,
+      lineClass: topicStyle.lineClass
     });
   }
 

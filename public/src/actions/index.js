@@ -48,6 +48,14 @@ export const updateTopicShapeClass = (id, shapeClass) => {
   }
 };
 
+export const updateTopicLineClass = (id, lineClass) => {
+  return {
+    type: types.UPDATE_TOPIC_LINECLASS,
+    id,
+    lineClass
+  }
+};
+
 export const updateTopicFillColor = (id, fillColor) => {
   return {
     type: types.UPDATE_TOPIC_FILLCOLOR,
