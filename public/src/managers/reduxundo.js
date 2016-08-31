@@ -1,6 +1,6 @@
 import store from '../store';
 
-import {deepAssign, delayInvoking} from '../apptools';
+import {deepClone, delayInvoking} from '../apptools';
 
 import {events} from '../managers';
 
@@ -21,7 +21,7 @@ const reduxUndo = (mapDispatchToProps, reducerKey) => {
 
     Object.keys(dispatchMap).forEach(function (dispatchKey) {
       undoDispatchMap[dispatchKey] = (...args) => {
-        const lastState = deepAssign({}, store.getState());
+        const lastState = deepClone(store.getState());
 
         delayInvoking(() => {
           pastDispatchStack.push(() => {
@@ -45,7 +45,7 @@ const reduxUndo = (mapDispatchToProps, reducerKey) => {
 reduxUndo.undo = () => {
   const pastDispatch = pastDispatchStack.pop();
 
-  const futureState = deepAssign({}, store.getState());
+  const futureState = deepClone(store.getState());
 
   if (pastDispatch) {
     const {dispatch, reducerKey} = pastDispatch();

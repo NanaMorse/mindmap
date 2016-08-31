@@ -167,6 +167,7 @@ export const editReceiver = (() => {
   }
 })();
 
+// seems like useless?
 export const deepAssign = (target, ...options) => {
   options.forEach(opt => {
     for (let key in opt) {
@@ -198,6 +199,10 @@ export const deepAssign = (target, ...options) => {
   });
 
   return target;
+};
+
+export const deepClone = (target) => {
+  return JSON.parse(JSON.stringify(target));
 };
 
 export const generateUUID = () => {

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 import {events, selectionsManager} from '../managers';
-import {getTextSize, editReceiver, deepAssign, generateUUID, wrapTextWithEllipsis} from '../apptools';
+import * as AppTools from '../apptools';
 
 import * as CommonConstant from '../constants/Common';
 import * as Distance from '../constants/Distance';
@@ -70,7 +70,7 @@ const Label = ({topicInfo}) => {
   const labelTextStartX = -halfParentWidth + Distance.LabelPadding.paddingLeft;
   const labelTextStartY = halfParentHeight + 1 + labelHeight / 2;
 
-  labelText = wrapTextWithEllipsis(labelText, CommonConstant.LABEL_TEXT_SIZE, labelWidth);
+  labelText = AppTools.wrapTextWithEllipsis(labelText, CommonConstant.LABEL_TEXT_SIZE, labelWidth);
 
   return (
     <g className="label">
@@ -168,7 +168,7 @@ class Topic extends Component {
   }
 
   onTopicDoubleClick() {
-    editReceiver.show();
+    AppTools.editReceiver.show();
   }
   
   onTopicMouseEnter(e) {
@@ -187,7 +187,7 @@ class Topic extends Component {
   // lifecycle events
   onSelected() {
     this.setState({selected: true, hovered: false});
-    editReceiver.prepare(this);
+    AppTools.editReceiver.prepare(this);
     
     events.emit(EventTags.TOPIC_SELECTED, this);
   }
@@ -242,7 +242,7 @@ class Topic extends Component {
   }
 
   onAddChildTopic() {
-    this.props.onAddChildTopic(this.props.topicInfo.id, generateUUID());
+    this.props.onAddChildTopic(this.props.topicInfo.id, AppTools.generateUUID());
   }
 
   onRemoveSelfTopic() {
@@ -311,7 +311,7 @@ class Topics extends Component {
   calculateFeedExtendInfo () {
     const {defaultStyle, feed} = this.props;
 
-    const feedCopy = deepAssign({}, feed);
+    const feedCopy = AppTools.deepClone(feed);
     
     _calculate();
 
@@ -337,7 +337,7 @@ class Topics extends Component {
       // get boxSize
       const fontSize = Object.assign({}, defaultStyle[topicType], feedTree.style).fontSize;
 
-      const titleAreaSize = getTextSize(feedTree.title || 'Topic', fontSize);
+      const titleAreaSize = AppTools.getTextSize(feedTree.title || 'Topic', fontSize);
 
       const boxSize = {};
       const {paddingLeft, paddingRight, paddingTop, paddingBottom} = Distance.TopicPadding[topicType];
@@ -346,7 +346,7 @@ class Topics extends Component {
 
       // if has label
       if (feedTree.label) {
-        const {width: labelTextWidth, height: labelTextHeight} = getTextSize(feedTree.label, CommonConstant.LABEL_TEXT_SIZE);
+        const {width: labelTextWidth, height: labelTextHeight} = AppTools.getTextSize(feedTree.label, CommonConstant.LABEL_TEXT_SIZE);
 
         const labelPadding = Distance.LabelPadding;
         const labelWidth = labelPadding.paddingLeft + labelTextWidth + labelPadding.paddingRight;

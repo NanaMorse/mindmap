@@ -1,10 +1,10 @@
 import * as types from '../constants/ActionTypes';
 
-import {deepAssign} from '../apptools';
+import {deepClone} from '../apptools';
 
 export default (currentState = {}, action) => {
   
-  const stateCopy = deepAssign({}, currentState);
+  const stateCopy = deepClone(currentState);
 
   const feedCopy = stateCopy.feed;
   
