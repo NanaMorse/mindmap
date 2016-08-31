@@ -10,3 +10,9 @@
     height: 200px;
     border: 1px solid;
 }
+
+.topic-edit-panel > div {
+    display: inline-block;
+    margin-right: 10px;
+    margin-top: 0.5em;
+}
