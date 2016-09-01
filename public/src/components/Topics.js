@@ -50,8 +50,9 @@ class TopicTitle extends Component {
 }
 
 // Connect line
-const ConnectLine = ({topicInfo, lineClass}) => {
-  const path = CalcConnectLine[lineClass](topicInfo);
+const ConnectLine = ({topicInfo, style}) => {
+  const lineClass = style.lineClass;
+  const path = CalcConnectLine[lineClass](topicInfo, style);
 
   return <path className="connect-line" d={path} stroke="#000" fill="none"></path>
 };
@@ -152,7 +153,7 @@ class Topic extends Component {
           <TopicTitle {...TopicTitleProps}/>
         </g>
         <TopicSelectBox {...TopicSelectBoxProps}/>
-        {needConnectLine ? <ConnectLine topicInfo={topicInfo} lineClass={style.lineClass}/> : []}
+        {needConnectLine ? <ConnectLine topicInfo={topicInfo} style={style}/> : []}
       </g>
     );
   }
@@ -350,7 +351,7 @@ class Topics extends Component {
 
       // if has label
       if (topicTree.label) {
-        const {width: labelTextWidth, height: labelTextHeight} = AppTools.getTextSize(topicTree.label, CommonConstant.LABEL_TEXT_SIZE);
+        const {width: labelTextWidth, height: labelTextHeight} = AppTools.getTextSize(topicTree.label, DefaultStyle.label.fontSize);
 
         const labelPadding = Distance.LabelPadding;
         const labelWidth = labelPadding.paddingLeft + labelTextWidth + labelPadding.paddingRight;

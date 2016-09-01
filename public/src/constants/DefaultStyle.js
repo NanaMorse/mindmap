@@ -28,5 +28,9 @@ export default {
   editReceiver: {
     minWidth: 100,
     minHeight: 20
-  }
+  },
+
+  parallelogramSlope: 2.5,
+  
+  selectBoxSpace: 5
 }

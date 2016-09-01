@@ -1,10 +1,9 @@
 import * as CommonConstant from '../constants/Common';
+import DefaultStyle from '../constants/DefaultStyle';
 
-const selectBoxSpace = 5;
-
-const getSelectBoxPath = (boxSize, space) => {
-  const halfWidth = boxSize.width / 2 + space;
-  const halfHeight = boxSize.height / 2 + space;
+const getSelectBoxPath = (boxSize) => {
+  const halfWidth = boxSize.width / 2 + DefaultStyle.selectBoxSpace;
+  const halfHeight = boxSize.height / 2 + DefaultStyle.selectBoxSpace;
 
   return `M ${-halfWidth} ${-halfHeight} ${halfWidth} ${-halfHeight} ` +
       `${halfWidth} ${halfHeight} ${-halfWidth} ${halfHeight} ` +
@@ -21,7 +20,7 @@ export default {
         `${halfWidth} ${halfHeight} ${-halfWidth} ${halfHeight} ` +
         `${-halfWidth} ${-halfHeight} Z`;
 
-    const topicSelectBoxPath = getSelectBoxPath(boxSize, selectBoxSpace);
+    const topicSelectBoxPath = getSelectBoxPath(boxSize);
 
     return { topicShapePath, topicSelectBoxPath };
   },
@@ -38,7 +37,23 @@ export default {
       `Q ${-halfWidth} ${halfHeight} ${-halfWidth} ${halfHeight - ry} L ${-halfWidth} ${-halfHeight + ry} ` +
       `Q ${-halfWidth} ${-halfHeight} ${-halfWidth + rx} ${-halfHeight} Z`;
 
-    const topicSelectBoxPath = getSelectBoxPath(boxSize, selectBoxSpace);
+    const topicSelectBoxPath = getSelectBoxPath(boxSize);
+
+    return { topicShapePath, topicSelectBoxPath };
+  },
+
+  [CommonConstant.SHAPE_PARALLELOGRAM](boxSize) {
+    const {width, height} = boxSize;
+
+    const halfWidth = width / 2;
+    const halfHeight = height / 2;
+
+    const cutLength = height / DefaultStyle.parallelogramSlope;
+
+    const topicShapePath = `M ${-halfWidth + cutLength} ${-halfHeight} h ${width - cutLength} ` +
+      `L ${halfWidth - cutLength} ${halfHeight} h ${cutLength - width} Z`;
+
+    const topicSelectBoxPath = getSelectBoxPath(boxSize);
 
     return { topicShapePath, topicSelectBoxPath };
   }

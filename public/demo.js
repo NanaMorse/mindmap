@@ -6,7 +6,9 @@ export default {
   "topics": {
     "id": "300af847dec8435975135bc737",
     "title": "Central Topic",
-    "structureClass": 'LOGIC_TO_RIGHT',
+    "style": {
+      "shapeClass": "SHAPE_PARALLELOGRAM"
+    },
     "children": [
       {
         "id": "cf99d952d6a99bab2cba9b1def",

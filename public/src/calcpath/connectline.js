@@ -1,10 +1,11 @@
 import * as CommonConstant from '../constants/Common';
 import * as Distance from '../constants/Distance';
+import DefaultStyle from '../constants/DefaultStyle';
 
 export default {
-  [CommonConstant.LINE_RIGHT_ANGLE](topicInfo) {
+  [CommonConstant.LINE_RIGHT_ANGLE](topicInfo, style) {
 
-    const {startPoint, centerPoint, endPoints} = getImportantPoints(topicInfo);
+    const {startPoint, centerPoint, endPoints} = getImportantPoints(topicInfo, style);
 
     // draw line path
     let path = '';
@@ -26,11 +27,11 @@ export default {
     return path;
   },
 
-  [CommonConstant.LINE_ROUNDED](topicInfo) {
+  [CommonConstant.LINE_ROUNDED](topicInfo, style) {
 
     const roundR = 5;
 
-    const {startPoint, centerPoint, endPoints} = getImportantPoints(topicInfo);
+    const {startPoint, centerPoint, endPoints} = getImportantPoints(topicInfo, style);
 
     let path = '';
 
@@ -62,16 +63,31 @@ export default {
   }
 }
 
-function getImportantPoints(topicInfo) {
+function getImportantPoints(topicInfo, style) {
   const {position: parentPosition, boxSize} = topicInfo;
 
   const marginLeft = Distance.TopicMargin[CommonConstant.LOGIC_TO_RIGHT].marginLeft;
 
+  const halfWidth = boxSize.width / 2;
+  
   // startPoint
-  const startPoint = [boxSize.width / 2, 0];
+  let startPoint;
+  switch (style.shapeClass) {
+    case CommonConstant.SHAPE_PARALLELOGRAM :
+    {
+      const cutLength = boxSize.height / 2 / DefaultStyle.parallelogramSlope;
+      startPoint = [halfWidth - cutLength, 0];
+      break;
+    }
+      
+    default :
+    {
+      startPoint = [halfWidth, 0];
+    }
+  }
 
   // centerPoint
-  const centerPoint = [startPoint[0] + marginLeft / 2, startPoint[1]];
+  const centerPoint = [halfWidth + marginLeft / 2, startPoint[1]];
 
   // endPoints
   const endPoints = topicInfo.children.map((childInfo) => {
