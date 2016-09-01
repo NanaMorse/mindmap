@@ -1,21 +1,21 @@
 import * as CommonConstant from '../constants/Common';
 
 export const TopicPadding = {
-  [CommonConstant.ROOT_TOPIC]: {
+  [CommonConstant.TOPIC_ROOT]: {
     paddingTop: 20,
     paddingRight: 30,
     paddingBottom: 20,
     paddingLeft: 30
   },
 
-  [CommonConstant.MAIN_TOPIC]: {
+  [CommonConstant.TOPIC_MAIN]: {
     paddingTop: 16,
     paddingRight: 25,
     paddingBottom: 25,
     paddingLeft: 16
   },
 
-  [CommonConstant.SUB_TOPIC]: {
+  [CommonConstant.TOPIC_SUB]: {
     paddingTop: 13,
     paddingRight: 20,
     paddingBottom: 20,

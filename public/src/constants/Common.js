@@ -1,9 +1,9 @@
 export const LOGIC_TO_RIGHT = 'LOGIC_TO_RIGHT';
 
 // Topic Types
-export const ROOT_TOPIC = 'ROOT_TOPIC';
-export const MAIN_TOPIC = 'MAIN_TOPIC';
-export const SUB_TOPIC = 'SUB_TOPIC';
+export const TOPIC_ROOT = 'TOPIC_ROOT';
+export const TOPIC_MAIN = 'TOPIC_MAIN';
+export const TOPIC_SUB = 'TOPIC_SUB';
 
 // Topic Shape Types
 export const SHAPE_RECT = 'SHAPE_RECT';

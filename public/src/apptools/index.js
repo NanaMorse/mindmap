@@ -1,4 +1,5 @@
 import * as KeyCode from '../constants/KeyCode';
+import DefaultStyle from '../constants/DefaultStyle';
 
 const appToolsContainer = document.querySelector('#app-tools-container');
 
@@ -37,14 +38,13 @@ export const editReceiver = (() => {
 
   input.id = 'editReceiver';
 
-  const minWidth = 100;
-  const minHeight = 20;
+  const {minWidth, minHeight} = DefaultStyle.editReceiver;
+
   input.style.minWidth = minWidth + 'px';
   input.style.minHeight = minHeight + 'px';
 
   appToolsContainer.appendChild(input);
-
-
+  
   let currentComponent;
   
   // lifeCircle method
@@ -58,10 +58,7 @@ export const editReceiver = (() => {
 
       left -= (minWidth - width) / 2;
       if (width === 0) {
-        const defaultHeight = 16;
-
-        height = defaultHeight;
-        top -= defaultHeight / 2;
+        top -= minHeight / 2;
       }
       width = minWidth;
     }

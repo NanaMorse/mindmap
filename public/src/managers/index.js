@@ -2,6 +2,8 @@ const Events = require('events');
 
 import store from '../store';
 
+import {TOPIC_ROOT} from '../constants/Common';
+
 export const events = new Events();
 
 export const selectionsManager = (() => {
@@ -48,42 +50,42 @@ export const selectionsManager = (() => {
     return selections.filter((selectionB) => {
       return !selections.some((selectionA) => {
           return isAAncestorOfB(selectionA, selectionB);
-        }) && selectionB.getType() !== 'ROOT_TOPIC';
+        }) && selectionB.getType() !== TOPIC_ROOT;
     });
   };
 
   const getAncestorCheckMethod = (selections) => {
     const ancestorMap = {};
 
-    const feed = store.getState().topics.feed;
+    const topicsInfo = store.getState().topics;
 
     selections.forEach((selection) => {
       getSelectionsAncestorList(selection);
     });
 
     return function (selectionA, selectionB) {
-      return selectionA.props.id !== feed.id && ancestorMap[selectionB.props.id].includes(selectionA.props.id);
+      return selectionA.props.id !== topicsInfo.id && ancestorMap[selectionB.props.id].includes(selectionA.props.id);
     };
 
     function getSelectionsAncestorList(selection) {
       const targetId = selection.props.id;
       const targetList = ancestorMap[targetId] = [];
 
-      if (targetId === feed.id) return;
+      if (targetId === topicsInfo.id) return;
 
       search();
 
-      function search(searchSource = feed) {
+      function search(searchSource = topicsInfo) {
         if (!searchSource.children) return;
 
-        for (const childFeed of searchSource.children) {
-          if (childFeed.id === targetId) {
+        for (const childTopic of searchSource.children) {
+          if (childTopic.id === targetId) {
             targetList.push(searchSource.id);
             return true;
           }
 
           targetList.push(searchSource.id);
-          if (search(childFeed)) {
+          if (search(childTopic)) {
             return true;
           }
 

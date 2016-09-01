@@ -4,11 +4,9 @@ import {deepClone} from '../apptools';
 
 export default (currentState = {}, action) => {
   
-  const stateCopy = deepClone(currentState);
-
-  const feedCopy = stateCopy.feed;
+  const topicsCopy = deepClone(currentState);
   
-  const {topicInfo: targetTopicInfo, parentInfo: targetParentInfo} = findTopicInfoById(feedCopy, action.id) || {};
+  const {topicInfo: targetTopicInfo, parentInfo: targetParentInfo} = findTopicInfoById(topicsCopy, action.id) || {};
 
   switch (action.type) {
     case types.UNDO :
@@ -81,17 +79,17 @@ export default (currentState = {}, action) => {
     }
   }
   
-  return stateCopy;
+  return topicsCopy;
 };
 
-function findTopicInfoById(feed, id, parentInfo) {
-  if (!feed || !id) return;
+function findTopicInfoById(topic, id, parentInfo) {
+  if (!topic || !id) return;
   
-  if (feed.id === id) return {topicInfo: feed, parentInfo};
+  if (topic.id === id) return {topicInfo: topic, parentInfo};
 
-  if (feed.children) {
-    for (const childFeed of feed.children) {
-      const {topicInfo, parentInfo} = findTopicInfoById(childFeed, id, feed) || {};
+  if (topic.children) {
+    for (const childTopic of topic.children) {
+      const {topicInfo, parentInfo} = findTopicInfoById(childTopic, id, topic) || {};
       if (topicInfo) return {topicInfo, parentInfo};
     }
   }

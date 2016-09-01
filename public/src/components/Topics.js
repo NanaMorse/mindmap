@@ -6,6 +6,7 @@ import * as AppTools from '../apptools';
 import * as CommonConstant from '../constants/Common';
 import * as Distance from '../constants/Distance';
 import * as EventTags from '../constants/EventTags';
+import DefaultStyle from '../constants/DefaultStyle';
 
 import CalcTopicShape from '../calcpath/topicshape';
 import CalcConnectLine from '../calcpath/connectline';
@@ -69,13 +70,16 @@ const Label = ({topicInfo}) => {
 
   const labelTextStartX = -halfParentWidth + Distance.LabelPadding.paddingLeft;
   const labelTextStartY = halfParentHeight + 1 + labelHeight / 2;
-
-  labelText = AppTools.wrapTextWithEllipsis(labelText, CommonConstant.LABEL_TEXT_SIZE, labelWidth);
+  
+  
+  const {fontSize, fillColor} = DefaultStyle.label;
+  
+  labelText = AppTools.wrapTextWithEllipsis(labelText, fontSize, labelWidth);
 
   return (
     <g className="label">
-      <path className="label-shape" d={path} stroke="none" fill={CommonConstant.LABEL_FILL_COLOR}/>
-      <text style={{fontSize: CommonConstant.LABEL_TEXT_SIZE}} x={labelTextStartX} y={labelTextStartY}>{labelText}</text>
+      <path className="label-shape" d={path} stroke="none" fill={fillColor}/>
+      <text fontSize={fontSize} x={labelTextStartX} y={labelTextStartY}>{labelText}</text>
     </g>
   )
 };
@@ -94,9 +98,9 @@ class Topic extends Component {
 
   render() {
     
-    const {topicInfo, defaultStyle} = this.props;
+    const {topicInfo} = this.props;
 
-    const style = this.style = Object.assign({}, defaultStyle[topicInfo.type], topicInfo.style || {});
+    const style = this.style = Object.assign({}, DefaultStyle[topicInfo.type], topicInfo.style || {});
 
     topicInfo.title = topicInfo.title == null ? 'Topic' : topicInfo.title;
     
@@ -260,7 +264,7 @@ class Topics extends Component {
 
   render() {
     // calculate layout position first
-    const feedExtend = this.calculateFeedExtendInfo();
+    const topicsExtend = this.calculateTopicsExtendInfo();
     
     const {
       onUpdateTitle, 
@@ -275,14 +279,14 @@ class Topics extends Component {
 
     const topicsArray = [];
 
-    const createTopic = feedInfo => {
+    const createTopic = topicInfo => {
 
-      const id = feedInfo.id;
+      const id = topicInfo.id;
 
       const topicProps = {
         key: id,
         id: id,
-        topicInfo: feedInfo,
+        topicInfo: topicInfo,
         defaultStyle: this.props.defaultStyle,
         onUpdateTitle,
         onUpdateFontSize,
@@ -297,47 +301,45 @@ class Topics extends Component {
       return <Topic { ...topicProps } ></Topic>;
     };
 
-    const setTopicArrayData = (feedTree) => {
-      topicsArray.push(createTopic(feedTree));
-      feedTree.children && feedTree.children.forEach(childTree => setTopicArrayData(childTree));
+    const setTopicArrayData = (topicInfo) => {
+      topicsArray.push(createTopic(topicInfo));
+      topicInfo.children && topicInfo.children.forEach(childTree => setTopicArrayData(childTree));
     };
 
-    setTopicArrayData(feedExtend);
+    setTopicArrayData(topicsExtend);
     
     return <g className="topics-group">{ topicsArray }</g>;
   }
   
-  // calculate feed info, include boxSize and topic type
-  calculateFeedExtendInfo () {
-    const {defaultStyle, feed} = this.props;
-
-    const feedCopy = AppTools.deepClone(feed);
+  // calculate topics info, include boxSize and topic type
+  calculateTopicsExtendInfo () {
+    const topicsCopy = AppTools.deepClone(this.props);
     
     _calculate();
 
     // get bounds and position
-    layoutTopics(feedCopy);
+    layoutTopics(topicsCopy);
 
-    return feedCopy;
+    return topicsCopy;
     
-    function _calculate(feedTree = feedCopy) {
+    function _calculate(topicTree = topicsCopy) {
       // get Topic type
       let topicType;
 
-      const parent = findTopicParent(feedTree);
+      const parent = findTopicParent(topicTree);
 
-      if (parent == null) topicType = CommonConstant.ROOT_TOPIC;
+      if (parent == null) topicType = CommonConstant.TOPIC_ROOT;
 
-      else if (findTopicParent(parent) == null) topicType = CommonConstant.MAIN_TOPIC;
+      else if (findTopicParent(parent) == null) topicType = CommonConstant.TOPIC_MAIN;
 
-      else topicType = CommonConstant.SUB_TOPIC;
+      else topicType = CommonConstant.TOPIC_SUB;
 
-      feedTree.type = topicType;
+      topicTree.type = topicType;
 
       // get boxSize
-      const fontSize = Object.assign({}, defaultStyle[topicType], feedTree.style).fontSize;
+      const fontSize = Object.assign({}, DefaultStyle[topicType], topicTree.style).fontSize;
 
-      const titleAreaSize = AppTools.getTextSize(feedTree.title || 'Topic', fontSize);
+      const titleAreaSize = AppTools.getTextSize(topicTree.title || 'Topic', fontSize);
 
       const boxSize = {};
       const {paddingLeft, paddingRight, paddingTop, paddingBottom} = Distance.TopicPadding[topicType];
@@ -345,23 +347,23 @@ class Topics extends Component {
       boxSize.height = titleAreaSize.height + paddingTop + paddingBottom;
 
       // if has label
-      if (feedTree.label) {
-        const {width: labelTextWidth, height: labelTextHeight} = AppTools.getTextSize(feedTree.label, CommonConstant.LABEL_TEXT_SIZE);
+      if (topicTree.label) {
+        const {width: labelTextWidth, height: labelTextHeight} = AppTools.getTextSize(topicTree.label, CommonConstant.LABEL_TEXT_SIZE);
 
         const labelPadding = Distance.LabelPadding;
         const labelWidth = labelPadding.paddingLeft + labelTextWidth + labelPadding.paddingRight;
         const labelHeight = labelPadding.paddingTop + labelTextHeight + labelPadding.paddingBottom;
         
-        feedTree.labelBoxSize = {width: labelWidth, height: labelHeight};
+        topicTree.labelBoxSize = {width: labelWidth, height: labelHeight};
       }
       
-      feedTree.boxSize = boxSize;
+      topicTree.boxSize = boxSize;
 
-      feedTree.children && feedTree.children.forEach(childTree => _calculate(childTree));
+      topicTree.children && topicTree.children.forEach(childTree => _calculate(childTree));
       
     }
 
-    function findTopicParent (topicTree, treeToCheck = feedCopy)  {
+    function findTopicParent (topicTree, treeToCheck = topicsCopy)  {
       if (topicTree === treeToCheck) return;
 
       const children = treeToCheck.children;

@@ -13,12 +13,12 @@ import * as CommonConstant from '../constants/Common';
  * 每个组件应该由它的直接子后代的bounds信息算出它本身的bounds，若该组件没有直接子后代，则它本身的bounds等于boxSize + 各个边的内补
  **/
 
-export default (feedTree) => {
-  feedTree.position = [300, 300];
+export default (topicTree) => {
+  topicTree.position = [300, 300];
 
-  calcComponentsBounds(feedTree);
+  calcComponentsBounds(topicTree);
   
-  calcChildrenPosition(feedTree);
+  calcChildrenPosition(topicTree);
 
   function calcComponentsBounds(parentTree) {
     const boxSize = parentTree.boxSize;
