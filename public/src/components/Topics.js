@@ -101,6 +101,8 @@ class Topic extends Component {
     const {topicInfo} = this.props;
 
     const style = this.style = Object.assign({}, DefaultStyle[topicInfo.type], topicInfo.style || {});
+    
+    this.topicType = topicInfo.type;
 
     topicInfo.title = topicInfo.title == null ? 'Topic' : topicInfo.title;
     

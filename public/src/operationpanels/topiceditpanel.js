@@ -38,6 +38,7 @@ class TopicEditPanel extends Component {
 
     this.state = {
       show: false,
+      remBtnDisabled: false,
       fontSize: '',
       fillColor: '',
       shapeClass: '',
@@ -82,6 +83,11 @@ class TopicEditPanel extends Component {
       }
     };
     
+    const removeTopicProps = {
+      onClick: e => this.dispatchOperator(e, selectionsManager.getSelectionsArrayWithoutChild()),
+      disabled: this.state.remBtnDisabled
+    };
+    
     return (
       <div { ...panelProps } >
         <UpdateFontSizeSelector {...updateFontSizeProps}/>
@@ -90,7 +96,7 @@ class TopicEditPanel extends Component {
         <UpdateFillColorPicker {...updateFillColorProps}/>
         <hr/>
         <AddChildTopicButton onClick={e => this.dispatchOperator(e)}/>
-        <RemoveTopicButton onClick={e => this.dispatchOperator(e, selectionsManager.getSelectionsArrayWithoutChild())}/>
+        <RemoveTopicButton {...removeTopicProps}/>
         <hr/>
         <UpdateLabelTextInput {...updateLabelProps}/>
       </div>
@@ -137,13 +143,21 @@ class TopicEditPanel extends Component {
   setPanelWidgetValue(topic) {
     const topicStyle = topic.style;
     const topicInfo = topic.props.topicInfo;
+    
+    let remBtnDisabled; {
+      const selections = selectionsManager.getSelectionsArray();
+      if (selections.length === 1 && selections[0].topicType === CommonConstant.TOPIC_ROOT) {
+        remBtnDisabled = true;
+      }
+    }
 
     this.setState({
       fontSize: topicStyle.fontSize,
       fillColor: topicStyle.fillColor,
       labelText: topicInfo.label || '',
       shapeClass: topicStyle.shapeClass,
-      lineClass: topicStyle.lineClass
+      lineClass: topicStyle.lineClass,
+      remBtnDisabled
     });
   }
 
