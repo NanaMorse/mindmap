@@ -21,6 +21,7 @@ const UpdateShapeClassSelector = widgetGenerator.selectorGenerator('shape class'
 });
 
 const UpdateLineClassSelector = widgetGenerator.selectorGenerator('line class', 'onUpdateLineClass', {
+  [CommonConstant.LINE_NONE]: 'None',
   [CommonConstant.LINE_RIGHT_ANGLE]: 'Right Angle',
   [CommonConstant.LINE_ROUNDED]: 'Rounded'
 });

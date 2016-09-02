@@ -75,7 +75,7 @@ function getImportantPoints(topicInfo) {
   switch (style.shapeClass) {
     case CommonConstant.SHAPE_PARALLELOGRAM :
     {
-      const cutLength = boxSize.height / 2 / DefaultStyle.parallelogramSlope;
+      const cutLength = boxSize.height / 2 / DefaultStyle.topicShapeStyle.parallelogramSlope;
       startPoint = [halfWidth - cutLength, 0];
       break;
     }
@@ -98,7 +98,7 @@ function getImportantPoints(topicInfo) {
     switch (style.shapeClass) {
       case CommonConstant.SHAPE_PARALLELOGRAM :
       {
-        const cutLength = boxSize.height / 2 / DefaultStyle.parallelogramSlope;
+        const cutLength = boxSize.height / 2 / DefaultStyle.topicShapeStyle.parallelogramSlope;
         return [fixedPosition[0] - boxSize.width / 2 + cutLength, fixedPosition[1]];
       }
 

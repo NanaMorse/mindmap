@@ -33,8 +33,11 @@ export default {
     minWidth: 100,
     minHeight: 20
   },
-
-  parallelogramSlope: 2.5,
+  
+  topicShapeStyle: {
+    parallelogramSlope: 2.5,
+    roundedRectR: 5
+  },
   
   selectBoxSpace: 5
 }

@@ -137,7 +137,7 @@ class Topic extends Component {
       hovered: this.state.hovered
     };
 
-    const needConnectLine = topicInfo.children && topicInfo.children.length;
+    const needConnectLine = style.lineClass !== CommonConstant.LINE_NONE && topicInfo.children && topicInfo.children.length;
     const needLabel = topicInfo.label;
     
     return (
