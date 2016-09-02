@@ -1,25 +1,49 @@
 import * as CommonConstant from '../constants/Common';
 
-export const TopicPadding = {
+export const TopicPaddingOverride = {
   [CommonConstant.TOPIC_ROOT]: {
-    paddingTop: 20,
-    paddingRight: 30,
-    paddingBottom: 20,
-    paddingLeft: 30
+    [CommonConstant.SHAPE_RECT]: {
+      paddingTop: 2 / 3,
+      paddingLeft: 4 / 5
+    },
+    [CommonConstant.SHAPE_ROUNDED_RECT]: {
+      paddingTop: 2 / 3,
+      paddingLeft: 4 / 5
+    },
+    [CommonConstant.SHAPE_PARALLELOGRAM]: {
+      paddingTop: 2 / 3,
+      paddingLeft: 8 / 5
+    }
   },
 
   [CommonConstant.TOPIC_MAIN]: {
-    paddingTop: 16,
-    paddingRight: 25,
-    paddingBottom: 25,
-    paddingLeft: 16
+    [CommonConstant.SHAPE_RECT]: {
+      paddingTop: 2 / 5,
+      paddingLeft: 2 / 3
+    },
+    [CommonConstant.SHAPE_ROUNDED_RECT]: {
+      paddingTop: 2 / 5,
+      paddingLeft: 2 / 3
+    },
+    [CommonConstant.SHAPE_PARALLELOGRAM]: {
+      paddingTop: 2 / 3,
+      paddingLeft: 4 / 3
+    }
   },
 
   [CommonConstant.TOPIC_SUB]: {
-    paddingTop: 13,
-    paddingRight: 20,
-    paddingBottom: 20,
-    paddingLeft: 13
+    [CommonConstant.SHAPE_RECT]: {
+      paddingTop: 1 / 2,
+      paddingLeft: 2 / 3
+    },
+    [CommonConstant.SHAPE_ROUNDED_RECT]: {
+      paddingTop: 1 / 2,
+      paddingLeft: 2 / 3
+    },
+    [CommonConstant.SHAPE_PARALLELOGRAM]: {
+      paddingTop: 2 / 3,
+      paddingLeft: 4 / 3
+    }
   }
 };
 

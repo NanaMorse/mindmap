@@ -31,6 +31,13 @@ export default (currentState = {}, action) => {
       targetTopicInfo.style.fontSize = action.fontSize;
       break;
     }
+      
+    case types.UPDATE_TOPIC_FONTCOLOR :
+    {
+      targetTopicInfo.style = targetTopicInfo.style || {};
+      targetTopicInfo.style.fontColor = action.fontColor;
+      break;
+    }
 
     case types.UPDATE_TOPIC_SHAPECLASS :
     {

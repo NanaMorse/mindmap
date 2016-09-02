@@ -40,6 +40,14 @@ export const updateTopicFontSize = (id, fontSize) => {
   }
 };
 
+export const updateTopicFontColor = (id, fontColor) => {
+  return {
+    type: types.UPDATE_TOPIC_FONTCOLOR,
+    id,
+    fontColor
+  }
+};
+
 export const updateTopicShapeClass = (id, shapeClass) => {
   return {
     type: types.UPDATE_TOPIC_SHAPECLASS,

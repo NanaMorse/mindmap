@@ -42,7 +42,8 @@ class TopicTitle extends Component {
     const {title} = this.props;
 
     const style = {
-      fontSize: this.props.fontSize
+      fontSize: this.props.fontSize,
+      fill: this.props.fontColor
     };
 
     return <text ref='title' style={ style }>{ title }</text>;
@@ -121,7 +122,8 @@ class Topic extends Component {
     const TopicTitleProps = {
       ref: 'TopicTitle',
       title: topicInfo.title,
-      fontSize: style.fontSize
+      fontSize: style.fontSize,
+      fontColor: style.fontColor
     };
     
     const TopicBoxGroupProps = {
@@ -227,6 +229,10 @@ class Topic extends Component {
     this.props.onUpdateFontSize(this.props.topicInfo.id, fontSize);
   }
 
+  onUpdateFontColor(fontColor) {
+    this.props.onUpdateFontColor(this.props.topicInfo.id, fontColor);
+  }
+
   onUpdateFillColor(fillColor) {
     this.props.onUpdateFillColor(this.props.topicInfo.id, fillColor);
   }
@@ -273,7 +279,8 @@ class Topics extends Component {
       onRemoveSelfTopic,
       onUpdateLabel,
       onUpdateShapeClass,
-      onUpdateLineClass
+      onUpdateLineClass,
+      onUpdateFontColor
     } = this.props;
 
     const topicsArray = [];
@@ -294,7 +301,8 @@ class Topics extends Component {
         onRemoveSelfTopic,
         onUpdateLabel,
         onUpdateShapeClass,
-        onUpdateLineClass
+        onUpdateLineClass,
+        onUpdateFontColor
       };
 
       return <Topic { ...topicProps } ></Topic>;
@@ -344,9 +352,10 @@ class Topics extends Component {
       const titleAreaSize = AppTools.getTextSize(topicTree.title || 'Topic', fontSize);
 
       const boxSize = {};
-      const {paddingLeft, paddingRight, paddingTop, paddingBottom} = Distance.TopicPadding[topicType];
-      boxSize.width = titleAreaSize.width + paddingLeft + paddingRight;
-      boxSize.height = titleAreaSize.height + paddingTop + paddingBottom;
+      const {paddingLeft, paddingTop} = Distance.TopicPaddingOverride[topicType][topicTree.style.shapeClass];
+      const fontSizeNumber = parseInt(fontSize);
+      boxSize.width = titleAreaSize.width + fontSizeNumber * paddingLeft * 2;
+      boxSize.height = titleAreaSize.height + fontSizeNumber * paddingTop * 2;
 
       // if has label
       if (topicTree.label) {

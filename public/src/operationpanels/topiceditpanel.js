@@ -8,11 +8,16 @@ import * as EventTags from '../constants/EventTags';
 import * as CommonConstant from '../constants/Common';
 
 
+const AddChildTopicButton = widgetGenerator.buttonGenerator('add child topic', 'onAddChildTopic');
+
+const RemoveTopicButton = widgetGenerator.buttonGenerator('remove topic', 'onRemoveSelfTopic');
+
 const UpdateFontSizeSelector = widgetGenerator.selectorGenerator('font size', 'onUpdateFontSize', {
-  '10px': '10',
-  '13px': '13',
-  '18px': '18'
+  '8px': '8', '9px': '9', '10px': '10', '11px': '11', '12px': '12', '13px': '13', '14px': '14', '16px': '16',
+  '18px': '18', '20px': '20', '22px': '22', '24px': '24', '36px': '36', '48px': '48', '56px': '56'
 });
+
+const UpdateFontColorPicker = widgetGenerator.colorPickerGenerator('font color', 'onUpdateFontColor');
 
 const UpdateShapeClassSelector = widgetGenerator.selectorGenerator('shape class', 'onUpdateShapeClass', {
   [CommonConstant.SHAPE_RECT]: 'Rect',
@@ -28,10 +33,6 @@ const UpdateLineClassSelector = widgetGenerator.selectorGenerator('line class', 
 
 const UpdateFillColorPicker = widgetGenerator.colorPickerGenerator('fill color', 'onUpdateFillColor');
 
-const AddChildTopicButton = widgetGenerator.buttonGenerator('add child topic', 'onAddChildTopic');
-
-const RemoveTopicButton = widgetGenerator.buttonGenerator('remove topic', 'onRemoveSelfTopic');
-
 const UpdateLabelTextInput = widgetGenerator.textInputGenerator('label text', 'onUpdateLabel');
 
 class TopicEditPanel extends Component {
@@ -41,7 +42,10 @@ class TopicEditPanel extends Component {
     this.state = {
       show: false,
       remBtnDisabled: false,
+
       fontSize: '',
+      fontColor: '',
+
       fillColor: '',
       shapeClass: '',
       lineClass: '',
@@ -57,23 +61,6 @@ class TopicEditPanel extends Component {
         display: this.state.show ? 'block' : 'none'
       }
     };
-    
-    const updateFontSizeProps = {
-      value: this.state.fontSize,
-      onChange: e => this.onUpdateFontSize(e)
-    };
-    const updateShapeClassProps = {
-      value: this.state.shapeClass,
-      onChange: e => this.onUpdateShapeClass(e)
-    };
-    const updateLineClassProps = {
-      value: this.state.lineClass,
-      onChange: e => this.onUpdateLineClass(e)
-    };
-    const updateFillColorProps = {
-      value: this.state.fillColor,
-      onChange: e => this.onUpdateFillColor(e)
-    };
 
     const updateLabelProps = {
       value: this.state.labelText,
@@ -86,60 +73,47 @@ class TopicEditPanel extends Component {
     };
     
     const removeTopicProps = {
-      onClick: e => this.dispatchOperator(e, selectionsManager.getSelectionsArrayWithoutChild()),
+      onClick: e => this.dispatchOperator(e, null, selectionsManager.getSelectionsArrayWithoutChild()),
       disabled: this.state.remBtnDisabled
     };
     
     return (
       <div { ...panelProps } >
-        <UpdateFontSizeSelector {...updateFontSizeProps}/>
-        <UpdateShapeClassSelector {...updateShapeClassProps}/>
-        <UpdateLineClassSelector {...updateLineClassProps}/>
-        <UpdateFillColorPicker {...updateFillColorProps}/>
-        <hr/>
         <AddChildTopicButton onClick={e => this.dispatchOperator(e)}/>
         <RemoveTopicButton {...removeTopicProps}/>
+        <hr/>
+        <UpdateFontSizeSelector {...this.generateNormalProps('fontSize')}/>
+        <UpdateFontColorPicker {...this.generateNormalProps('fontColor')}/>
+        <hr/>
+        <UpdateShapeClassSelector {...this.generateNormalProps('shapeClass')}/>
+        <UpdateLineClassSelector {...this.generateNormalProps('lineClass')}/>
+        <UpdateFillColorPicker {...this.generateNormalProps('fillColor')}/>
         <hr/>
         <UpdateLabelTextInput {...updateLabelProps}/>
       </div>
     );
   }
-  
-  onUpdateFontSize(e) {
-    this.dispatchOperator(e);
-    this.setState({
-      fontSize: e.target.value
-    });
-  }
-  
-  onUpdateShapeClass(e) {
-    this.dispatchOperator(e);
-    this.setState({
-      shapeClass: e.target.value
-    });
-  }
 
-  onUpdateLineClass(e) {
-    this.dispatchOperator(e);
-    this.setState({
-      lineClass: e.target.value
-    });
+  generateNormalProps(stateKey) {
+    return {
+      value: this.state[stateKey],
+      onChange: e => this.dispatchOperator(e, stateKey)
+    };
   }
   
-  onUpdateFillColor(e) {
-    this.dispatchOperator(e);
-    this.setState({
-      fillColor: e.target.value
-    });
-  }
-  
-  dispatchOperator(e, operatorTargetArray = selectionsManager.getSelectionsArray()) {
+  dispatchOperator(e, syncValue, operatorTargetArray = selectionsManager.getSelectionsArray()) {
     const widgetId = e.target.id;
     const widgetValue = e.target.value;
 
     operatorTargetArray.forEach((component) => {
       component[widgetId](widgetValue);
     });
+
+    if (syncValue) {
+      this.setState({
+        [syncValue]: e.target.value
+      });
+    }
   }
 
   setPanelWidgetValue(topicInfo) {
@@ -154,6 +128,7 @@ class TopicEditPanel extends Component {
 
     this.setState({
       fontSize: topicStyle.fontSize,
+      fontColor: topicStyle.fontColor,
       fillColor: topicStyle.fillColor,
       labelText: topicInfo.label || '',
       shapeClass: topicStyle.shapeClass,

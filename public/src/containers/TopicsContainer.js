@@ -23,6 +23,10 @@ const mapDispatchToProps = (dispatch) => {
     onUpdateFontSize : (id, fontSize) => {
       dispatch(actions.updateTopicFontSize(id, fontSize));
     },
+    
+    onUpdateFontColor : (id, fontColor) => {
+      dispatch(actions.updateTopicFontColor(id, fontColor));
+    },
 
     onUpdateFillColor : (id, fillColor) => {
       dispatch(actions.updateTopicFillColor(id, fillColor));
