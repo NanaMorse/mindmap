@@ -45,7 +45,11 @@ class TopicTitle extends Component {
       fontSize: this.props.fontSize,
       fill: this.props.fontColor
     };
-
+    
+    if (this.props.isFontBold) {
+      style.fontWeight = 700;
+    }
+    
     return <text ref='title' style={ style }>{ title }</text>;
   }
 }
@@ -123,7 +127,8 @@ class Topic extends Component {
       ref: 'TopicTitle',
       title: topicInfo.title,
       fontSize: style.fontSize,
-      fontColor: style.fontColor
+      fontColor: style.fontColor,
+      isFontBold: style.isFontBold
     };
     
     const TopicBoxGroupProps = {
@@ -233,6 +238,10 @@ class Topic extends Component {
     this.props.onUpdateFontColor(this.props.topicInfo.id, fontColor);
   }
 
+  onUpdateIsFontBold(isFontBold) {
+    this.props.onUpdateIsFontBold(this.props.topicInfo.id, isFontBold);
+  }
+
   onUpdateFillColor(fillColor) {
     this.props.onUpdateFillColor(this.props.topicInfo.id, fillColor);
   }
@@ -280,7 +289,8 @@ class Topics extends Component {
       onUpdateLabel,
       onUpdateShapeClass,
       onUpdateLineClass,
-      onUpdateFontColor
+      onUpdateFontColor,
+      onUpdateIsFontBold
     } = this.props;
 
     const topicsArray = [];
@@ -302,7 +312,8 @@ class Topics extends Component {
         onUpdateLabel,
         onUpdateShapeClass,
         onUpdateLineClass,
-        onUpdateFontColor
+        onUpdateFontColor,
+        onUpdateIsFontBold
       };
 
       return <Topic { ...topicProps } ></Topic>;

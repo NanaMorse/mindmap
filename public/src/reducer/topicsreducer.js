@@ -38,6 +38,13 @@ export default (currentState = {}, action) => {
       targetTopicInfo.style.fontColor = action.fontColor;
       break;
     }
+      
+    case types.UPDATE_TOPIC_ISFONTBOLD :
+    {
+      targetTopicInfo.style = targetTopicInfo.style || {};
+      targetTopicInfo.style.isFontBold = action.isFontBold;
+      break;
+    }
 
     case types.UPDATE_TOPIC_SHAPECLASS :
     {

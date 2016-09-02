@@ -48,6 +48,14 @@ export const updateTopicFontColor = (id, fontColor) => {
   }
 };
 
+export const updateTopicIsFontBold = (id, isFontBold) => {
+  return {
+    type: types.UPDATE_TOPIC_ISFONTBOLD,
+    id,
+    isFontBold
+  }
+};
+
 export const updateTopicShapeClass = (id, shapeClass) => {
   return {
     type: types.UPDATE_TOPIC_SHAPECLASS,

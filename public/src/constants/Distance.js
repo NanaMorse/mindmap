@@ -26,7 +26,7 @@ export const TopicPaddingOverride = {
       paddingLeft: 2 / 3
     },
     [CommonConstant.SHAPE_PARALLELOGRAM]: {
-      paddingTop: 2 / 3,
+      paddingTop: 2 / 5,
       paddingLeft: 4 / 3
     }
   },
@@ -41,7 +41,7 @@ export const TopicPaddingOverride = {
       paddingLeft: 2 / 3
     },
     [CommonConstant.SHAPE_PARALLELOGRAM]: {
-      paddingTop: 2 / 3,
+      paddingTop: 1 / 2,
       paddingLeft: 4 / 3
     }
   }

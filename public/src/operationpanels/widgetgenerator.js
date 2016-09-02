@@ -39,6 +39,17 @@ export function textInputGenerator(label, id) {
   }
 }
 
+export function checkBoxGenerator(label, id) {
+  return function (props) {
+    return (
+      <div>
+        <input type="checkbox" id={id} {...props}/>
+        <label>{label}</label>
+      </div>
+    )
+  }
+}
+
 /**
  * @param {string} label -- selector's label name
  * @param {string} id -- selector's wrapper id

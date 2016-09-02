@@ -19,6 +19,8 @@ const UpdateFontSizeSelector = widgetGenerator.selectorGenerator('font size', 'o
 
 const UpdateFontColorPicker = widgetGenerator.colorPickerGenerator('font color', 'onUpdateFontColor');
 
+const UpdateIsFontBoldCheckBox = widgetGenerator.checkBoxGenerator('bold', 'onUpdateIsFontBold');
+
 const UpdateShapeClassSelector = widgetGenerator.selectorGenerator('shape class', 'onUpdateShapeClass', {
   [CommonConstant.SHAPE_RECT]: 'Rect',
   [CommonConstant.SHAPE_ROUNDED_RECT]: 'Rounded Rectangle',
@@ -45,6 +47,7 @@ class TopicEditPanel extends Component {
 
       fontSize: '',
       fontColor: '',
+      isFontBold: '',
 
       fillColor: '',
       shapeClass: '',
@@ -84,6 +87,7 @@ class TopicEditPanel extends Component {
         <hr/>
         <UpdateFontSizeSelector {...this.generateNormalProps('fontSize')}/>
         <UpdateFontColorPicker {...this.generateNormalProps('fontColor')}/>
+        <UpdateIsFontBoldCheckBox {...this.generateCheckBoxProps('isFontBold')}/>
         <hr/>
         <UpdateShapeClassSelector {...this.generateNormalProps('shapeClass')}/>
         <UpdateLineClassSelector {...this.generateNormalProps('lineClass')}/>
@@ -101,6 +105,24 @@ class TopicEditPanel extends Component {
     };
   }
   
+  generateCheckBoxProps(stateKey) {
+    return {
+      checked: this.state[stateKey],
+      onClick: e => {
+        const widgetId = e.target.id;
+        const checked = e.target.checked;
+
+        selectionsManager.getSelectionsArray().forEach((component) => {
+          component[widgetId](checked);
+        });
+
+        this.setState({
+          [stateKey]: checked
+        });
+      }
+    }
+  }
+  
   dispatchOperator(e, syncValue, operatorTargetArray = selectionsManager.getSelectionsArray()) {
     const widgetId = e.target.id;
     const widgetValue = e.target.value;
@@ -111,7 +133,7 @@ class TopicEditPanel extends Component {
 
     if (syncValue) {
       this.setState({
-        [syncValue]: e.target.value
+        [syncValue]: widgetValue
       });
     }
   }
@@ -129,6 +151,8 @@ class TopicEditPanel extends Component {
     this.setState({
       fontSize: topicStyle.fontSize,
       fontColor: topicStyle.fontColor,
+      isFontBold: !!topicStyle.isFontBold,
+      
       fillColor: topicStyle.fillColor,
       labelText: topicInfo.label || '',
       shapeClass: topicStyle.shapeClass,

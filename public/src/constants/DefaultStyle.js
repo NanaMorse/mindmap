@@ -4,6 +4,7 @@ export default {
   [CommonConstant.TOPIC_ROOT]: {
     "fontSize": "24px",
     "fontColor": "#4c4c4c",
+    "isFontBold": true,
     "shapeClass": CommonConstant.SHAPE_ROUNDED_RECT,
     "lineClass": CommonConstant.LINE_ROUNDED,
     "fillColor": "#cbdefd"
