@@ -24,6 +24,10 @@ export default {
     "fontSize": "12px",
     "fillColor": "#edf9cc"
   },
+  
+  connectLine: {
+    "stroke": "#7f7f7f"
+  },
 
   editReceiver: {
     minWidth: 100,

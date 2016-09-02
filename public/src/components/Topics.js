@@ -50,11 +50,11 @@ class TopicTitle extends Component {
 }
 
 // Connect line
-const ConnectLine = ({topicInfo, style}) => {
-  const lineClass = style.lineClass;
-  const path = CalcConnectLine[lineClass](topicInfo, style);
+const ConnectLine = ({topicInfo}) => {
+  const lineClass = topicInfo.style.lineClass;
+  const path = CalcConnectLine[lineClass](topicInfo);
 
-  return <path className="connect-line" d={path} stroke="#000" fill="none"></path>
+  return <path className="connect-line" d={path} stroke={DefaultStyle.connectLine.stroke} fill="none"></path>
 };
 
 // Label
@@ -100,14 +100,10 @@ class Topic extends Component {
   render() {
     
     const {topicInfo} = this.props;
-
-    const style = this.style = Object.assign({}, DefaultStyle[topicInfo.type], topicInfo.style || {});
     
-    this.topicType = topicInfo.type;
-
     topicInfo.title = topicInfo.title == null ? 'Topic' : topicInfo.title;
     
-    const boxSize = topicInfo.boxSize;
+    const {style, boxSize} = topicInfo;
     
     const {topicShapePath, topicSelectBoxPath} = this.getTopicShapePath(boxSize, style.shapeClass);
 
@@ -153,7 +149,7 @@ class Topic extends Component {
           <TopicTitle {...TopicTitleProps}/>
         </g>
         <TopicSelectBox {...TopicSelectBoxProps}/>
-        {needConnectLine ? <ConnectLine topicInfo={topicInfo} style={style}/> : []}
+        {needConnectLine ? <ConnectLine topicInfo={topicInfo}/> : []}
       </g>
     );
   }
@@ -196,7 +192,7 @@ class Topic extends Component {
     this.setState({selected: true, hovered: false});
     AppTools.editReceiver.prepare(this);
     
-    events.emit(EventTags.TOPIC_SELECTED, this);
+    events.emit(EventTags.TOPIC_SELECTED, this.props.topicInfo);
   }
 
   onDeselected() {
@@ -338,6 +334,9 @@ class Topics extends Component {
       else topicType = CommonConstant.TOPIC_SUB;
 
       topicTree.type = topicType;
+      
+      // mix topic style
+      topicTree.style = Object.assign({}, DefaultStyle[topicType], topicTree.style || {});
 
       // get boxSize
       const fontSize = Object.assign({}, DefaultStyle[topicType], topicTree.style).fontSize;

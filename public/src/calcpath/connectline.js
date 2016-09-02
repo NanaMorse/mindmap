@@ -3,9 +3,9 @@ import * as Distance from '../constants/Distance';
 import DefaultStyle from '../constants/DefaultStyle';
 
 export default {
-  [CommonConstant.LINE_RIGHT_ANGLE](topicInfo, style) {
+  [CommonConstant.LINE_RIGHT_ANGLE](topicInfo) {
 
-    const {startPoint, centerPoint, endPoints} = getImportantPoints(topicInfo, style);
+    const {startPoint, centerPoint, endPoints} = getImportantPoints(topicInfo);
 
     // draw line path
     let path = '';
@@ -27,11 +27,11 @@ export default {
     return path;
   },
 
-  [CommonConstant.LINE_ROUNDED](topicInfo, style) {
+  [CommonConstant.LINE_ROUNDED](topicInfo) {
 
     const roundR = 5;
 
-    const {startPoint, centerPoint, endPoints} = getImportantPoints(topicInfo, style);
+    const {startPoint, centerPoint, endPoints} = getImportantPoints(topicInfo);
 
     let path = '';
 
@@ -63,8 +63,8 @@ export default {
   }
 }
 
-function getImportantPoints(topicInfo, style) {
-  const {position: parentPosition, boxSize} = topicInfo;
+function getImportantPoints(topicInfo) {
+  const {position: parentPosition, boxSize, style} = topicInfo;
 
   const marginLeft = Distance.TopicMargin[CommonConstant.LOGIC_TO_RIGHT].marginLeft;
 
@@ -91,11 +91,23 @@ function getImportantPoints(topicInfo, style) {
 
   // endPoints
   const endPoints = topicInfo.children.map((childInfo) => {
-    const {position, boxSize} = childInfo;
+    const {position, boxSize, style} = childInfo;
 
     const fixedPosition = [position[0] - parentPosition[0], position[1] - parentPosition[1]];
 
-    return [fixedPosition[0] - boxSize.width / 2, fixedPosition[1]];
+    switch (style.shapeClass) {
+      case CommonConstant.SHAPE_PARALLELOGRAM :
+      {
+        const cutLength = boxSize.height / 2 / DefaultStyle.parallelogramSlope;
+        return [fixedPosition[0] - boxSize.width / 2 + cutLength, fixedPosition[1]];
+      }
+
+      default :
+      {
+        return [fixedPosition[0] - boxSize.width / 2, fixedPosition[1]];
+      }
+    }
+    
   });
 
   return {startPoint, centerPoint, endPoints}

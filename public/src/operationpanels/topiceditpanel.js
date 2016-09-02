@@ -16,7 +16,8 @@ const UpdateFontSizeSelector = widgetGenerator.selectorGenerator('font size', 'o
 
 const UpdateShapeClassSelector = widgetGenerator.selectorGenerator('shape class', 'onUpdateShapeClass', {
   [CommonConstant.SHAPE_RECT]: 'Rect',
-  [CommonConstant.SHAPE_ROUNDED_RECT]: 'Rounded Rectangle'
+  [CommonConstant.SHAPE_ROUNDED_RECT]: 'Rounded Rectangle',
+  [CommonConstant.SHAPE_PARALLELOGRAM]: 'Parallelogram'
 });
 
 const UpdateLineClassSelector = widgetGenerator.selectorGenerator('line class', 'onUpdateLineClass', {
@@ -140,16 +141,15 @@ class TopicEditPanel extends Component {
     });
   }
 
-  setPanelWidgetValue(topic) {
-    const topicStyle = topic.style;
-    const topicInfo = topic.props.topicInfo;
-    
+  setPanelWidgetValue(topicInfo) {
     let remBtnDisabled; {
       const selections = selectionsManager.getSelectionsArray();
-      if (selections.length === 1 && selections[0].topicType === CommonConstant.TOPIC_ROOT) {
+      if (selections.length === 1 && selections[0].props.topicInfo.type === CommonConstant.TOPIC_ROOT) {
         remBtnDisabled = true;
       }
     }
+
+    const topicStyle = topicInfo.style;
 
     this.setState({
       fontSize: topicStyle.fontSize,
@@ -162,9 +162,9 @@ class TopicEditPanel extends Component {
   }
 
   componentDidMount() {
-    events.on(EventTags.TOPIC_SELECTED, (topic) => {
+    events.on(EventTags.TOPIC_SELECTED, (topicInfo) => {
       this.setState({show: true});
-      this.setPanelWidgetValue(topic);
+      this.setPanelWidgetValue(topicInfo);
     });
     
     events.on(EventTags.TOPIC_DESELECTED, () => {
@@ -175,7 +175,7 @@ class TopicEditPanel extends Component {
       if (!this.state.show) return;
 
       const selections = selectionsManager.getSelectionsArray();
-      this.setPanelWidgetValue(selections[selections.length - 1]);
+      this.setPanelWidgetValue(selections[selections.length - 1].props.topicInfo);
     });
   }
 }
