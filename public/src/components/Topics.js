@@ -80,7 +80,7 @@ const Label = ({topicInfo}) => {
   
   const {fontSize, fillColor} = DefaultStyle.label;
   
-  labelText = AppTools.wrapTextWithEllipsis(labelText, fontSize, labelWidth);
+  labelText = AppTools.wrapTextWithEllipsis(labelText, fontSize, labelWidth - Distance.LabelPadding.paddingLeft - Distance.LabelPadding.paddingRight);
 
   return (
     <g className="label">
@@ -106,8 +106,6 @@ class Topic extends Component {
     
     const {topicInfo} = this.props;
     
-    topicInfo.title = topicInfo.title == null ? 'Topic' : topicInfo.title;
-    
     const {style, boxSize} = topicInfo;
     
     const {topicShapePath, topicSelectBoxPath} = this.getTopicShapePath(boxSize, style.shapeClass);
@@ -123,9 +121,10 @@ class Topic extends Component {
       fillColor: style.fillColor
     };
 
+    const title = topicInfo.title == null ? 'Topic' : topicInfo.title;
     const TopicTitleProps = {
       ref: 'TopicTitle',
-      title: topicInfo.title,
+      title: title,
       fontSize: style.fontSize,
       fontColor: style.fontColor,
       isFontBold: style.isFontBold
@@ -222,7 +221,7 @@ class Topic extends Component {
   }
 
   getTitle() {
-    return this.props.topicInfo.title;
+    return this.props.topicInfo.title || 'Topic';
   }
 
   getType() {
@@ -269,6 +268,40 @@ class Topic extends Component {
     events.emit(EventTags.TOPIC_DESELECTED);
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    const stringify = JSON.stringify.bind(JSON);
+
+    // check state
+    const stateHasChanged = stringify(this.state) !== stringify(nextState);
+    if (stateHasChanged) return true;
+
+    // check self props
+    const topicInfo = this.props.topicInfo;
+    const nextTopicInfo = nextProps.topicInfo;
+
+    const styleHasChanged = stringify(topicInfo.style) !== stringify(nextTopicInfo.style);
+    const boundsHasChanged = stringify(topicInfo.bounds) !== stringify(nextTopicInfo.bounds);
+    const positionHasChanged = stringify(topicInfo.position) !== stringify(nextTopicInfo.position);
+    const titleHasChanged = topicInfo.title !== nextTopicInfo.title;
+
+    const selfPropsHasChanged = styleHasChanged || boundsHasChanged || positionHasChanged || titleHasChanged;
+    if (selfPropsHasChanged) return true;
+
+    
+    // check child structure props
+    const children = topicInfo.children;
+    const nextChildren = nextTopicInfo.children;
+    
+    let childShapeClassHasChanged = false;
+    if (children && nextChildren) {
+      childShapeClassHasChanged = children.some((childInfo, index) => {
+        return childInfo.style.shapeClass !== nextChildren[index].style.shapeClass;
+      });
+    }
+    
+    return childShapeClassHasChanged;
+  }
+
   componentWillUnmount() {
     selectionsManager.removeSelection(this);
   }
@@ -303,7 +336,6 @@ class Topics extends Component {
         key: id,
         id: id,
         topicInfo: topicInfo,
-        defaultStyle: this.props.defaultStyle,
         onUpdateTitle,
         onUpdateFontSize,
         onUpdateFillColor,

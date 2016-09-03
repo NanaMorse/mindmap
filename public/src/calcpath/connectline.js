@@ -22,7 +22,7 @@ export default {
     const endPointYs = endPoints.map(endPoint => endPoint[1]);
     const minY = Math.min(...endPointYs);
     const maxY = Math.max(...endPointYs);
-    path += `M ${centerPoint[0]} ${minY} ${centerPoint[0]} ${maxY}`;
+    if (minY !== maxY) path += `M ${centerPoint[0]} ${minY} ${centerPoint[0]} ${maxY}`;
     
     return path;
   },
@@ -57,7 +57,7 @@ export default {
     const endPointYs = endPoints.map(endPoint => endPoint[1]);
     const minY = Math.min(...endPointYs);
     const maxY = Math.max(...endPointYs);
-    path += `M ${centerPoint[0]} ${minY + roundR} ${centerPoint[0]} ${maxY - roundR}`;
+    if (minY !== maxY) path += `M ${centerPoint[0]} ${minY + roundR} ${centerPoint[0]} ${maxY - roundR}`;
     
     return path;
   }
