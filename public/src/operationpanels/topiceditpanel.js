@@ -8,34 +8,38 @@ import * as EventTags from '../constants/EventTags';
 import * as CommonConstant from '../constants/Common';
 
 
-const AddChildTopicButton = widgetGenerator.buttonGenerator('add child topic', 'onAddChildTopic');
+const AddChildTopicButton = widgetGenerator.buttonGenerator('Add Child Topic', 'onAddChildTopic');
 
-const RemoveTopicButton = widgetGenerator.buttonGenerator('remove topic', 'onRemoveSelfTopic');
+const RemoveTopicButton = widgetGenerator.buttonGenerator('Remove Topic', 'onRemoveSelfTopic');
 
-const UpdateFontSizeSelector = widgetGenerator.selectorGenerator('font size', 'onUpdateFontSize', {
+const UpdateFontSizeSelector = widgetGenerator.selectorGenerator('Font Size', 'onUpdateFontSize', {
   '8px': '8', '9px': '9', '10px': '10', '11px': '11', '12px': '12', '13px': '13', '14px': '14', '16px': '16',
   '18px': '18', '20px': '20', '22px': '22', '24px': '24', '36px': '36', '48px': '48', '56px': '56'
 });
 
-const UpdateFontColorPicker = widgetGenerator.colorPickerGenerator('font color', 'onUpdateFontColor');
+const UpdateFontColorPicker = widgetGenerator.colorPickerGenerator('Font Color', 'onUpdateFontColor');
 
-const UpdateIsFontBoldCheckBox = widgetGenerator.checkBoxGenerator('bold', 'onUpdateIsFontBold');
+const UpdateIsFontBoldCheckBox = widgetGenerator.checkBoxGenerator('Bold', 'onUpdateIsFontBold');
 
-const UpdateShapeClassSelector = widgetGenerator.selectorGenerator('shape class', 'onUpdateShapeClass', {
+const UpdateIsFontItalicCheckBox = widgetGenerator.checkBoxGenerator('Italic', 'onUpdateIsFontItalic');
+
+const UpdateIsFontLineThroughCheckBox = widgetGenerator.checkBoxGenerator('Line Through', 'onUpdateIsFontLineThrough');
+
+const UpdateShapeClassSelector = widgetGenerator.selectorGenerator('Shape Class', 'onUpdateShapeClass', {
   [CommonConstant.SHAPE_RECT]: 'Rect',
   [CommonConstant.SHAPE_ROUNDED_RECT]: 'Rounded Rectangle',
   [CommonConstant.SHAPE_PARALLELOGRAM]: 'Parallelogram'
 });
 
-const UpdateLineClassSelector = widgetGenerator.selectorGenerator('line class', 'onUpdateLineClass', {
+const UpdateLineClassSelector = widgetGenerator.selectorGenerator('Line Class', 'onUpdateLineClass', {
   [CommonConstant.LINE_NONE]: 'None',
   [CommonConstant.LINE_RIGHT_ANGLE]: 'Right Angle',
   [CommonConstant.LINE_ROUNDED]: 'Rounded'
 });
 
-const UpdateFillColorPicker = widgetGenerator.colorPickerGenerator('fill color', 'onUpdateFillColor');
+const UpdateFillColorPicker = widgetGenerator.colorPickerGenerator('Fill Color', 'onUpdateFillColor');
 
-const UpdateLabelTextInput = widgetGenerator.textInputGenerator('label text', 'onUpdateLabel');
+const UpdateLabelTextInput = widgetGenerator.textInputGenerator('Label Text', 'onUpdateLabel');
 
 class TopicEditPanel extends Component {
   constructor() {
@@ -48,6 +52,8 @@ class TopicEditPanel extends Component {
       fontSize: '',
       fontColor: '',
       isFontBold: '',
+      isFontItalic: '',
+      isFontLineThrough: '',
 
       fillColor: '',
       shapeClass: '',
@@ -88,6 +94,8 @@ class TopicEditPanel extends Component {
         <UpdateFontSizeSelector {...this.generateNormalProps('fontSize')}/>
         <UpdateFontColorPicker {...this.generateNormalProps('fontColor')}/>
         <UpdateIsFontBoldCheckBox {...this.generateCheckBoxProps('isFontBold')}/>
+        <UpdateIsFontItalicCheckBox {...this.generateCheckBoxProps('isFontItalic')}/>
+        <UpdateIsFontLineThroughCheckBox {...this.generateCheckBoxProps('isFontLineThrough')}/>
         <hr/>
         <UpdateShapeClassSelector {...this.generateNormalProps('shapeClass')}/>
         <UpdateLineClassSelector {...this.generateNormalProps('lineClass')}/>
@@ -152,6 +160,8 @@ class TopicEditPanel extends Component {
       fontSize: topicStyle.fontSize,
       fontColor: topicStyle.fontColor,
       isFontBold: !!topicStyle.isFontBold,
+      isFontItalic: !!topicStyle.isFontItalic,
+      isFontLineThrough: !!topicStyle.isFontLineThrough,
       
       fillColor: topicStyle.fillColor,
       labelText: topicInfo.label || '',

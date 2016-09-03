@@ -46,6 +46,20 @@ export default (currentState = {}, action) => {
       break;
     }
 
+    case types.UPDATE_TOPIC_ISFONTITALIC :
+    {
+      targetTopicInfo.style = targetTopicInfo.style || {};
+      targetTopicInfo.style.isFontItalic = action.isFontItalic;
+      break;
+    }
+      
+    case types.UPDATE_TOPIC_ISFONTLINETHROUGH : 
+    {
+      targetTopicInfo.style = targetTopicInfo.style || {};
+      targetTopicInfo.style.isFontLineThrough = action.isFontLineThrough;
+      break;
+    }
+
     case types.UPDATE_TOPIC_SHAPECLASS :
     {
       targetTopicInfo.style = targetTopicInfo.style || {};

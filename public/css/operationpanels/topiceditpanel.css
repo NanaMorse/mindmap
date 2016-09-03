@@ -20,3 +20,15 @@
     margin-right: 10px;
     margin-top: 0.5em;
 }
+
+#onUpdateIsFontBold + label {
+    font-weight: 700;
+}
+
+#onUpdateIsFontItalic + label {
+    font-style: italic;
+}
+
+#onUpdateIsFontLineThrough + label {
+    text-decoration: line-through;
+}

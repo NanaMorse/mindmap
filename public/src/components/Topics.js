@@ -39,16 +39,16 @@ const TopicSelectBox = ({d, selected, hovered}) => {
 class TopicTitle extends Component {
   render() {
 
-    const {title} = this.props;
+    const {title, fontSize, fontColor, isFontBold, isFontItalic, isFontLineThrough} = this.props;
 
     const style = {
-      fontSize: this.props.fontSize,
-      fill: this.props.fontColor
+      fontSize: fontSize,
+      fill: fontColor
     };
     
-    if (this.props.isFontBold) {
-      style.fontWeight = 700;
-    }
+    if (isFontBold) style.fontWeight = 700;
+    if (isFontItalic) style.fontStyle = 'italic';
+    if (isFontLineThrough) style.textDecoration = 'line-through';
     
     return <text ref='title' style={ style }>{ title }</text>;
   }
@@ -106,16 +106,15 @@ class Topic extends Component {
     
     const {topicInfo} = this.props;
     
-    const {style, boxSize} = topicInfo;
-    
-    const {topicShapePath, topicSelectBoxPath} = this.getTopicShapePath(boxSize, style.shapeClass);
-
     const TopicGroupProps = {
       className: 'topic-group',
       onDoubleClick: (e) => this.onTopicDoubleClick(e),
       transform: `translate(${topicInfo.position[0]},${topicInfo.position[1]})`
     };
 
+    const {topicShapePath, topicSelectBoxPath} = this.getTopicShapePath();
+    const style = topicInfo.style;
+    
     const TopicFillProps = {
       d: topicShapePath,
       fillColor: style.fillColor
@@ -127,7 +126,9 @@ class Topic extends Component {
       title: title,
       fontSize: style.fontSize,
       fontColor: style.fontColor,
-      isFontBold: style.isFontBold
+      isFontBold: style.isFontBold,
+      isFontItalic: style.isFontItalic,
+      isFontLineThrough: style.isFontLineThrough
     };
     
     const TopicBoxGroupProps = {
@@ -160,8 +161,9 @@ class Topic extends Component {
     );
   }
 
-  getTopicShapePath(boxSize, shapeClass) {
-    return CalcTopicShape[shapeClass](boxSize);
+  getTopicShapePath() {
+    const topicInfo = this.props.topicInfo;
+    return CalcTopicShape[topicInfo.style.shapeClass](topicInfo.boxSize);
   }
   
   // userAgent events
@@ -239,6 +241,14 @@ class Topic extends Component {
 
   onUpdateIsFontBold(isFontBold) {
     this.props.onUpdateIsFontBold(this.props.topicInfo.id, isFontBold);
+  }
+
+  onUpdateIsFontItalic(isFontItalic) {
+    this.props.onUpdateIsFontItalic(this.props.topicInfo.id, isFontItalic);
+  }
+
+  onUpdateIsFontLineThrough(isFontLineThrough) {
+    this.props.onUpdateIsFontLineThrough(this.props.topicInfo.id, isFontLineThrough);
   }
 
   onUpdateFillColor(fillColor) {
@@ -323,7 +333,9 @@ class Topics extends Component {
       onUpdateShapeClass,
       onUpdateLineClass,
       onUpdateFontColor,
-      onUpdateIsFontBold
+      onUpdateIsFontBold,
+      onUpdateIsFontItalic,
+      onUpdateIsFontLineThrough
     } = this.props;
 
     const topicsArray = [];
@@ -345,7 +357,9 @@ class Topics extends Component {
         onUpdateShapeClass,
         onUpdateLineClass,
         onUpdateFontColor,
-        onUpdateIsFontBold
+        onUpdateIsFontBold,
+        onUpdateIsFontItalic,
+        onUpdateIsFontLineThrough
       };
 
       return <Topic { ...topicProps } ></Topic>;

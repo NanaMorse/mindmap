@@ -31,6 +31,14 @@ const mapDispatchToProps = (dispatch) => {
     onUpdateIsFontBold : (id, isFontBold) => {
       dispatch(actions.updateTopicIsFontBold(id, isFontBold));
     },
+    
+    onUpdateIsFontItalic : (id, isFontItalic) => {
+      dispatch(actions.updateTopicIsFontItalic(id, isFontItalic));
+    },
+
+    onUpdateIsFontLineThrough : (id, isFontLineThrough) => {
+      dispatch(actions.updateTopicIsFontLineThrough(id, isFontLineThrough));
+    },
 
     onUpdateFillColor : (id, fillColor) => {
       dispatch(actions.updateTopicFillColor(id, fillColor));

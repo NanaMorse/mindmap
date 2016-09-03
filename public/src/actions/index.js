@@ -56,6 +56,22 @@ export const updateTopicIsFontBold = (id, isFontBold) => {
   }
 };
 
+export const updateTopicIsFontItalic = (id, isFontItalic) => {
+  return {
+    type: types.UPDATE_TOPIC_ISFONTITALIC,
+    id,
+    isFontItalic
+  }
+};
+
+export const updateTopicIsFontLineThrough = (id, isFontLineThrough) => {
+  return {
+    type: types.UPDATE_TOPIC_ISFONTLINETHROUGH,
+    id,
+    isFontLineThrough
+  }
+};
+
 export const updateTopicShapeClass = (id, shapeClass) => {
   return {
     type: types.UPDATE_TOPIC_SHAPECLASS,
