@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import Draggable from 'react-draggable';
 
 import {events, selectionsManager} from '../managers';
 import * as AppTools from '../apptools';
@@ -107,7 +108,7 @@ class Topic extends Component {
     const {topicInfo} = this.props;
     
     const TopicGroupProps = {
-      className: 'topic-group',
+      className: `topic-group ${topicInfo.type}`,
       onDoubleClick: (e) => this.onTopicDoubleClick(e),
       transform: `translate(${topicInfo.position[0]},${topicInfo.position[1]})`
     };
@@ -182,7 +183,7 @@ class Topic extends Component {
     AppTools.editReceiver.show();
   }
   
-  onTopicMouseEnter(e) {
+  onTopicMouseEnter() {
     // if not selected, show hovered box
     if (!this.state.selected) {
       this.setState({hovered: true});
@@ -372,7 +373,11 @@ class Topics extends Component {
 
     setTopicArrayData(topicsExtend);
     
-    return <g className="topics-group">{ topicsArray }</g>;
+    return (
+      <Draggable handle={`.${CommonConstant.TOPIC_ROOT}`}>
+        <g><g className="topics-group">{ topicsArray }</g></g>
+      </Draggable>
+    );
   }
   
   // calculate topics info, include boxSize and topic type
