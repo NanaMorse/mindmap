@@ -215,7 +215,7 @@ class Topic extends Component {
       return false;
     }
 
-    this.props.onUpdateTitle(this.props.topicInfo.id, title);
+    this.props.onUpdateTitle(this.props.id, title);
   }
 
   // method for editReceiver
@@ -233,48 +233,48 @@ class Topic extends Component {
 
   // method for reducer
   onUpdateFontSize(fontSize) {
-    this.props.onUpdateFontSize(this.props.topicInfo.id, fontSize);
+    this.props.onUpdateFontSize(this.props.id, fontSize);
   }
 
   onUpdateFontColor(fontColor) {
-    this.props.onUpdateFontColor(this.props.topicInfo.id, fontColor);
+    this.props.onUpdateFontColor(this.props.id, fontColor);
   }
 
   onUpdateIsFontBold(isFontBold) {
-    this.props.onUpdateIsFontBold(this.props.topicInfo.id, isFontBold);
+    this.props.onUpdateIsFontBold(this.props.id, isFontBold);
   }
 
   onUpdateIsFontItalic(isFontItalic) {
-    this.props.onUpdateIsFontItalic(this.props.topicInfo.id, isFontItalic);
+    this.props.onUpdateIsFontItalic(this.props.id, isFontItalic);
   }
 
   onUpdateIsFontLineThrough(isFontLineThrough) {
-    this.props.onUpdateIsFontLineThrough(this.props.topicInfo.id, isFontLineThrough);
+    this.props.onUpdateIsFontLineThrough(this.props.id, isFontLineThrough);
   }
 
   onUpdateFillColor(fillColor) {
-    this.props.onUpdateFillColor(this.props.topicInfo.id, fillColor);
+    this.props.onUpdateFillColor(this.props.id, fillColor);
   }
 
   onUpdateLabel(labelText) {
     if (labelText === this.props.topicInfo.label) return;
-    this.props.onUpdateLabel(this.props.topicInfo.id, labelText);
+    this.props.onUpdateLabel(this.props.id, labelText);
   }
 
   onUpdateShapeClass(shapeClass) {
-    this.props.onUpdateShapeClass(this.props.topicInfo.id, shapeClass);
+    this.props.onUpdateShapeClass(this.props.id, shapeClass);
   }
 
   onUpdateLineClass(lineClass) {
-    this.props.onUpdateLineClass(this.props.topicInfo.id, lineClass);
+    this.props.onUpdateLineClass(this.props.id, lineClass);
   }
 
   onAddChildTopic() {
-    this.props.onAddChildTopic(this.props.topicInfo.id, AppTools.generateUUID());
+    this.props.onAddChildTopic(this.props.id, {id: AppTools.generateUUID()});
   }
 
   onRemoveSelfTopic() {
-    this.props.onRemoveSelfTopic(this.props.topicInfo.id);
+    this.props.onRemoveSelfTopic(this.props.id);
     selectionsManager.removeSelection(this);
     events.emit(EventTags.TOPIC_DESELECTED);
   }
@@ -348,6 +348,7 @@ class Topics extends Component {
       const topicProps = {
         key: id,
         id: id,
+        parentId: topicInfo.parentId,
         topicInfo: topicInfo,
         onUpdateTitle,
         onUpdateFontSize,
@@ -404,6 +405,8 @@ class Topics extends Component {
       else topicType = CommonConstant.TOPIC_SUB;
 
       topicTree.type = topicType;
+      
+      topicTree.parentId = parent ? parent.id : null;
       
       // mix topic style
       topicTree.style = Object.assign({}, DefaultStyle[topicType], topicTree.style || {});

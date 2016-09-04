@@ -56,8 +56,8 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(actions.updateTopicLabel(id, labelText));
     },
     
-    onAddChildTopic : (id, childId) => {
-      dispatch(actions.addChildTopic(id, childId));
+    onAddChildTopic : (id, childInfo, index) => {
+      dispatch(actions.addChildTopic(id, childInfo, index));
     },
     
     onRemoveSelfTopic : (id) => {

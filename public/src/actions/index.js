@@ -104,11 +104,12 @@ export const updateTopicLabel = (id, labelText) => {
   }
 };
 
-export const addChildTopic = (id, childId) => {
+export const addChildTopic = (id, childInfo, index) => {
   return {
     type: types.ADD_CHILD_TOPIC,
     id,
-    childId
+    childInfo,
+    index
   }
 };
 

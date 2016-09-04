@@ -91,7 +91,8 @@ export default (currentState = {}, action) => {
     case types.ADD_CHILD_TOPIC :
     {
       targetTopicInfo.children = targetTopicInfo.children || [];
-      targetTopicInfo.children.push({id: action.childId});
+      const length = targetTopicInfo.children.length;
+      targetTopicInfo.children.splice(action.index || length, 0, action.childInfo);
       break;
     }
 
