@@ -10,7 +10,12 @@ import * as CommonConstant from '../constants/Common';
 
 const AddChildTopicButton = widgetGenerator.buttonGenerator('Add Child Topic', 'onAddChildTopic');
 
+const AddTopicBeforeButton = widgetGenerator.buttonGenerator('Add Topic Before', 'onAddTopicBefore');
+
+const AddParentTopicButton = widgetGenerator.buttonGenerator('Add Parent Topic', 'onAddParentTopic');
+
 const RemoveTopicButton = widgetGenerator.buttonGenerator('Remove Topic', 'onRemoveSelfTopic');
+
 
 const UpdateFontSizeSelector = widgetGenerator.selectorGenerator('Font Size', 'onUpdateFontSize', {
   '8px': '8', '9px': '9', '10px': '10', '11px': '11', '12px': '12', '13px': '13', '14px': '14', '16px': '16',
@@ -47,7 +52,7 @@ class TopicEditPanel extends Component {
 
     this.state = {
       show: false,
-      remBtnDisabled: false,
+      isTargetRoot: false,
 
       fontSize: '',
       fontColor: '',
@@ -70,6 +75,16 @@ class TopicEditPanel extends Component {
         display: this.state.show ? 'block' : 'none'
       }
     };
+    
+    const actionSingleTopicExceptRootProps = {
+      onClick: e => this.dispatchOperator(e, null, [selectionsManager.getSelectionsArray()[0]]),
+      disabled: this.state.isTargetRoot
+    };
+
+    const removeTopicProps = {
+      onClick: e => this.dispatchOperator(e, null, selectionsManager.getSelectionsArrayWithoutChild()),
+      disabled: this.state.isTargetRoot
+    };
 
     const updateLabelProps = {
       value: this.state.labelText,
@@ -81,14 +96,11 @@ class TopicEditPanel extends Component {
       }
     };
     
-    const removeTopicProps = {
-      onClick: e => this.dispatchOperator(e, null, selectionsManager.getSelectionsArrayWithoutChild()),
-      disabled: this.state.remBtnDisabled
-    };
-    
     return (
       <div { ...panelProps } >
         <AddChildTopicButton onClick={e => this.dispatchOperator(e)}/>
+        <AddTopicBeforeButton {...actionSingleTopicExceptRootProps}/>
+        <AddParentTopicButton {...actionSingleTopicExceptRootProps}/>
         <RemoveTopicButton {...removeTopicProps}/>
         <hr/>
         <UpdateFontSizeSelector {...this.generateNormalProps('fontSize')}/>
@@ -147,10 +159,10 @@ class TopicEditPanel extends Component {
   }
 
   setPanelWidgetValue(topicInfo) {
-    let remBtnDisabled; {
+    let isTargetRoot; {
       const selections = selectionsManager.getSelectionsArray();
       if (selections.length === 1 && selections[0].props.topicInfo.type === CommonConstant.TOPIC_ROOT) {
-        remBtnDisabled = true;
+        isTargetRoot = true;
       }
     }
 
@@ -167,7 +179,7 @@ class TopicEditPanel extends Component {
       labelText: topicInfo.label || '',
       shapeClass: topicStyle.shapeClass,
       lineClass: topicStyle.lineClass,
-      remBtnDisabled
+      isTargetRoot
     });
   }
 

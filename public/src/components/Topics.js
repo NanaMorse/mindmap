@@ -269,8 +269,16 @@ class Topic extends Component {
     this.props.onUpdateLineClass(this.props.id, lineClass);
   }
 
+  onAddTopicBefore() {
+    this.props.onAddChildTopic(this.props.parentId, {id: AppTools.generateUUID()}, this.props.index);
+  }
+
   onAddChildTopic() {
     this.props.onAddChildTopic(this.props.id, {id: AppTools.generateUUID()});
+  }
+
+  onAddParentTopic() {
+    this.props.onAddParentTopic(this.props.id, AppTools.generateUUID());
   }
 
   onRemoveSelfTopic() {
@@ -328,7 +336,8 @@ class Topics extends Component {
       onUpdateTitle, 
       onUpdateFontSize, 
       onUpdateFillColor, 
-      onAddChildTopic, 
+      onAddChildTopic,
+      onAddParentTopic,
       onRemoveSelfTopic,
       onUpdateLabel,
       onUpdateShapeClass,
@@ -349,11 +358,13 @@ class Topics extends Component {
         key: id,
         id: id,
         parentId: topicInfo.parentId,
+        index: topicInfo.index,
         topicInfo: topicInfo,
         onUpdateTitle,
         onUpdateFontSize,
         onUpdateFillColor,
         onAddChildTopic,
+        onAddParentTopic,
         onRemoveSelfTopic,
         onUpdateLabel,
         onUpdateShapeClass,
@@ -407,6 +418,8 @@ class Topics extends Component {
       topicTree.type = topicType;
       
       topicTree.parentId = parent ? parent.id : null;
+      
+      topicTree.index = parent ? parent.children.indexOf(topicTree) : 0;
       
       // mix topic style
       topicTree.style = Object.assign({}, DefaultStyle[topicType], topicTree.style || {});

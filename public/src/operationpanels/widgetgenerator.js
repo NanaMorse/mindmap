@@ -23,7 +23,7 @@ export function selectorGenerator(label, id, selectorOptions = {}) {
 export function buttonGenerator(innerText, id) {
   return function (props) {
     return (
-      <button className="primary-button" id={ id } {...props}>{ innerText }</button>
+      <button className="primary-button small-button" id={ id } {...props}>{ innerText }</button>
     )
   }
 }

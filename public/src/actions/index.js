@@ -113,6 +113,14 @@ export const addChildTopic = (id, childInfo, index) => {
   }
 };
 
+export const addParentTopic = (id, parentId) => {
+  return {
+    type: types.Add_PARENT_TOPIC,
+    id,
+    parentId
+  }
+};
+
 export const removeSelfTopic = (id) => {
   return {
     type: types.REM_SELF_TOPIC,

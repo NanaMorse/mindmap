@@ -21,6 +21,10 @@
     margin-top: 0.5em;
 }
 
+.topic-edit-panel > button {
+    margin-bottom: 10px;
+}
+
 #onUpdateIsFontBold + label {
     font-weight: 700;
 }

@@ -60,6 +60,10 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(actions.addChildTopic(id, childInfo, index));
     },
     
+    onAddParentTopic : (id, parentId) => {
+      dispatch(actions.addParentTopic(id, parentId));
+    },
+    
     onRemoveSelfTopic : (id) => {
       dispatch(actions.removeSelfTopic(id));
     }

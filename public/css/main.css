@@ -51,6 +51,13 @@ button[disabled] {
   opacity: .65;
 }
 
+.small-button {
+  padding: 5px 10px;
+  font-size: 12px;
+  line-height: 1.5;
+  border-radius: 3px;
+}
+
 .primary-button, .primary-button[disabled]:hover {
   color: #fff;
   background-color: #337ab7;

@@ -92,7 +92,24 @@ export default (currentState = {}, action) => {
     {
       targetTopicInfo.children = targetTopicInfo.children || [];
       const length = targetTopicInfo.children.length;
-      targetTopicInfo.children.splice(action.index || length, 0, action.childInfo);
+      targetTopicInfo.children.splice(action.index == null ? length : action.index, 0, action.childInfo);
+      break;
+    }
+
+    case types.Add_PARENT_TOPIC :
+    {
+      // remove self info
+      const selfIndex = targetParentInfo.children.indexOf(targetTopicInfo);
+      targetParentInfo.children.splice(selfIndex, 1);
+      
+      // generate new parent info
+      const newParent = {
+        id: action.parentId,
+        children: [targetTopicInfo]
+      };
+      
+      // add a new parent to old parent
+      targetParentInfo.children.splice(selfIndex, 0, newParent);
       break;
     }
 
