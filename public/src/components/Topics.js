@@ -109,7 +109,6 @@ class Topic extends Component {
     
     const TopicGroupProps = {
       className: `topic-group ${topicInfo.type}`,
-      onDoubleClick: (e) => this.onTopicDoubleClick(e),
       transform: `translate(${topicInfo.position[0]},${topicInfo.position[1]})`
     };
 
@@ -135,6 +134,7 @@ class Topic extends Component {
     const TopicBoxGroupProps = {
       className: 'topic-box-group',
       onClick: (e) => this.onTopicClick(e),
+      onDoubleClick: (e) => this.onTopicDoubleClick(e),
       onMouseEnter: (e) => this.onTopicMouseEnter(e),
       onMouseOut: (e) => this.onTopicMouseOut(e)
     };
@@ -180,7 +180,7 @@ class Topic extends Component {
   }
 
   onTopicDoubleClick() {
-    AppTools.editReceiver.show();
+    AppTools.editReceiver.show(this);
   }
   
   onTopicMouseEnter() {
@@ -196,6 +196,10 @@ class Topic extends Component {
     }
   }
 
+  onTopicCopy() {
+    console.log('copy');
+  }
+
   // lifecycle events
   onSelected() {
     this.setState({selected: true, hovered: false});
@@ -208,6 +212,10 @@ class Topic extends Component {
     this.setState({selected: false});
     
     events.emit(EventTags.TOPIC_DESELECTED);
+  }
+
+  pasteTopicInfo(topicInfo) {
+    this.props.onAddChildTopic(this.props.id, topicInfo);
   }
 
   onUpdateTitle(title) {
@@ -229,6 +237,10 @@ class Topic extends Component {
 
   getType() {
     return this.props.topicInfo.type;
+  }
+  
+  cloneTopicTree() {
+    return AppTools.replaceInfoId(this.props.topicInfo.originTopicInfo);
   }
 
   // method for reducer
@@ -404,6 +416,8 @@ class Topics extends Component {
     return topicsCopy;
     
     function _calculate(topicTree = topicsCopy) {
+      const copyAsOrigin = AppTools.deepClone(topicTree);
+      
       // get Topic type
       let topicType;
 
@@ -416,6 +430,8 @@ class Topics extends Component {
       else topicType = CommonConstant.TOPIC_SUB;
 
       topicTree.type = topicType;
+      
+      topicTree.originTopicInfo = copyAsOrigin;
       
       topicTree.parentId = parent ? parent.id : null;
       

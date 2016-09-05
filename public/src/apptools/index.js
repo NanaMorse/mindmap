@@ -46,6 +46,8 @@ export const editReceiver = (() => {
   appToolsContainer.appendChild(input);
   
   let currentComponent;
+
+  let componentToCopy;
   
   // lifeCircle method
   const setShowStyle = () => {
@@ -139,6 +141,19 @@ export const editReceiver = (() => {
     !isVisible() && setShowStyle();
   });
 
+  input.addEventListener('copy', () => {
+    if(!isVisible()) {
+      componentToCopy = currentComponent;
+    }
+  });
+
+  input.addEventListener('paste', (e) => {
+    if (!isVisible()) {
+      e.preventDefault();
+      currentComponent.pasteTopicInfo(componentToCopy.cloneTopicTree());
+    }
+  });
+
   return {
     prepare (targetComponent) {
 
@@ -147,7 +162,9 @@ export const editReceiver = (() => {
       input.focus();
     },
 
-    show () {
+    show (targetComponent) {
+
+      currentComponent = targetComponent;
 
       setShowStyle();
 
@@ -200,6 +217,19 @@ export const deepAssign = (target, ...options) => {
 
 export const deepClone = (target) => {
   return JSON.parse(JSON.stringify(target));
+};
+
+export const replaceInfoId = (topicInfo) => {
+  const infoCopy = deepClone(topicInfo);
+  
+  _replaceId(infoCopy);
+
+  return infoCopy;
+
+  function _replaceId(info = infoCopy) {
+    info.id = generateUUID();
+    info.children && info.children.forEach(child => _replaceId(child));
+  }
 };
 
 export const generateUUID = () => {
