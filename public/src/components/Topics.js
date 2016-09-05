@@ -196,8 +196,13 @@ class Topic extends Component {
     }
   }
 
-  onTopicCopy() {
-    console.log('copy');
+  copyTopicInfo() {
+    AppTools.copyInfoStoreCenter.refreshInfo(this.props.topicInfo.originTopicInfo);
+  }
+
+  pasteTopicInfo() {
+    if (!AppTools.copyInfoStoreCenter.hasInfoStashed()) return;
+    this.props.onAddChildTopic(this.props.id, AppTools.copyInfoStoreCenter.getInfo());
   }
 
   // lifecycle events
@@ -212,10 +217,6 @@ class Topic extends Component {
     this.setState({selected: false});
     
     events.emit(EventTags.TOPIC_DESELECTED);
-  }
-
-  pasteTopicInfo(topicInfo) {
-    this.props.onAddChildTopic(this.props.id, topicInfo);
   }
 
   onUpdateTitle(title) {
@@ -239,10 +240,6 @@ class Topic extends Component {
     return this.props.topicInfo.type;
   }
   
-  cloneTopicTree() {
-    return AppTools.replaceInfoId(this.props.topicInfo.originTopicInfo);
-  }
-
   // method for reducer
   onUpdateFontSize(fontSize) {
     this.props.onUpdateFontSize(this.props.id, fontSize);

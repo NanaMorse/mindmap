@@ -3,18 +3,6 @@ import DefaultStyle from '../constants/DefaultStyle';
 
 const appToolsContainer = document.querySelector('#app-tools-container');
 
-const keyMap = {
-  13 : 'Enter',
-  8  : 'Delete',
-  46 : 'Delete',
-  90 : 'Z',
-  38 : "Direct",
-  40 : "Direct",
-  37 : "Direct",
-  39 : "Direct",
-  27 : 'ESC'
-};
-
 export const getTextSize = (() => {
   const p = document.createElement('p');
 
@@ -34,6 +22,18 @@ export const getTextSize = (() => {
 })();
 
 export const editReceiver = (() => {
+  const keyMap = {
+    13 : 'Enter',
+    8  : 'Delete',
+    46 : 'Delete',
+    90 : 'Z',
+    38 : "Direct",
+    40 : "Direct",
+    37 : "Direct",
+    39 : "Direct",
+    27 : 'ESC'
+  };
+
   const input = document.createElement('input');
 
   input.id = 'editReceiver';
@@ -46,8 +46,6 @@ export const editReceiver = (() => {
   appToolsContainer.appendChild(input);
   
   let currentComponent;
-
-  let componentToCopy;
   
   // lifeCircle method
   const setShowStyle = () => {
@@ -143,14 +141,14 @@ export const editReceiver = (() => {
 
   input.addEventListener('copy', () => {
     if(!isVisible()) {
-      componentToCopy = currentComponent;
+      currentComponent.copyTopicInfo();
     }
   });
 
   input.addEventListener('paste', (e) => {
     if (!isVisible()) {
       e.preventDefault();
-      currentComponent.pasteTopicInfo(componentToCopy.cloneTopicTree());
+      currentComponent.pasteTopicInfo();
     }
   });
 
@@ -280,3 +278,22 @@ export const wrapTextWithEllipsis  = (text, fontSize, maxWidth) => {
     }
   }
 };
+
+// todo enable string paste
+export const copyInfoStoreCenter = (() => {
+  let componentInfoToBePasted;
+
+  const refreshInfo = (info) => {
+    componentInfoToBePasted = deepClone(info);
+  };
+
+  const getInfo = () => {
+    return replaceInfoId(componentInfoToBePasted);
+  };
+
+  const hasInfoStashed = () => {
+    return !!componentInfoToBePasted;
+  };
+
+  return {refreshInfo, getInfo, hasInfoStashed};
+})();
