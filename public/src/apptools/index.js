@@ -144,6 +144,12 @@ export const editReceiver = (() => {
       currentComponent.copyTopicInfo();
     }
   });
+  
+  input.addEventListener('cut', () => {
+    if(!isVisible()) {
+      currentComponent.cutTopicInfo();
+    }
+  });
 
   input.addEventListener('paste', (e) => {
     if (!isVisible()) {

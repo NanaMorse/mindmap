@@ -200,6 +200,13 @@ class Topic extends Component {
     AppTools.copyInfoStoreCenter.refreshInfo(this.props.topicInfo.originTopicInfo);
   }
 
+  cutTopicInfo() {
+    if (this.getType() === CommonConstant.TOPIC_ROOT) return false;
+    
+    AppTools.copyInfoStoreCenter.refreshInfo(this.props.topicInfo.originTopicInfo);
+    this.onRemoveSelfTopic();
+  }
+
   pasteTopicInfo() {
     if (!AppTools.copyInfoStoreCenter.hasInfoStashed()) return;
     this.props.onAddChildTopic(this.props.id, AppTools.copyInfoStoreCenter.getInfo());
