@@ -1,6 +1,6 @@
 import store from '../store';
 
-import {deepClone, delayInvoking} from '../apptools';
+import {deepClone, delayInvoking} from '../apptools/commonfunc';
 
 import {events} from '../managers';
 

@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
 import Draggable from 'react-draggable';
 
-import {events, selectionsManager} from '../managers';
-import * as AppTools from '../apptools';
+import {events, selectionsManager, pasteInfoManager} from '../managers';
+
+import * as AddOn from '../apptools/addon';
+import * as CommonFunc from '../apptools/commonfunc';
 
 import * as CommonConstant from '../constants/Common';
 import * as Distance from '../constants/Distance';
@@ -81,7 +83,7 @@ const Label = ({topicInfo}) => {
   
   const {fontSize, fillColor} = DefaultStyle.label;
   
-  labelText = AppTools.wrapTextWithEllipsis(labelText, fontSize, labelWidth - Distance.LabelPadding.paddingLeft - Distance.LabelPadding.paddingRight);
+  labelText = CommonFunc.wrapTextWithEllipsis(labelText, fontSize, labelWidth - Distance.LabelPadding.paddingLeft - Distance.LabelPadding.paddingRight);
 
   return (
     <g className="label">
@@ -180,7 +182,7 @@ class Topic extends Component {
   }
 
   onTopicDoubleClick() {
-    AppTools.editReceiver.show(this);
+    AddOn.editReceiver.show(this);
   }
   
   onTopicMouseEnter() {
@@ -197,25 +199,25 @@ class Topic extends Component {
   }
 
   copyTopicInfo() {
-    AppTools.copyInfoStoreCenter.refreshInfo(this.props.topicInfo.originTopicInfo);
+    pasteInfoManager.refreshInfo(this.props.topicInfo.originTopicInfo);
   }
 
   cutTopicInfo() {
     if (this.getType() === CommonConstant.TOPIC_ROOT) return false;
-    
-    AppTools.copyInfoStoreCenter.refreshInfo(this.props.topicInfo.originTopicInfo);
+
+    pasteInfoManager.refreshInfo(this.props.topicInfo.originTopicInfo);
     this.onRemoveSelfTopic();
   }
 
   pasteTopicInfo() {
-    if (!AppTools.copyInfoStoreCenter.hasInfoStashed()) return;
-    this.props.onAddChildTopic(this.props.id, AppTools.copyInfoStoreCenter.getInfo());
+    if (!pasteInfoManager.hasInfoStashed()) return;
+    this.props.onAddChildTopic(this.props.id, pasteInfoManager.getInfo());
   }
 
   // lifecycle events
   onSelected() {
     this.setState({selected: true, hovered: false});
-    AppTools.editReceiver.prepare(this);
+    AddOn.editReceiver.prepare(this);
     
     events.emit(EventTags.TOPIC_SELECTED, this.props.topicInfo);
   }
@@ -286,15 +288,15 @@ class Topic extends Component {
   }
 
   onAddTopicBefore() {
-    this.props.onAddChildTopic(this.props.parentId, {id: AppTools.generateUUID()}, this.props.index);
+    this.props.onAddChildTopic(this.props.parentId, {id: CommonFunc.generateUUID()}, this.props.index);
   }
 
   onAddChildTopic() {
-    this.props.onAddChildTopic(this.props.id, {id: AppTools.generateUUID()});
+    this.props.onAddChildTopic(this.props.id, {id: CommonFunc.generateUUID()});
   }
 
   onAddParentTopic() {
-    this.props.onAddParentTopic(this.props.id, AppTools.generateUUID());
+    this.props.onAddParentTopic(this.props.id, CommonFunc.generateUUID());
   }
 
   onRemoveSelfTopic() {
@@ -410,7 +412,7 @@ class Topics extends Component {
   
   // calculate topics info, include boxSize and topic type
   calculateTopicsExtendInfo () {
-    const topicsCopy = AppTools.deepClone(this.props);
+    const topicsCopy = CommonFunc.deepClone(this.props);
     
     _calculate();
 
@@ -420,7 +422,7 @@ class Topics extends Component {
     return topicsCopy;
     
     function _calculate(topicTree = topicsCopy) {
-      const copyAsOrigin = AppTools.deepClone(topicTree);
+      const copyAsOrigin = CommonFunc.deepClone(topicTree);
       
       // get Topic type
       let topicType;
@@ -447,7 +449,7 @@ class Topics extends Component {
       // get boxSize
       const fontSize = Object.assign({}, DefaultStyle[topicType], topicTree.style).fontSize;
 
-      const titleAreaSize = AppTools.getTextSize(topicTree.title || 'Topic', fontSize);
+      const titleAreaSize = CommonFunc.getTextSize(topicTree.title || 'Topic', fontSize);
 
       const boxSize = {};
       const {paddingLeft, paddingTop} = Distance.TopicPaddingOverride[topicType][topicTree.style.shapeClass];
@@ -457,7 +459,7 @@ class Topics extends Component {
 
       // if has label
       if (topicTree.label) {
-        const {width: labelTextWidth, height: labelTextHeight} = AppTools.getTextSize(topicTree.label, DefaultStyle.label.fontSize);
+        const {width: labelTextWidth, height: labelTextHeight} = CommonFunc.getTextSize(topicTree.label, DefaultStyle.label.fontSize);
 
         const labelPadding = Distance.LabelPadding;
         const labelWidth = labelPadding.paddingLeft + labelTextWidth + labelPadding.paddingRight;

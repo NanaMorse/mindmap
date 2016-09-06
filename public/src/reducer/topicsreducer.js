@@ -1,6 +1,6 @@
 import * as types from '../constants/ActionTypes';
 
-import {deepClone} from '../apptools';
+import {deepClone} from '../apptools/commonfunc';
 
 export default (currentState = {}, action) => {
   

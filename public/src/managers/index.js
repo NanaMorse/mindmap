@@ -4,6 +4,8 @@ import store from '../store';
 
 import {TOPIC_ROOT} from '../constants/Common';
 
+import * as CommonFunc from '../apptools/commonfunc';
+
 export const events = new Events();
 
 export const selectionsManager = (() => {
@@ -96,4 +98,22 @@ export const selectionsManager = (() => {
   };
   
   return { getSelectionsArray, addSelection, selectSingle, clearSelection, removeSelection, getSelectionsArrayWithoutChild }
+})();
+
+export const pasteInfoManager = (() => {
+  let componentInfoToBePasted;
+
+  const refreshInfo = (info) => {
+    componentInfoToBePasted = CommonFunc.deepClone(info);
+  };
+
+  const getInfo = () => {
+    return CommonFunc.replaceInfoId(componentInfoToBePasted);
+  };
+
+  const hasInfoStashed = () => {
+    return !!componentInfoToBePasted;
+  };
+
+  return {refreshInfo, getInfo, hasInfoStashed};
 })();
