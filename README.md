@@ -2,6 +2,8 @@
 
 A simple mindmap web application based on react and redux.
 
+online demo: [mindmap](http://54.162.29.138:3000/)
+
 if you want to try it by yourself, clone it and run those commands in your terminal:
 
 ```
