@@ -1,14 +1,20 @@
 import * as types from '../constants/ActionTypes';
 
+interface action {
+  (...param: any[]): {
+    type: string
+  }
+}
+
 // Undo Action
-export const undo = (pastState) => {
+export const undo:action = (pastState: Object) => {
   return {
     type: types.UNDO,
     pastState
   }
 };
 
-export const redo = (futureState) => {
+export const redo:action = (futureState: Object) => {
   return {
     type: types.REDO,
     futureState
@@ -16,7 +22,7 @@ export const redo = (futureState) => {
 };
 
 // Sheet Action
-export const updateSheetBgColor = (bgColor) => {
+export const updateSheetBgColor:action = (bgColor: string) => {
   return {
     type: types.UPDATE_SHEET_BGCOLOR,
     bgColor
@@ -24,7 +30,7 @@ export const updateSheetBgColor = (bgColor) => {
 };
 
 // Topic Action
-export const updateTopicTitle = (id, title) => {
+export const updateTopicTitle:action = (id: string, title: string) => {
   return {
     type: types.UPDATE_TOPIC_TITLE,
     id,
@@ -32,7 +38,7 @@ export const updateTopicTitle = (id, title) => {
   }
 };
 
-export const updateTopicFontSize = (id, fontSize) => {
+export const updateTopicFontSize:action = (id: string, fontSize: string) => {
   return {
     type: types.UPDATE_TOPIC_FONTSIZE,
     id,
@@ -40,7 +46,7 @@ export const updateTopicFontSize = (id, fontSize) => {
   }
 };
 
-export const updateTopicFontColor = (id, fontColor) => {
+export const updateTopicFontColor:action = (id: string, fontColor: string) => {
   return {
     type: types.UPDATE_TOPIC_FONTCOLOR,
     id,
@@ -48,7 +54,7 @@ export const updateTopicFontColor = (id, fontColor) => {
   }
 };
 
-export const updateTopicIsFontBold = (id, isFontBold) => {
+export const updateTopicIsFontBold:action = (id: string, isFontBold: boolean) => {
   return {
     type: types.UPDATE_TOPIC_ISFONTBOLD,
     id,
@@ -56,7 +62,7 @@ export const updateTopicIsFontBold = (id, isFontBold) => {
   }
 };
 
-export const updateTopicIsFontItalic = (id, isFontItalic) => {
+export const updateTopicIsFontItalic:action = (id: string, isFontItalic: boolean) => {
   return {
     type: types.UPDATE_TOPIC_ISFONTITALIC,
     id,
@@ -64,7 +70,7 @@ export const updateTopicIsFontItalic = (id, isFontItalic) => {
   }
 };
 
-export const updateTopicIsFontLineThrough = (id, isFontLineThrough) => {
+export const updateTopicIsFontLineThrough:action = (id: string, isFontLineThrough: boolean) => {
   return {
     type: types.UPDATE_TOPIC_ISFONTLINETHROUGH,
     id,
@@ -72,7 +78,7 @@ export const updateTopicIsFontLineThrough = (id, isFontLineThrough) => {
   }
 };
 
-export const updateTopicShapeClass = (id, shapeClass) => {
+export const updateTopicShapeClass:action = (id: string, shapeClass: string) => {
   return {
     type: types.UPDATE_TOPIC_SHAPECLASS,
     id,
@@ -80,7 +86,7 @@ export const updateTopicShapeClass = (id, shapeClass) => {
   }
 };
 
-export const updateTopicLineClass = (id, lineClass) => {
+export const updateTopicLineClass:action = (id: string, lineClass: string) => {
   return {
     type: types.UPDATE_TOPIC_LINECLASS,
     id,
@@ -88,7 +94,7 @@ export const updateTopicLineClass = (id, lineClass) => {
   }
 };
 
-export const updateTopicFillColor = (id, fillColor) => {
+export const updateTopicFillColor:action = (id: string, fillColor: string) => {
   return {
     type: types.UPDATE_TOPIC_FILLCOLOR,
     id,
@@ -96,7 +102,7 @@ export const updateTopicFillColor = (id, fillColor) => {
   }
 };
 
-export const updateTopicLabel = (id, labelText) => {
+export const updateTopicLabel:action = (id: string, labelText: string) => {
   return {
     type: types.UPDATE_TOPIC_LABEL,
     id,
@@ -104,7 +110,7 @@ export const updateTopicLabel = (id, labelText) => {
   }
 };
 
-export const addChildTopic = (id, childInfo, index) => {
+export const addChildTopic:action = (id: string, childInfo: Object, index: number) => {
   return {
     type: types.ADD_CHILD_TOPIC,
     id,
@@ -113,7 +119,7 @@ export const addChildTopic = (id, childInfo, index) => {
   }
 };
 
-export const addParentTopic = (id, parentId) => {
+export const addParentTopic:action = (id: string, parentId: string) => {
   return {
     type: types.Add_PARENT_TOPIC,
     id,
@@ -121,7 +127,7 @@ export const addParentTopic = (id, parentId) => {
   }
 };
 
-export const removeSelfTopic = (id) => {
+export const removeSelfTopic:action = (id: string) => {
   return {
     type: types.REM_SELF_TOPIC,
     id

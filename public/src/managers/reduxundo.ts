@@ -1,19 +1,30 @@
 import store from '../store';
 
-import {deepClone, delayInvoking} from '../apptools/commonfunc';
+import { deepClone, delayInvoking } from '../apptools/commonfunc';
 
-import {events} from '../managers';
+import { events } from '../managers';
 
-import {undo, redo} from '../actions';
+import { undo, redo } from '../actions';
 
 import * as EventTags from '../constants/EventTags';
+
+interface ReduxUndoFunc {
+  (mapDispatchToProps: Function, reducerKey: string):(dispatch: Function) => Object;
+
+  undo: () => void;
+
+  redo: () => void;
+
+  hasUndo: () => boolean;
+
+  hasRedo: () => boolean;
+}
 
 const pastDispatchStack = [];
 
 const futureDispatchStack = [];
 
-const reduxUndo = function (mapDispatchToProps, reducerKey) {
-
+const reduxUndo = <ReduxUndoFunc>function(mapDispatchToProps, reducerKey) {
   return function (dispatch) {
     const dispatchMap = mapDispatchToProps(dispatch);
 
@@ -28,10 +39,10 @@ const reduxUndo = function (mapDispatchToProps, reducerKey) {
             dispatch(undo(lastState[reducerKey]));
             return {dispatch, reducerKey};
           });
-          
+
           events.emit(EventTags.PUSH_UNDO_STACK);
         });
-        
+
         futureDispatchStack.splice(0);
 
         dispatchMap[dispatchKey](...args);
@@ -40,7 +51,7 @@ const reduxUndo = function (mapDispatchToProps, reducerKey) {
 
     return undoDispatchMap;
   };
-}
+};
 
 reduxUndo.undo = () => {
   const pastDispatch = pastDispatchStack.pop();
@@ -49,7 +60,7 @@ reduxUndo.undo = () => {
 
   if (pastDispatch) {
     const {dispatch, reducerKey} = pastDispatch();
-    
+
     futureDispatchStack.push(() => {
       dispatch(redo(futureState[reducerKey]));
       pastDispatchStack.push(pastDispatch);

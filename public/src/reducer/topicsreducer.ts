@@ -3,10 +3,10 @@ import * as types from '../constants/ActionTypes';
 import {deepClone} from '../apptools/commonfunc';
 
 export default (currentState = {}, action) => {
-  
+
   const topicsCopy = deepClone(currentState);
-  
-  const {topicInfo: targetTopicInfo, parentInfo: targetParentInfo} = findTopicInfoById(topicsCopy, action.id) || {};
+
+  const {topicInfo: targetTopicInfo, parentInfo: targetParentInfo} = findTopicInfoById(topicsCopy, action.id) || {topicInfo: null, parentInfo: null};
 
   switch (action.type) {
     case types.UNDO :
@@ -31,14 +31,14 @@ export default (currentState = {}, action) => {
       targetTopicInfo.style.fontSize = action.fontSize;
       break;
     }
-      
+
     case types.UPDATE_TOPIC_FONTCOLOR :
     {
       targetTopicInfo.style = targetTopicInfo.style || {};
       targetTopicInfo.style.fontColor = action.fontColor;
       break;
     }
-      
+
     case types.UPDATE_TOPIC_ISFONTBOLD :
     {
       targetTopicInfo.style = targetTopicInfo.style || {};
@@ -52,8 +52,8 @@ export default (currentState = {}, action) => {
       targetTopicInfo.style.isFontItalic = action.isFontItalic;
       break;
     }
-      
-    case types.UPDATE_TOPIC_ISFONTLINETHROUGH : 
+
+    case types.UPDATE_TOPIC_ISFONTLINETHROUGH :
     {
       targetTopicInfo.style = targetTopicInfo.style || {};
       targetTopicInfo.style.isFontLineThrough = action.isFontLineThrough;
@@ -66,7 +66,7 @@ export default (currentState = {}, action) => {
       targetTopicInfo.style.shapeClass = action.shapeClass;
       break;
     }
-      
+
     case types.UPDATE_TOPIC_LINECLASS :
     {
       targetTopicInfo.style = targetTopicInfo.style || {};
@@ -80,7 +80,7 @@ export default (currentState = {}, action) => {
       targetTopicInfo.style.fillColor = action.fillColor;
       break;
     }
-      
+
     case types.UPDATE_TOPIC_LABEL :
     {
       if (action.labelText) targetTopicInfo.label = action.labelText;
@@ -101,13 +101,13 @@ export default (currentState = {}, action) => {
       // remove self info
       const selfIndex = targetParentInfo.children.indexOf(targetTopicInfo);
       targetParentInfo.children.splice(selfIndex, 1);
-      
+
       // generate new parent info
       const newParent = {
         id: action.parentId,
         children: [targetTopicInfo]
       };
-      
+
       // add a new parent to old parent
       targetParentInfo.children.splice(selfIndex, 0, newParent);
       break;
@@ -124,18 +124,18 @@ export default (currentState = {}, action) => {
       return currentState;
     }
   }
-  
+
   return topicsCopy;
 };
 
-function findTopicInfoById(topic, id, parentInfo? = null) {
+function findTopicInfoById(topic, id, parentInfo?) {
   if (!topic || !id) return;
-  
+
   if (topic.id === id) return {topicInfo: topic, parentInfo};
 
   if (topic.children) {
     for (const childTopic of topic.children) {
-      const {topicInfo, parentInfo} = findTopicInfoById(childTopic, id, topic) || {};
+      const {topicInfo, parentInfo} = findTopicInfoById(childTopic, id, topic) || {topicInfo: null, parentInfo: null};
       if (topicInfo) return {topicInfo, parentInfo};
     }
   }

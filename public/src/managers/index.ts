@@ -1,4 +1,4 @@
-import Events = require('events');
+import { EventEmitter } from 'events';
 
 import store from '../store';
 
@@ -6,10 +6,10 @@ import {TOPIC_ROOT} from '../constants/Common';
 
 import * as CommonFunc from '../apptools/commonfunc';
 
-export const events = new Events();
+export const events = new EventEmitter();
 
 export const selectionsManager = (() => {
-  
+
   const selections = [];
 
   const getSelectionsArray = () => {
@@ -23,23 +23,23 @@ export const selectionsManager = (() => {
     }
 
   };
-  
+
   const selectSingle = (selection) => {
     clearSelection();
     addSelection(selection);
   };
-  
+
   const clearSelection = () => {
-    
+
     if (!selections.length) return false;
-    
+
     selections.forEach((selection) => {
       selection.onDeselected();
     });
 
     selections.splice(0);
   };
-  
+
   const removeSelection = (selection) => {
     if (selections.includes(selection)) {
       selections.splice(selections.indexOf(selection), 1);
@@ -96,7 +96,7 @@ export const selectionsManager = (() => {
       }
     }
   };
-  
+
   return { getSelectionsArray, addSelection, selectSingle, clearSelection, removeSelection, getSelectionsArrayWithoutChild }
 })();
 

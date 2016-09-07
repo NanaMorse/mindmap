@@ -1,6 +1,6 @@
 // events about topic
-export const TOPIC_SELECTED = Symbol('TOPIC_SELECTED');
-export const TOPIC_DESELECTED = Symbol('TOPIC_DESELECTED');
+export const TOPIC_SELECTED = 'TOPIC_SELECTED';
+export const TOPIC_DESELECTED = 'TOPIC_DESELECTED';
 
-export const PUSH_UNDO_STACK = Symbol('PUSH_UNDO_STACK');
-export const UNDO_OR_REDO_TRIGGERED = Symbol('UNDO_OR_REDO_TRIGGERED');
+export const PUSH_UNDO_STACK = 'PUSH_UNDO_STACK';
+export const UNDO_OR_REDO_TRIGGERED = 'UNDO_OR_REDO_TRIGGERED';

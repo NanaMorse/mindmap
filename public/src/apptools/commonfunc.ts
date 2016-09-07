@@ -101,10 +101,10 @@ export const wrapTextWithEllipsis  = (text, fontSize, maxWidth) => {
 
   return wrapResult + '...';
 
-  function sliceText(textToSlice:string = text) {
+  function sliceText(textToSlice: string = text) {
     if (textToSlice.length === 1) return textToSlice;
 
-    const slicePart1 = textToSlice.slice(0, parseInt(textToSlice.length / 2));
+    const slicePart1 = textToSlice.slice(0, parseInt(textToSlice.length / 2 + ''));
     const slicePart2 = textToSlice.replace(slicePart1, '');
 
     if (getTextSize(wrapResult + slicePart1, fontSize).width > maxWidth - ellipsisLength) sliceText(slicePart1);

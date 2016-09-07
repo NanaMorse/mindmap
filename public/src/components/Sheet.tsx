@@ -1,10 +1,18 @@
-import React from 'react';
+import * as React from 'react';
 
 import TopicsContainer from '../containers/TopicsContainer';
 
 import {selectionsManager} from '../managers';
 
-class Sheet extends React.Component {
+interface SheetProps {
+  bgColor: string
+}
+
+class Sheet extends React.Component<SheetProps, void> {
+
+  topicsContainer: HTMLElement;
+
+  editReceiver: HTMLElement;
 
   render() {
 
@@ -38,7 +46,7 @@ class Sheet extends React.Component {
   // todo try svg animation
   moveTopicsContainer(deltaX, deltaY) {
     if (deltaX === 0 && deltaY === 0) return false;
-    
+
     const {topicsContainer} = this;
     const transformAttr = topicsContainer.getAttribute('transform');
     const execResult = /translate\(\s*([^\s,)]+)[ ,]([^\s,)]+)/.exec(transformAttr);
@@ -50,19 +58,19 @@ class Sheet extends React.Component {
 
   moveEditReceiver(deltaX, deltaY) {
     if (deltaX === 0 && deltaY === 0) return false;
-    
+
     const {editReceiver} = this;
 
-    if (editReceiver.style.zIndex < 0) return false;
+    if (Number(editReceiver.style.zIndex) < 0) return false;
 
     const {left: preLeft, top: preTop} = editReceiver.style;
     editReceiver.style.left = parseInt(preLeft) - deltaX + 'px';
     editReceiver.style.top = parseInt(preTop) - deltaY + 'px';
   }
-  
+
   componentDidMount() {
-    this.topicsContainer = document.querySelector('.topics-group');
-    this.editReceiver = document.querySelector('#editReceiver')
+    this.topicsContainer = document.querySelector('.topics-group') as HTMLElement;
+    this.editReceiver = document.querySelector('#editReceiver') as HTMLElement;
   }
 }
 

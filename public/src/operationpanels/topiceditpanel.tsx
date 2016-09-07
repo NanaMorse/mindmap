@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import * as React from 'react';
 
 import {events, selectionsManager} from '../managers';
 
@@ -46,7 +46,23 @@ const UpdateFillColorPicker = widgetGenerator.colorPickerGenerator('Fill Color',
 
 const UpdateLabelTextInput = widgetGenerator.textInputGenerator('Label Text', 'onUpdateLabel');
 
-class TopicEditPanel extends Component {
+interface TopicEditPanelState {
+  show?: boolean,
+  isTargetRoot?: boolean,
+
+  fontSize?: string,
+  fontColor?: string,
+  isFontBold?: boolean,
+  isFontItalic?: boolean,
+  isFontLineThrough?: boolean,
+
+  fillColor?: string,
+  shapeClass?: string,
+  lineClass?: string,
+  labelText?: string
+}
+
+class TopicEditPanel extends React.Component<void, TopicEditPanelState> {
   constructor() {
     super();
 
@@ -56,9 +72,9 @@ class TopicEditPanel extends Component {
 
       fontSize: '',
       fontColor: '',
-      isFontBold: '',
-      isFontItalic: '',
-      isFontLineThrough: '',
+      isFontBold: false,
+      isFontItalic: false,
+      isFontLineThrough: false,
 
       fillColor: '',
       shapeClass: '',
@@ -75,7 +91,7 @@ class TopicEditPanel extends Component {
         display: this.state.show ? 'block' : 'none'
       }
     };
-    
+
     const actionSingleTopicExceptRootProps = {
       onClick: e => this.dispatchOperator(e, null, [selectionsManager.getSelectionsArray()[0]]),
       disabled: this.state.isTargetRoot
@@ -95,7 +111,7 @@ class TopicEditPanel extends Component {
         which === 13 && this.dispatchOperator(e);
       }
     };
-    
+
     return (
       <div { ...panelProps } >
         <AddChildTopicButton onClick={e => this.dispatchOperator(e)}/>
@@ -124,7 +140,7 @@ class TopicEditPanel extends Component {
       onChange: e => this.dispatchOperator(e, stateKey)
     };
   }
-  
+
   generateCheckBoxProps(stateKey) {
     return {
       checked: this.state[stateKey],
@@ -142,8 +158,8 @@ class TopicEditPanel extends Component {
       }
     }
   }
-  
-  dispatchOperator(e, syncValue, operatorTargetArray = selectionsManager.getSelectionsArray()) {
+
+  dispatchOperator(e, syncValue?, operatorTargetArray = selectionsManager.getSelectionsArray()) {
     const widgetId = e.target.id;
     const widgetValue = e.target.value;
 
@@ -174,7 +190,7 @@ class TopicEditPanel extends Component {
       isFontBold: !!topicStyle.isFontBold,
       isFontItalic: !!topicStyle.isFontItalic,
       isFontLineThrough: !!topicStyle.isFontLineThrough,
-      
+
       fillColor: topicStyle.fillColor,
       labelText: topicInfo.label || '',
       shapeClass: topicStyle.shapeClass,
@@ -188,11 +204,11 @@ class TopicEditPanel extends Component {
       this.setState({show: true});
       this.setPanelWidgetValue(topicInfo);
     });
-    
+
     events.on(EventTags.TOPIC_DESELECTED, () => {
       this.setState({show: false});
     });
-    
+
     events.on(EventTags.UNDO_OR_REDO_TRIGGERED, () => {
       if (!this.state.show) return;
 

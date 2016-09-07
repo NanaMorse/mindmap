@@ -47,11 +47,11 @@ export const editReceiver = (() => {
     style.top = top + 'px';
     style.height = height + 'px';
 
-    style.zIndex = 1;
+    style.zIndex = '1';
   };
 
   const setHideStyle = () => {
-    input.style.zIndex = -1;
+    input.style.zIndex = '-1';
 
     input.value = '';
   };
@@ -72,7 +72,7 @@ export const editReceiver = (() => {
   };
 
   const isVisible = () => {
-    return input.style.zIndex > 0;
+    return Number(input.style.zIndex) > 0;
   };
 
   const keyDownMap = {
@@ -166,5 +166,5 @@ export const editReceiver = (() => {
 
 // todo 
 export const dragSelectReceiver = (() => {
-  
+
 })();

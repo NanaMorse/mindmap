@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import Draggable from 'react-draggable';
+import * as React from 'react';
+import * as Draggable from 'react-draggable';
 
 import {events, selectionsManager, pasteInfoManager} from '../managers';
 
@@ -15,6 +15,8 @@ import CalcTopicShape from '../calcpath/topicshape';
 import CalcConnectLine from '../calcpath/connectline';
 
 import layoutTopics from '../layout';
+
+import { TopicDispatchFuncs } from '../interface';
 
 // Topic Shape
 const TopicShape = ({d}) => {
@@ -34,25 +36,42 @@ const TopicSelectBox = ({d, selected, hovered}) => {
 
   const hoveredStroke = 'rgb(199, 217, 231)';
   const selectedStroke = 'rgb(75, 111, 189)';
-  
+
   return <path d={ d } fill="none" stroke={selected ? selectedStroke : hoveredStroke} strokeWidth="3" style={ style }></path>;
 };
 
 // Topic Title
-class TopicTitle extends Component {
+interface TopicTitleProps {
+  title: string
+  fontSize: string
+  fontColor: string
+  isFontBold: boolean
+  isFontItalic: boolean
+  isFontLineThrough: boolean
+}
+
+interface TopicTitleStyle {
+  fontSize: string,
+  fill: string,
+  fontWeight?: number,
+  fontStyle?: string,
+  textDecoration?: string
+}
+
+class TopicTitle extends React.Component<TopicTitleProps, void> {
   render() {
 
     const {title, fontSize, fontColor, isFontBold, isFontItalic, isFontLineThrough} = this.props;
 
-    const style = {
+    const style: TopicTitleStyle = {
       fontSize: fontSize,
       fill: fontColor
     };
-    
+
     if (isFontBold) style.fontWeight = 700;
     if (isFontItalic) style.fontStyle = 'italic';
     if (isFontLineThrough) style.textDecoration = 'line-through';
-    
+
     return <text ref='title' style={ style }>{ title }</text>;
   }
 }
@@ -68,7 +87,7 @@ const ConnectLine = ({topicInfo}) => {
 // Label
 const Label = ({topicInfo}) => {
   let {boxSize: {width: parentWidth, height: parentHeight}, labelBoxSize, label: labelText} = topicInfo;
-  
+
   const halfParentWidth = parentWidth / 2;
   const halfParentHeight = parentHeight / 2;
 
@@ -79,10 +98,10 @@ const Label = ({topicInfo}) => {
 
   const labelTextStartX = -halfParentWidth + Distance.LabelPadding.paddingLeft;
   const labelTextStartY = halfParentHeight + 1 + labelHeight / 2;
-  
-  
+
+
   const {fontSize, fillColor} = DefaultStyle.label;
-  
+
   labelText = CommonFunc.wrapTextWithEllipsis(labelText, fontSize, labelWidth - Distance.LabelPadding.paddingLeft - Distance.LabelPadding.paddingRight);
 
   return (
@@ -93,7 +112,79 @@ const Label = ({topicInfo}) => {
   )
 };
 
-class Topic extends Component {
+interface TopicInfo {
+  id: string
+
+  type: string
+
+  title: string
+
+  label: string
+
+  parentId?: string
+
+  index: number
+
+  boxSize: {
+    width: number
+    height: number
+  }
+
+  labelBoxSize: {
+    width: number
+    height: number
+  }
+
+  bounds: {
+    width: number
+    height: number
+  }
+
+  position: [number, number]
+
+  children: TopicInfo[]
+
+  style: {
+    shapeClass: string
+
+    fillColor: string
+
+    fontSize: string
+
+    fontColor: string
+
+    isFontBold?: boolean
+
+    isFontItalic?: boolean
+
+    isFontLineThrough?: boolean
+
+    lineClass: string
+
+  }
+
+  originTopicInfo: Object
+}
+
+interface TopicProps extends TopicDispatchFuncs {
+  id: string
+
+  parentId?: string
+
+  index: number
+
+  topicInfo: TopicInfo
+}
+
+
+interface TopicState {
+  selected?: boolean;
+  hovered?: boolean;
+}
+
+class Topic extends React.Component<TopicProps, TopicState> {
+
+  refs: any;
 
   constructor() {
     super();
@@ -106,9 +197,9 @@ class Topic extends Component {
   }
 
   render() {
-    
+
     const {topicInfo} = this.props;
-    
+
     const TopicGroupProps = {
       className: `topic-group ${topicInfo.type}`,
       transform: `translate(${topicInfo.position[0]},${topicInfo.position[1]})`
@@ -116,7 +207,7 @@ class Topic extends Component {
 
     const {topicShapePath, topicSelectBoxPath} = this.getTopicShapePath();
     const style = topicInfo.style;
-    
+
     const TopicFillProps = {
       d: topicShapePath,
       fillColor: style.fillColor
@@ -132,12 +223,12 @@ class Topic extends Component {
       isFontItalic: style.isFontItalic,
       isFontLineThrough: style.isFontLineThrough
     };
-    
+
     const TopicBoxGroupProps = {
       className: 'topic-box-group',
       onClick: (e) => this.onTopicClick(e),
-      onDoubleClick: (e) => this.onTopicDoubleClick(e),
-      onMouseEnter: (e) => this.onTopicMouseEnter(e),
+      onDoubleClick: () => this.onTopicDoubleClick(),
+      onMouseEnter: () => this.onTopicMouseEnter(),
       onMouseOut: (e) => this.onTopicMouseOut(e)
     };
 
@@ -149,7 +240,7 @@ class Topic extends Component {
 
     const needConnectLine = style.lineClass !== CommonConstant.LINE_NONE && topicInfo.children && topicInfo.children.length;
     const needLabel = topicInfo.label;
-    
+
     return (
       <g {...TopicGroupProps} >
         {needLabel ? <Label topicInfo={topicInfo}/> : []}
@@ -168,7 +259,7 @@ class Topic extends Component {
     const topicInfo = this.props.topicInfo;
     return CalcTopicShape[topicInfo.style.shapeClass](topicInfo.boxSize);
   }
-  
+
   // userAgent events
   onTopicClick(e) {
     e.stopPropagation();
@@ -184,7 +275,7 @@ class Topic extends Component {
   onTopicDoubleClick() {
     AddOn.editReceiver.show(this);
   }
-  
+
   onTopicMouseEnter() {
     // if not selected, show hovered box
     if (!this.state.selected) {
@@ -218,13 +309,13 @@ class Topic extends Component {
   onSelected() {
     this.setState({selected: true, hovered: false});
     AddOn.editReceiver.prepare(this);
-    
+
     events.emit(EventTags.TOPIC_SELECTED, this.props.topicInfo);
   }
 
   onDeselected() {
     this.setState({selected: false});
-    
+
     events.emit(EventTags.TOPIC_DESELECTED);
   }
 
@@ -248,7 +339,7 @@ class Topic extends Component {
   getType() {
     return this.props.topicInfo.type;
   }
-  
+
   // method for reducer
   onUpdateFontSize(fontSize) {
     this.props.onUpdateFontSize(this.props.id, fontSize);
@@ -324,18 +415,18 @@ class Topic extends Component {
     const selfPropsHasChanged = styleHasChanged || boundsHasChanged || positionHasChanged || titleHasChanged;
     if (selfPropsHasChanged) return true;
 
-    
+
     // check child structure props
     const children = topicInfo.children;
     const nextChildren = nextTopicInfo.children;
-    
+
     let childShapeClassHasChanged = false;
     if (children && nextChildren) {
-      childShapeClassHasChanged = children.some((childInfo, index) => {
+      childShapeClassHasChanged = children.some((childInfo: TopicInfo, index) => {
         return childInfo.style.shapeClass !== nextChildren[index].style.shapeClass;
       });
     }
-    
+
     return childShapeClassHasChanged;
   }
 
@@ -344,16 +435,20 @@ class Topic extends Component {
   }
 }
 
-class Topics extends Component {
+interface TopicsProps extends TopicDispatchFuncs {
+
+}
+
+class Topics extends React.Component<TopicsProps, void> {
 
   render() {
     // calculate layout position first
     const topicsExtend = this.calculateTopicsExtendInfo();
-    
+
     const {
-      onUpdateTitle, 
-      onUpdateFontSize, 
-      onUpdateFillColor, 
+      onUpdateTitle,
+      onUpdateFontSize,
+      onUpdateFillColor,
       onAddChildTopic,
       onAddParentTopic,
       onRemoveSelfTopic,
@@ -402,32 +497,32 @@ class Topics extends Component {
     };
 
     setTopicArrayData(topicsExtend);
-    
+
     return (
       <Draggable handle={`.${CommonConstant.TOPIC_ROOT}`}>
         <g><g className="topics-group">{ topicsArray }</g></g>
       </Draggable>
     );
   }
-  
+
   // calculate topics info, include boxSize and topic type
   calculateTopicsExtendInfo () {
     const topicsCopy = CommonFunc.deepClone(this.props);
-    
+
     _calculate();
 
     // get bounds and position
     layoutTopics(topicsCopy);
 
     return topicsCopy;
-    
-    function _calculate(topicTree = topicsCopy) {
+
+    function _calculate(topicTree: TopicInfo = topicsCopy) {
       const copyAsOrigin = CommonFunc.deepClone(topicTree);
-      
+
       // get Topic type
       let topicType;
 
-      const parent = findTopicParent(topicTree);
+      const parent: TopicInfo = findTopicParent(topicTree);
 
       if (parent == null) topicType = CommonConstant.TOPIC_ROOT;
 
@@ -436,13 +531,13 @@ class Topics extends Component {
       else topicType = CommonConstant.TOPIC_SUB;
 
       topicTree.type = topicType;
-      
+
       topicTree.originTopicInfo = copyAsOrigin;
-      
+
       topicTree.parentId = parent ? parent.id : null;
-      
+
       topicTree.index = parent ? parent.children.indexOf(topicTree) : 0;
-      
+
       // mix topic style
       topicTree.style = Object.assign({}, DefaultStyle[topicType], topicTree.style || {});
 
@@ -451,7 +546,7 @@ class Topics extends Component {
 
       const titleAreaSize = CommonFunc.getTextSize(topicTree.title || 'Topic', fontSize);
 
-      const boxSize = {};
+      const boxSize = {width: 0, height: 0};
       const {paddingLeft, paddingTop} = Distance.TopicPaddingOverride[topicType][topicTree.style.shapeClass];
       const fontSizeNumber = parseInt(fontSize);
       boxSize.width = titleAreaSize.width + fontSizeNumber * paddingLeft * 2;
@@ -464,14 +559,14 @@ class Topics extends Component {
         const labelPadding = Distance.LabelPadding;
         const labelWidth = labelPadding.paddingLeft + labelTextWidth + labelPadding.paddingRight;
         const labelHeight = labelPadding.paddingTop + labelTextHeight + labelPadding.paddingBottom;
-        
+
         topicTree.labelBoxSize = {width: labelWidth, height: labelHeight};
       }
-      
+
       topicTree.boxSize = boxSize;
 
       topicTree.children && topicTree.children.forEach(childTree => _calculate(childTree));
-      
+
     }
 
     function findTopicParent (topicTree, treeToCheck = topicsCopy)  {
