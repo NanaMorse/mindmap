@@ -1,11 +1,11 @@
-import React, {Component} from 'react';
+import * as React from 'react';
 
 import {events} from '../managers';
 import reduxUndo from '../managers/reduxundo';
 
 import {PUSH_UNDO_STACK, UNDO_OR_REDO_TRIGGERED} from '../constants/EventTags';
 
-class Header extends Component {
+export class Header extends React.Component {
 
   constructor() {
     super();
@@ -64,5 +64,3 @@ class Header extends Component {
     );
   }
 }
-
-export default Header;

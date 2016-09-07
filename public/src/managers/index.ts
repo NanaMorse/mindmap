@@ -1,4 +1,4 @@
-const Events = require('events');
+import Events = require('events');
 
 import store from '../store';
 

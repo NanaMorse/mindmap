@@ -12,7 +12,7 @@ const pastDispatchStack = [];
 
 const futureDispatchStack = [];
 
-const reduxUndo = (mapDispatchToProps, reducerKey) => {
+const reduxUndo = function (mapDispatchToProps, reducerKey) {
 
   return function (dispatch) {
     const dispatchMap = mapDispatchToProps(dispatch);
@@ -40,7 +40,7 @@ const reduxUndo = (mapDispatchToProps, reducerKey) => {
 
     return undoDispatchMap;
   };
-};
+}
 
 reduxUndo.undo = () => {
   const pastDispatch = pastDispatchStack.pop();

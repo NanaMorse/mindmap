@@ -128,7 +128,7 @@ export default (currentState = {}, action) => {
   return topicsCopy;
 };
 
-function findTopicInfoById(topic, id, parentInfo) {
+function findTopicInfoById(topic, id, parentInfo? = null) {
   if (!topic || !id) return;
   
   if (topic.id === id) return {topicInfo: topic, parentInfo};
