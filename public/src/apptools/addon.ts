@@ -1,4 +1,7 @@
 import DefaultStyle from '../constants/DefaultStyle';
+import { TOPIC_SELECTED } from '../constants/EventTags';
+
+import { events, selectionsManager, componentMapManager } from '../managers';
 
 export const editReceiver = (() => {
   const keyMap = {
@@ -168,9 +171,15 @@ export const editReceiver = (() => {
 export const dragSelectReceiver = (() => {
   const dragSelectBox = document.createElement('div');
   dragSelectBox.id = 'dragSelectBox';
-  document.querySelector('#app-tools-container').appendChild(dragSelectBox);
 
-  let dragPrepared: boolean = false;
+  const dragSelectCover = document.createElement('div');
+  dragSelectCover.id = 'dragSelectCover';
+
+  dragSelectCover.appendChild(dragSelectBox);
+
+  document.querySelector('#app-tools-container').appendChild(dragSelectCover);
+
+  const body = document.querySelector('body');
 
   let startPoint: [number, number];
 
@@ -192,31 +201,74 @@ export const dragSelectReceiver = (() => {
     return {left, top, width, height};
   }
 
+  interface rectBox {
+    left: number
+    top: number
+    width: number
+    height: number
+  }
 
+  function isBoxIntersects(boxA: rectBox, boxB: rectBox): boolean {
+    return boxA.left <= boxB.left + boxB.width &&
+      boxA.left + boxA.width >= boxB.left &&
+      boxA.top <= boxB.top + boxB.height &&
+      boxA.top + boxA.height >= boxB.top;
+  }
+
+
+  // todo need to consider performance
+  function dragMoving(e) {
+    endPoint = [e.pageX, e.pageY];
+
+    const selectBoxStyle = getSelectBoxStyle(startPoint, endPoint);
+
+    Object.assign(dragSelectBox.style, selectBoxStyle);
+    dragSelectCover.style.display = 'block';
+
+    const selectBoxNumberData = {
+      left: parseInt(selectBoxStyle.left),
+      top: parseInt(selectBoxStyle.top),
+      width: parseInt(selectBoxStyle.width),
+      height: parseInt(selectBoxStyle.height)
+    };
+
+    const componentMap = componentMapManager.getMap();
+
+    Object.keys(componentMap).forEach((id) => {
+      const component = componentMap[id];
+      const componentBoxRect = component.getGroupBoxRect();
+
+      if (isBoxIntersects(selectBoxNumberData, componentBoxRect)) {
+        selectionsManager.addSelection(component);
+        if (!component.state.selected) {
+          component.setState({selected: true});
+        }
+      } else {
+        selectionsManager.removeSelection(component);
+        if (component.state.selected) {
+          component.setState({selected: false});
+        }
+      }
+    });
+  }
+
+  function dragEnd() {
+    body.removeEventListener('mousemove', dragMoving);
+    body.removeEventListener('mouseup', dragEnd);
+
+    dragSelectCover.style.display = 'none';
+
+    if (selectionsManager.getSelectionsArray().length) {
+      events.emit(TOPIC_SELECTED);
+    }
+  }
 
   return {
     dragStart(e) {
-      dragPrepared = true;
-
       startPoint = [e.pageX, e.pageY];
 
-      console.log('dragStart');
-    },
-
-    dragMoving(e) {
-      if (!dragPrepared) return;
-
-      endPoint = [e.pageX, e.pageY];
-
-      Object.assign(dragSelectBox.style, getSelectBoxStyle(startPoint, endPoint));
-      dragSelectBox.style.display = 'block';
-
-      console.log('dragMoving');
-    },
-
-    dragEnd(e) {
-      dragPrepared = false;
-      console.log('dragEnd');
+      body.addEventListener('mousemove', dragMoving);
+      body.addEventListener('mouseup', dragEnd);
     }
   }
 })();

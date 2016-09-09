@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as Draggable from 'react-draggable';
 
-import {events, selectionsManager, pasteInfoManager} from '../managers';
+import {events, selectionsManager, pasteInfoManager, componentMapManager} from '../managers';
 
 import * as AddOn from '../apptools/addon';
 import * as CommonFunc from '../apptools/commonfunc';
@@ -17,6 +17,7 @@ import CalcConnectLine from '../calcpath/connectline';
 import layoutTopics from '../layout';
 
 import { TopicDispatchFuncs } from '../interface';
+import ReactElement = __React.ReactElement;
 
 // Topic Shape
 const TopicShape = ({d}) => {
@@ -31,13 +32,13 @@ const TopicFill = ({d, fillColor}) => {
 // Topic Select Box
 const TopicSelectBox = ({d, selected, hovered}) => {
   const style = {
-    display: selected || hovered ? 'block' : 'none'
+    visibility: selected || hovered ? 'visible' : 'hidden'
   };
 
   const hoveredStroke = 'rgb(199, 217, 231)';
   const selectedStroke = 'rgb(75, 111, 189)';
 
-  return <path d={ d } fill="none" stroke={selected ? selectedStroke : hoveredStroke} strokeWidth="3" style={ style }></path>;
+  return <path d={ d } className="topic-select-box" fill="none" stroke={selected ? selectedStroke : hoveredStroke} strokeWidth="3" style={ style }></path>;
 };
 
 // Topic Title
@@ -201,6 +202,7 @@ class Topic extends React.Component<TopicProps, TopicState> {
     const {topicInfo} = this.props;
 
     const TopicGroupProps = {
+      ref: 'TopicGroup',
       className: `topic-group ${topicInfo.type}`,
       transform: `translate(${topicInfo.position[0]},${topicInfo.position[1]})`
     };
@@ -340,6 +342,10 @@ class Topic extends React.Component<TopicProps, TopicState> {
     return this.props.topicInfo.type;
   }
 
+  getGroupBoxRect() {
+    return this.refs.TopicGroup.querySelector('.topic-select-box').getBoundingClientRect();
+  }
+
   // method for reducer
   onUpdateFontSize(fontSize) {
     this.props.onUpdateFontSize(this.props.id, fontSize);
@@ -396,6 +402,10 @@ class Topic extends React.Component<TopicProps, TopicState> {
     events.emit(EventTags.TOPIC_DESELECTED);
   }
 
+  componentWillMount() {
+    componentMapManager.addComponent(this.props.id, this as ReactElement);
+  }
+
   shouldComponentUpdate(nextProps, nextState) {
     const stringify = JSON.stringify.bind(JSON);
 
@@ -431,6 +441,7 @@ class Topic extends React.Component<TopicProps, TopicState> {
   }
 
   componentWillUnmount() {
+    componentMapManager.removeComponent(this.props.id);
     selectionsManager.removeSelection(this);
   }
 }
@@ -499,7 +510,7 @@ class Topics extends React.Component<TopicsProps, void> {
     setTopicArrayData(topicsExtend);
 
     return (
-      <Draggable handle={`.${CommonConstant.TOPIC_ROOT}`}>
+      <Draggable handle={`.${CommonConstant.TOPIC_ROOT}`} onMouseDown={e => e.stopPropagation()}>
         <g><g className="topics-group">{ topicsArray }</g></g>
       </Draggable>
     );

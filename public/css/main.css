@@ -84,9 +84,17 @@ button[disabled] {
     z-index: -1;
 }
 
+#dragSelectCover {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  display: none;
+}
+
 #dragSelectBox {
   position: absolute;
-  display: none;
   border: 1px solid #01358f;
   background-color: #7f8da8;
   opacity: 0.4;

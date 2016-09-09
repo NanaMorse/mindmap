@@ -201,6 +201,11 @@ class TopicEditPanel extends React.Component<void, TopicEditPanelState> {
 
   componentDidMount() {
     events.on(EventTags.TOPIC_SELECTED, (topicInfo) => {
+      if (!topicInfo) {
+        const selections = selectionsManager.getSelectionsArray();
+        topicInfo = selections[selections.length - 1].props.topicInfo;
+      }
+
       this.setState({show: true});
       this.setPanelWidgetValue(topicInfo);
     });

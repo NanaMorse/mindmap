@@ -5,6 +5,7 @@ import store from '../store';
 import {TOPIC_ROOT} from '../constants/Common';
 
 import * as CommonFunc from '../apptools/commonfunc';
+import ReactElement = __React.ReactElement;
 
 export const events = new EventEmitter();
 
@@ -116,4 +117,22 @@ export const pasteInfoManager = (() => {
   };
 
   return {refreshInfo, getInfo, hasInfoStashed};
+})();
+
+export const componentMapManager = (() => {
+  const map = {};
+
+  return {
+    addComponent(id: string, component: ReactElement) {
+      map[id] = component;
+    },
+
+    removeComponent(id: string) {
+      delete map[id];
+    },
+
+    getMap() {
+      return map;
+    }
+  }
 })();

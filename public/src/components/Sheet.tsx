@@ -16,14 +16,7 @@ class Sheet extends React.Component<SheetProps, void> {
 
   editReceiver: HTMLElement;
 
-  constructor() {
-    super();
-
-
-  }
-
   render() {
-
     const sheetProps = {
       id: 'sheet',
       style: {
@@ -34,9 +27,7 @@ class Sheet extends React.Component<SheetProps, void> {
     const sheetEvents = {
       onClick: () => this.onClick(),
       onWheel: (e) => this.onWheel(e),
-      onMouseDown: (e) => this.onMouseDown(e),
-      onMouseMove: (e) => this.onMouseMove(e),
-      onMouseUp: (e) => this.onMouseUp(e)
+      onMouseDown: (e) => this.onMouseDown(e)
     };
 
     return <svg { ...sheetProps } { ...sheetEvents } >
@@ -45,7 +36,7 @@ class Sheet extends React.Component<SheetProps, void> {
   }
 
   onClick() {
-    selectionsManager.clearSelection();
+    //selectionsManager.clearSelection();
   }
 
   onWheel(e) {
@@ -55,15 +46,8 @@ class Sheet extends React.Component<SheetProps, void> {
   }
 
   onMouseDown(e) {
+    selectionsManager.clearSelection();
     dragSelectReceiver.dragStart(e);
-  }
-
-  onMouseMove(e) {
-    dragSelectReceiver.dragMoving(e);
-  }
-
-  onMouseUp(e) {
-    dragSelectReceiver.dragEnd(e);
   }
 
   // todo try svg animation
