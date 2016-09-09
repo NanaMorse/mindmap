@@ -10,7 +10,6 @@
   "author": "morse",
   "license": "MIT",
   "dependencies": {
-    "@types/node": "^6.0.38",
     "babel-core": "^6.9.1",
     "babel-loader": "^6.2.4",
     "babel-polyfill": "^6.13.0",
@@ -25,6 +24,7 @@
     "redux": "^3.5.2",
     "source-map-loader": "^0.1.5",
     "ts-loader": "^0.8.2",
+    "typescript": "^1.8.10",
     "webpack": "^1.13.1"
   }
 }

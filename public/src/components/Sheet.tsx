@@ -4,6 +4,8 @@ import TopicsContainer from '../containers/TopicsContainer';
 
 import {selectionsManager} from '../managers';
 
+import { dragSelectReceiver } from '../apptools/addon';
+
 interface SheetProps {
   bgColor: string
 }
@@ -13,6 +15,12 @@ class Sheet extends React.Component<SheetProps, void> {
   topicsContainer: HTMLElement;
 
   editReceiver: HTMLElement;
+
+  constructor() {
+    super();
+
+
+  }
 
   render() {
 
@@ -24,8 +32,11 @@ class Sheet extends React.Component<SheetProps, void> {
     };
 
     const sheetEvents = {
-      onClick: this.onClick.bind(this),
-      onWheel: this.onWheel.bind(this)
+      onClick: () => this.onClick(),
+      onWheel: (e) => this.onWheel(e),
+      onMouseDown: (e) => this.onMouseDown(e),
+      onMouseMove: (e) => this.onMouseMove(e),
+      onMouseUp: (e) => this.onMouseUp(e)
     };
 
     return <svg { ...sheetProps } { ...sheetEvents } >
@@ -41,6 +52,18 @@ class Sheet extends React.Component<SheetProps, void> {
     e.preventDefault();
     this.moveTopicsContainer(e.deltaX, e.deltaY);
     this.moveEditReceiver(e.deltaX, e.deltaY);
+  }
+
+  onMouseDown(e) {
+    dragSelectReceiver.dragStart(e);
+  }
+
+  onMouseMove(e) {
+    dragSelectReceiver.dragMoving(e);
+  }
+
+  onMouseUp(e) {
+    dragSelectReceiver.dragEnd(e);
   }
 
   // todo try svg animation

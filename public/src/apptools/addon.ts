@@ -166,5 +166,57 @@ export const editReceiver = (() => {
 
 // todo 
 export const dragSelectReceiver = (() => {
+  const dragSelectBox = document.createElement('div');
+  dragSelectBox.id = 'dragSelectBox';
+  document.querySelector('#app-tools-container').appendChild(dragSelectBox);
 
+  let dragPrepared: boolean = false;
+
+  let startPoint: [number, number];
+
+  let endPoint: [number, number];
+
+  interface selectBoxStyle {
+    left: string
+    top: string
+    width: string
+    height: string
+  }
+
+  function getSelectBoxStyle(startPoint: [number, number], endPoint: [number, number]): selectBoxStyle {
+    const left = Math.min(startPoint[0], endPoint[0]) + 'px';
+    const top = Math.min(startPoint[1], endPoint[1]) + 'px';
+    const width = Math.abs(startPoint[0] - endPoint[0]) + 'px';
+    const height = Math.abs(startPoint[1] - endPoint[1]) + 'px';
+
+    return {left, top, width, height};
+  }
+
+
+
+  return {
+    dragStart(e) {
+      dragPrepared = true;
+
+      startPoint = [e.pageX, e.pageY];
+
+      console.log('dragStart');
+    },
+
+    dragMoving(e) {
+      if (!dragPrepared) return;
+
+      endPoint = [e.pageX, e.pageY];
+
+      Object.assign(dragSelectBox.style, getSelectBoxStyle(startPoint, endPoint));
+      dragSelectBox.style.display = 'block';
+
+      console.log('dragMoving');
+    },
+
+    dragEnd(e) {
+      dragPrepared = false;
+      console.log('dragEnd');
+    }
+  }
 })();

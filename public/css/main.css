@@ -76,10 +76,18 @@ button[disabled] {
 
 
 /* app tools */
-#getTextSize, #editReceiver {
+#getTextSize, #editReceiver, #dragSelectBox {
     position: fixed;
 }
 
 #editReceiver {
     z-index: -1;
+}
+
+#dragSelectBox {
+  position: absolute;
+  display: none;
+  border: 1px solid #01358f;
+  background-color: #7f8da8;
+  opacity: 0.4;
 }
