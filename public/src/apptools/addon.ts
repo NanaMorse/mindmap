@@ -253,7 +253,10 @@ export const dragSelectReceiver = (() => {
     });
   }
 
-  const limitedDragMoving = limitInvokeRepeat(dragMoving, 20);
+  // if browser is chrome, do not set limit because some bug existed here
+  const userAgent = navigator.userAgent.toLowerCase();
+  const isChrome = /chrome/.test(userAgent) && !/edge/.test(userAgent);
+  const limitedDragMoving = isChrome ? dragMoving : limitInvokeRepeat(dragMoving, 20);
 
   function dragEnd() {
     body.removeEventListener('mousemove', limitedDragMoving);
