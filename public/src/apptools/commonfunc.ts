@@ -90,6 +90,18 @@ export const delayInvoking = (() => {
   }
 })();
 
+export const limitInvokeRepeat = (func: Function, time: number) => {
+  let limiting;
+  return function (...arg: any[]) {
+    if (limiting) return;
+
+    limiting = setTimeout(function () {
+      func(...arg);
+      limiting = false;
+    }, time);
+  }
+};
+
 export const wrapTextWithEllipsis  = (text, fontSize, maxWidth) => {
   if (getTextSize(text, fontSize).width <= maxWidth) return text;
 

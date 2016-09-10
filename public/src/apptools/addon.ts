@@ -2,6 +2,7 @@ import DefaultStyle from '../constants/DefaultStyle';
 import { TOPIC_SELECTED } from '../constants/EventTags';
 
 import { events, selectionsManager, componentMapManager } from '../managers';
+import { limitInvokeRepeat } from './commonfunc';
 
 export const editReceiver = (() => {
   const keyMap = {
@@ -252,8 +253,10 @@ export const dragSelectReceiver = (() => {
     });
   }
 
+  const limitedDragMoving = limitInvokeRepeat(dragMoving, 20);
+
   function dragEnd() {
-    body.removeEventListener('mousemove', dragMoving);
+    body.removeEventListener('mousemove', limitedDragMoving);
     body.removeEventListener('mouseup', dragEnd);
 
     dragSelectCover.style.display = 'none';
@@ -267,7 +270,7 @@ export const dragSelectReceiver = (() => {
     dragStart(e) {
       startPoint = [e.pageX, e.pageY];
 
-      body.addEventListener('mousemove', dragMoving);
+      body.addEventListener('mousemove', limitedDragMoving);
       body.addEventListener('mouseup', dragEnd);
     }
   }
