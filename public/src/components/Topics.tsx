@@ -286,7 +286,7 @@ class Topic extends React.Component<TopicProps, TopicState> {
   }
 
   onTopicMouseOut(e) {
-    if (e.target.classList.value.includes('topic-fill') && this.state.hovered) {
+    if (e.target.getAttribute('class').includes('topic-fill') && this.state.hovered) {
       this.setState({hovered: false});
     }
   }
@@ -403,7 +403,7 @@ class Topic extends React.Component<TopicProps, TopicState> {
   }
 
   componentWillMount() {
-    componentMapManager.addComponent(this.props.id, this as ReactElement);
+    componentMapManager.addComponent(this.props.id, this);
   }
 
   shouldComponentUpdate(nextProps, nextState) {

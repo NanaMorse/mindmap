@@ -223,7 +223,7 @@ export const dragSelectReceiver = (() => {
 
     const selectBoxStyle = getSelectBoxStyle(startPoint, endPoint);
 
-    Object.assign(dragSelectBox.style, selectBoxStyle);
+    (<any>Object).assign(dragSelectBox.style, selectBoxStyle);
     dragSelectCover.style.display = 'block';
 
     const selectBoxNumberData = {

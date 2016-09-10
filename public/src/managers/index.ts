@@ -42,7 +42,7 @@ export const selectionsManager = (() => {
   };
 
   const removeSelection = (selection) => {
-    if (selections.includes(selection)) {
+    if ((<any>selections).includes(selection)) {
       selections.splice(selections.indexOf(selection), 1);
     }
   };
@@ -123,7 +123,7 @@ export const componentMapManager = (() => {
   const map = {};
 
   return {
-    addComponent(id: string, component: ReactElement) {
+    addComponent(id: string, component) {
       map[id] = component;
     },
 
