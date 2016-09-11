@@ -22,19 +22,23 @@ export default class Header extends React.Component<void, HeaderState> {
   }
 
   invokeUndo() {
-    reduxUndo.undo();
-    this.setState({
-      hasUndo: reduxUndo.hasUndo(),
-      hasRedo: true
-    });
+    setTimeout(() => {
+      reduxUndo.undo();
+      this.setState({
+        hasUndo: reduxUndo.hasUndo(),
+        hasRedo: true
+      });
+    }, 0)
   }
 
   invokeRedo() {
-    reduxUndo.redo();
-    this.setState({
-      hasUndo: true,
-      hasRedo: reduxUndo.hasRedo()
-    });
+    setTimeout(() => {
+      reduxUndo.redo();
+      this.setState({
+        hasUndo: true,
+        hasRedo: reduxUndo.hasRedo()
+      });
+    }, 0)
   }
 
   componentDidMount() {
