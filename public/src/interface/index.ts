@@ -1,3 +1,7 @@
+export interface SheetDispatchFuncs {
+  updateSheetBgColor: Function
+}
+
 export interface TopicDispatchFuncs {
   onUpdateTitle: Function
   onUpdateFontSize: Function

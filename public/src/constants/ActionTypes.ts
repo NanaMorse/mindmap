@@ -1,11 +1,13 @@
-// constants for undo and redo
-export const UNDO = 'UNDO';
-export const REDO = 'REDO';
-
 // constants for sheet
+export const SHEET_UNDO = 'SHEET_UNDO';
+export const SHEET_REDO = 'SHEET_REDO';
+
 export const UPDATE_SHEET_BGCOLOR = 'UPDATE_SHEET_BGCOLOR';
 
 // constants for topic
+export const TOPICS_UNDO = 'TOPICS_UNDO';
+export const TOPICS_REDO = 'TOPICS_REDO';
+
 export const UPDATE_TOPIC_TITLE = 'UPDATE_TOPIC_TITLE';
 
 export const UPDATE_TOPIC_FONTSIZE = 'UPDATE_TOPIC_FONTSIZE';

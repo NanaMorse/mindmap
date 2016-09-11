@@ -32,9 +32,9 @@ const operatorMap = {
   }
 };
 
-document.querySelector('body').addEventListener('keydown', function (e) {
-  if (elementsIdToStopPropagation.includes((<HTMLElement>e.target).id)) return true;
+document.querySelector('body').addEventListener('keydown', function (e: any) {
+  if ((<any>elementsIdToStopPropagation).includes(e.target.id)) return true;
 
-  const keyCode = (e as KeyboardEvent).keyCode;
+  const keyCode = e.keyCode;
   keyCode in operatorMap && operatorMap[keyCode](e);
 });

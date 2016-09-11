@@ -1,6 +1,6 @@
 export default {
   "sheet": {
-    "bgColor": "#fff"
+    "bgColor": "#ffffff"
   },
 
   "topics": {

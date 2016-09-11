@@ -17,7 +17,6 @@ import CalcConnectLine from '../calcpath/connectline';
 import layoutTopics from '../layout';
 
 import { TopicDispatchFuncs } from '../interface';
-import ReactElement = __React.ReactElement;
 
 // Topic Shape
 const TopicShape = ({d}) => {
@@ -413,7 +412,7 @@ class Topic extends React.Component<TopicProps, TopicState> {
     const stateHasChanged = stringify(this.state) !== stringify(nextState);
     if (stateHasChanged) return true;
 
-    // check self props
+    // check selfs props
     const topicInfo = this.props.topicInfo;
     const nextTopicInfo = nextProps.topicInfo;
 
@@ -446,9 +445,7 @@ class Topic extends React.Component<TopicProps, TopicState> {
   }
 }
 
-interface TopicsProps extends TopicDispatchFuncs {
-
-}
+interface TopicsProps extends TopicDispatchFuncs {}
 
 class Topics extends React.Component<TopicsProps, void> {
 

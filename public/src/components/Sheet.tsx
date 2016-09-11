@@ -2,11 +2,13 @@ import * as React from 'react';
 
 import TopicsContainer from '../containers/TopicsContainer';
 
-import {selectionsManager} from '../managers';
+import { componentMapManager, selectionsManager } from '../managers';
 
 import { dragSelectReceiver } from '../apptools/addon';
 
-interface SheetProps {
+import { SheetDispatchFuncs } from '../interface';
+
+interface SheetProps extends SheetDispatchFuncs {
   bgColor: string
 }
 
@@ -75,9 +77,15 @@ class Sheet extends React.Component<SheetProps, void> {
     editReceiver.style.top = parseInt(preTop) - deltaY + 'px';
   }
 
+  onUpdateSheetBgColor(bgColor) {
+    this.props.updateSheetBgColor(bgColor);
+  }
+
   componentDidMount() {
     this.topicsContainer = document.querySelector('.topics-group') as HTMLElement;
     this.editReceiver = document.querySelector('#editReceiver') as HTMLElement;
+
+    componentMapManager.sheetComponent = this;
   }
 }
 

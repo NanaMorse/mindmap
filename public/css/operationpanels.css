@@ -1,0 +1,40 @@
+/* edit panel */
+#operation-panel-container {
+  background-color: #f7f7f9;
+  position: fixed;
+  right: 0;
+  top: 50px;
+}
+
+.edit-panel {
+  width: 300px;
+  height: 100vh;
+  border-left: 2px solid #29333e;
+  -webkit-box-shadow: -4px 1px 10px -2px  #29333e;
+  -moz-box-shadow: -4px 1px 10px -2px  #29333e;
+  box-shadow: -4px 1px 10px -2px  #29333e;
+  padding: 10px;
+}
+
+/* topic edit panel */
+.topic-edit-panel > div {
+  display: inline-block;
+  margin-right: 10px;
+  margin-top: 0.5em;
+}
+
+.topic-edit-panel > button {
+  margin-bottom: 10px;
+}
+
+#onUpdateIsFontBold + label {
+  font-weight: 700;
+}
+
+#onUpdateIsFontItalic + label {
+  font-style: italic;
+}
+
+#onUpdateIsFontLineThrough + label {
+  text-decoration: line-through;
+}

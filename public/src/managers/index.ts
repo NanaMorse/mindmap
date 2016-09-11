@@ -1,11 +1,10 @@
-import { EventEmitter } from 'events';
+import * as EventEmitter from 'wolfy87-eventemitter';
 
 import store from '../store';
 
 import {TOPIC_ROOT} from '../constants/Common';
 
 import * as CommonFunc from '../apptools/commonfunc';
-import ReactElement = __React.ReactElement;
 
 export const events = new EventEmitter();
 
@@ -120,6 +119,8 @@ export const pasteInfoManager = (() => {
 })();
 
 export const componentMapManager = (() => {
+  let sheetComponent;
+
   const map = {};
 
   return {
@@ -133,6 +134,15 @@ export const componentMapManager = (() => {
 
     getMap() {
       return map;
+    },
+
+    get sheetComponent() {
+      return sheetComponent;
+    },
+
+    set sheetComponent(component) {
+      if (sheetComponent) return;
+      sheetComponent = component;
     }
   }
 })();

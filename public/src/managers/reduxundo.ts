@@ -4,7 +4,7 @@ import { deepClone, delayInvoking } from '../apptools/commonfunc';
 
 import { events } from '../managers';
 
-import { undo, redo } from '../actions';
+import * as Actions from '../actions';
 
 import * as EventTags from '../constants/EventTags';
 
@@ -19,6 +19,18 @@ interface ReduxUndoFunc {
 
   hasRedo: () => boolean;
 }
+
+const reducerKeyToAction = {
+  'sheet': {
+    undo: Actions.sheetUndo,
+    redo: Actions.sheetRedo
+  },
+
+  'topics': {
+    undo: Actions.topicsUndo,
+    redo: Actions.topicsRedo
+  }
+};
 
 const pastDispatchStack = [];
 
@@ -36,7 +48,9 @@ const reduxUndo = <ReduxUndoFunc>function(mapDispatchToProps, reducerKey) {
 
         delayInvoking(() => {
           pastDispatchStack.push(() => {
-            dispatch(undo(lastState[reducerKey]));
+            const action = reducerKeyToAction[reducerKey].undo(lastState[reducerKey]);
+
+            dispatch(action);
             return {dispatch, reducerKey};
           });
 
@@ -62,7 +76,7 @@ reduxUndo.undo = () => {
     const {dispatch, reducerKey} = pastDispatch();
 
     futureDispatchStack.push(() => {
-      dispatch(redo(futureState[reducerKey]));
+      dispatch(reducerKeyToAction[reducerKey].redo(futureState[reducerKey]));
       pastDispatchStack.push(pastDispatch);
     });
   }

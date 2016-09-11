@@ -11,6 +11,7 @@ import Header from './components/Header';
 
 import SheetContainer from './containers/SheetContainer';
 
+import SheetEditPanel from './operationpanels/sheeteditpanel';
 import TopicEditPanel from './operationpanels/topiceditpanel';
 
 render(
@@ -21,4 +22,7 @@ render(
 );
 
 render(<Header />, document.getElementById('header-container'));
-render(<TopicEditPanel />, document.getElementById('operation-panel-container'));
+render(<div>
+  <TopicEditPanel />
+  <SheetEditPanel />
+</div>, document.getElementById('operation-panel-container'));

@@ -9,12 +9,12 @@ export default (currentState = {}, action) => {
   const {topicInfo: targetTopicInfo, parentInfo: targetParentInfo} = findTopicInfoById(topicsCopy, action.id) || {topicInfo: null, parentInfo: null};
 
   switch (action.type) {
-    case types.UNDO :
+    case types.TOPICS_UNDO :
     {
       return action.pastState;
     }
 
-    case types.REDO :
+    case types.TOPICS_REDO :
     {
       return action.futureState;
     }
@@ -98,7 +98,7 @@ export default (currentState = {}, action) => {
 
     case types.Add_PARENT_TOPIC :
     {
-      // remove self info
+      // remove selfs info
       const selfIndex = targetParentInfo.children.indexOf(targetTopicInfo);
       targetParentInfo.children.splice(selfIndex, 1);
 

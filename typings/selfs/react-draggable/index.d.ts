@@ -1,7 +1,4 @@
-declare module 'react-draggable' {
-
-  import {Component} from 'react';
-  import Props = __React.Props;
+declare namespace reactDraggable {
 
   interface DraggableBounds {
     left: number
@@ -10,14 +7,14 @@ declare module 'react-draggable' {
     bottom:number
   }
 
-  interface DraggableProps extends Props<Draggable> {
+  interface DraggableProps {
     axis?: string
     bounds?: DraggableBounds|string|boolean
     start?:{x:number,y:number}
     zIndex?:number
   }
 
-  interface DraggableCoreProps extends Props<DraggableCore> {
+  interface DraggableCoreProps {
     allowAnyClick: boolean
     disabled: boolean
     enableUserSelectHack: boolean
@@ -30,10 +27,11 @@ declare module 'react-draggable' {
     onMouseDown: (event, ui) => boolean
   }
 
-  export default class Draggable extends Component<DraggableProps, any> {
-  }
+  export default class Draggable extends __React.Component<DraggableProps, any> {}
 
-  export class DraggableCore extends Component<DraggableCoreProps, any> {
-  }
+  export class DraggableCore extends __React.Component<DraggableCoreProps, any> {}
+}
 
+declare module 'react-draggable' {
+  export = reactDraggable
 }

@@ -2,49 +2,49 @@ import * as React from 'react';
 
 import {events, selectionsManager} from '../managers';
 
-import * as widgetGenerator from './widgetgenerator';
+import * as WidgetGenerator from './widgetgenerator';
 
 import * as EventTags from '../constants/EventTags';
 import * as CommonConstant from '../constants/Common';
 
 
-const AddChildTopicButton = widgetGenerator.buttonGenerator('Add Child Topic', 'onAddChildTopic');
+const AddChildTopicButton = WidgetGenerator.buttonGenerator('Add Child Topic', 'onAddChildTopic');
 
-const AddTopicBeforeButton = widgetGenerator.buttonGenerator('Add Topic Before', 'onAddTopicBefore');
+const AddTopicBeforeButton = WidgetGenerator.buttonGenerator('Add Topic Before', 'onAddTopicBefore');
 
-const AddParentTopicButton = widgetGenerator.buttonGenerator('Add Parent Topic', 'onAddParentTopic');
+const AddParentTopicButton = WidgetGenerator.buttonGenerator('Add Parent Topic', 'onAddParentTopic');
 
-const RemoveTopicButton = widgetGenerator.buttonGenerator('Remove Topic', 'onRemoveSelfTopic');
+const RemoveTopicButton = WidgetGenerator.buttonGenerator('Remove Topic', 'onRemoveSelfTopic');
 
 
-const UpdateFontSizeSelector = widgetGenerator.selectorGenerator('Font Size', 'onUpdateFontSize', {
+const UpdateFontSizeSelector = WidgetGenerator.selectorGenerator('Font Size', 'onUpdateFontSize', {
   '8px': '8', '9px': '9', '10px': '10', '11px': '11', '12px': '12', '13px': '13', '14px': '14', '16px': '16',
   '18px': '18', '20px': '20', '22px': '22', '24px': '24', '36px': '36', '48px': '48', '56px': '56'
 });
 
-const UpdateFontColorPicker = widgetGenerator.colorPickerGenerator('Font Color', 'onUpdateFontColor');
+const UpdateFontColorPicker = WidgetGenerator.colorPickerGenerator('Font Color', 'onUpdateFontColor');
 
-const UpdateIsFontBoldCheckBox = widgetGenerator.checkBoxGenerator('Bold', 'onUpdateIsFontBold');
+const UpdateIsFontBoldCheckBox = WidgetGenerator.checkBoxGenerator('Bold', 'onUpdateIsFontBold');
 
-const UpdateIsFontItalicCheckBox = widgetGenerator.checkBoxGenerator('Italic', 'onUpdateIsFontItalic');
+const UpdateIsFontItalicCheckBox = WidgetGenerator.checkBoxGenerator('Italic', 'onUpdateIsFontItalic');
 
-const UpdateIsFontLineThroughCheckBox = widgetGenerator.checkBoxGenerator('Line Through', 'onUpdateIsFontLineThrough');
+const UpdateIsFontLineThroughCheckBox = WidgetGenerator.checkBoxGenerator('Line Through', 'onUpdateIsFontLineThrough');
 
-const UpdateShapeClassSelector = widgetGenerator.selectorGenerator('Shape Class', 'onUpdateShapeClass', {
+const UpdateShapeClassSelector = WidgetGenerator.selectorGenerator('Shape Class', 'onUpdateShapeClass', {
   [CommonConstant.SHAPE_RECT]: 'Rect',
   [CommonConstant.SHAPE_ROUNDED_RECT]: 'Rounded Rectangle',
   [CommonConstant.SHAPE_PARALLELOGRAM]: 'Parallelogram'
 });
 
-const UpdateLineClassSelector = widgetGenerator.selectorGenerator('Line Class', 'onUpdateLineClass', {
+const UpdateLineClassSelector = WidgetGenerator.selectorGenerator('Line Class', 'onUpdateLineClass', {
   [CommonConstant.LINE_NONE]: 'None',
   [CommonConstant.LINE_RIGHT_ANGLE]: 'Right Angle',
   [CommonConstant.LINE_ROUNDED]: 'Rounded'
 });
 
-const UpdateFillColorPicker = widgetGenerator.colorPickerGenerator('Fill Color', 'onUpdateFillColor');
+const UpdateFillColorPicker = WidgetGenerator.colorPickerGenerator('Fill Color', 'onUpdateFillColor');
 
-const UpdateLabelTextInput = widgetGenerator.textInputGenerator('Label Text', 'onUpdateLabel');
+const UpdateLabelTextInput = WidgetGenerator.textInputGenerator('Label Text', 'onUpdateLabel');
 
 interface TopicEditPanelState {
   show?: boolean,
@@ -86,7 +86,7 @@ class TopicEditPanel extends React.Component<void, TopicEditPanelState> {
   render() {
 
     const panelProps = {
-      className: 'topic-edit-panel',
+      className: 'edit-panel topic-edit-panel',
       style: {
         display: this.state.show ? 'block' : 'none'
       }

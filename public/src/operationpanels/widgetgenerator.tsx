@@ -5,12 +5,12 @@ import * as React from 'react';
  * @param {string} id -- selector's wrapper id
  * @param {object} selectorOptions -- object like { optionValue : optionText }
  **/
-export function selectorGenerator(label, id, selectorOptions = {}) {
+export function selectorGenerator(label: string, id: string, selectorOptions: Object = {}) {
   const options = Object.keys(selectorOptions).map((value) => {
     return <option key={ value } value={ value }>{ selectorOptions[value] }</option>
   });
 
-  return function (props) {
+  return function (props: Object) {
     return (
       <div>
         <label>{ label + ': ' }</label>
@@ -54,7 +54,7 @@ export function checkBoxGenerator(label, id) {
  * @param {string} label -- selector's label name
  * @param {string} id -- selector's wrapper id
  **/
-export function colorPickerGenerator(label, id) {
+export function colorPickerGenerator(label: string, id: string) {
   return function (props) {
     return (
       <div>
