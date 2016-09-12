@@ -1,16 +1,46 @@
 import * as React from 'react';
+import FormEvent = __React.FormEvent;
+import MouseEvent = __React.MouseEvent;
+import FocusEvent = __React.FocusEvent;
+import KeyboardEvent = __React.KeyboardEvent;
 
-/**
- * @param {string} label -- selector's label name
- * @param {string} id -- selector's wrapper id
- * @param {object} selectorOptions -- object like { optionValue : optionText }
- **/
-export function selectorGenerator(label: string, id: string, selectorOptions: Object = {}) {
+interface selectorProps {
+  value: string;
+  onChange: (event: FormEvent) => void;
+}
+
+interface selectorOptionsObject {
+  [optionValue: string]: string
+}
+
+interface buttonProps {
+  disabled?: boolean;
+  onClick: (event: MouseEvent) => void;
+}
+
+interface textInputProps {
+  value: string;
+  onChange: (event: FormEvent) => void;
+  onBlur: (event: FocusEvent) => void;
+  onKeyDown: (event: KeyboardEvent) => void
+}
+
+interface checkBoxProps {
+  checked: boolean;
+  onClick: (event: MouseEvent) => void
+}
+
+interface colorPickerProps {
+  value: string;
+  onChange: (event: FormEvent) => void
+}
+
+export function selectorGenerator(label: string, id: string, selectorOptions: selectorOptionsObject) {
   const options = Object.keys(selectorOptions).map((value) => {
     return <option key={ value } value={ value }>{ selectorOptions[value] }</option>
   });
 
-  return function (props: Object) {
+  return function (props: selectorProps) {
     return (
       <div>
         <label>{ label + ': ' }</label>
@@ -20,16 +50,16 @@ export function selectorGenerator(label: string, id: string, selectorOptions: Ob
   }
 }
 
-export function buttonGenerator(innerText, id) {
-  return function (props) {
+export function buttonGenerator(innerText: string, id: string) {
+  return function (props: buttonProps) {
     return (
       <button className="primary-button small-button" id={ id } {...props}>{ innerText }</button>
     )
   }
 }
 
-export function textInputGenerator(label, id) {
-  return function (props) {
+export function textInputGenerator(label: string, id: string) {
+  return function (props: textInputProps) {
     return (
       <div>
         <label>{label + ': '}</label>
@@ -39,8 +69,8 @@ export function textInputGenerator(label, id) {
   }
 }
 
-export function checkBoxGenerator(label, id) {
-  return function (props) {
+export function checkBoxGenerator(label: string, id: string) {
+  return function (props: checkBoxProps) {
     return (
       <div>
         <input type="checkbox" id={id} {...props}/>
@@ -50,12 +80,8 @@ export function checkBoxGenerator(label, id) {
   }
 }
 
-/**
- * @param {string} label -- selector's label name
- * @param {string} id -- selector's wrapper id
- **/
 export function colorPickerGenerator(label: string, id: string) {
-  return function (props) {
+  return function (props: colorPickerProps) {
     return (
       <div>
         <label>{ label + ': ' }</label>

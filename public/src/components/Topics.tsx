@@ -19,17 +19,31 @@ import layoutTopics from '../layout';
 import { TopicDispatchFuncs } from '../interface';
 
 // Topic Shape
-const TopicShape = ({d, strokeWidth, strokeColor}) => {
+interface topicShapeProps {
+  d: string;
+  strokeWidth: string;
+  strokeColor: string;
+}
+const TopicShape = ({d, strokeWidth, strokeColor}: topicShapeProps) => {
   return <path className="topic-shape" d={ d } stroke={strokeColor} strokeWidth={strokeWidth}></path>;
 };
 
 // Topic Fill
-const TopicFill = ({d, fillColor}) => {
+interface topicFillProps {
+  d: string;
+  fillColor: string
+}
+const TopicFill = ({d, fillColor}: topicFillProps) => {
   return <path className="topic-fill" d={ d } fill={ fillColor } stroke="none"></path>;
 };
 
 // Topic Select Box
-const TopicSelectBox = ({d, selected, hovered}) => {
+interface topicSelectBoxProps {
+  d: string;
+  selected: boolean;
+  hovered: boolean;
+}
+const TopicSelectBox = ({d, selected, hovered}: topicSelectBoxProps) => {
   const style = {
     visibility: selected || hovered ? 'visible' : 'hidden'
   };
@@ -50,20 +64,12 @@ interface TopicTitleProps {
   isFontLineThrough: boolean
 }
 
-interface TopicTitleStyle {
-  fontSize: string,
-  fill: string,
-  fontWeight?: number,
-  fontStyle?: string,
-  textDecoration?: string
-}
-
 class TopicTitle extends React.Component<TopicTitleProps, void> {
   render() {
 
     const {title, fontSize, fontColor, isFontBold, isFontItalic, isFontLineThrough} = this.props;
 
-    const style: TopicTitleStyle = {
+    const style: any = {
       fontSize: fontSize,
       fill: fontColor
     };
@@ -572,15 +578,16 @@ class Topics extends React.Component<TopicsProps, void> {
       topicTree.style = Object.assign({}, DefaultStyle[topicType], topicTree.style || {});
 
       // get boxSize
-      const fontSize = Object.assign({}, DefaultStyle[topicType], topicTree.style).fontSize;
+      const fontSize = topicTree.style.fontSize;
 
       const titleAreaSize = CommonFunc.getTextSize(topicTree.title || 'Topic', fontSize);
 
       const boxSize = {width: 0, height: 0};
       const {paddingLeft, paddingTop} = Distance.TopicPaddingOverride[topicType][topicTree.style.shapeClass];
       const fontSizeNumber = parseInt(fontSize);
-      boxSize.width = titleAreaSize.width + fontSizeNumber * paddingLeft * 2;
-      boxSize.height = titleAreaSize.height + fontSizeNumber * paddingTop * 2;
+      const strokeWidthNumber = topicTree.style.strokeWidth === CommonConstant.STROKE_NONE ? 0 : parseInt(topicTree.style.strokeWidth);
+      boxSize.width = titleAreaSize.width + fontSizeNumber * paddingLeft * 2 + strokeWidthNumber;
+      boxSize.height = titleAreaSize.height + fontSizeNumber * paddingTop * 2 + strokeWidthNumber;
 
       // if has label
       if (topicTree.label) {
