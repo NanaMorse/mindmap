@@ -8,6 +8,11 @@ export default (currentState = {}, action) => {
 
   const {topicInfo: targetTopicInfo, parentInfo: targetParentInfo} = findTopicInfoById(topicsCopy, action.id) || {topicInfo: null, parentInfo: null};
 
+  function changeStyle(styleKey: string) {
+    targetTopicInfo.style = targetTopicInfo.style || {};
+    targetTopicInfo.style[styleKey] = action[styleKey];
+  }
+
   switch (action.type) {
     case types.TOPICS_UNDO :
     {
@@ -27,57 +32,61 @@ export default (currentState = {}, action) => {
 
     case types.UPDATE_TOPIC_FONTSIZE :
     {
-      targetTopicInfo.style = targetTopicInfo.style || {};
-      targetTopicInfo.style.fontSize = action.fontSize;
+      changeStyle('fontSize');
       break;
     }
 
     case types.UPDATE_TOPIC_FONTCOLOR :
     {
-      targetTopicInfo.style = targetTopicInfo.style || {};
-      targetTopicInfo.style.fontColor = action.fontColor;
+      changeStyle('fontColor');
       break;
     }
 
     case types.UPDATE_TOPIC_ISFONTBOLD :
     {
-      targetTopicInfo.style = targetTopicInfo.style || {};
-      targetTopicInfo.style.isFontBold = action.isFontBold;
+      changeStyle('isFontBold');
       break;
     }
 
     case types.UPDATE_TOPIC_ISFONTITALIC :
     {
-      targetTopicInfo.style = targetTopicInfo.style || {};
-      targetTopicInfo.style.isFontItalic = action.isFontItalic;
+      changeStyle('isFontItalic');
       break;
     }
 
     case types.UPDATE_TOPIC_ISFONTLINETHROUGH :
     {
-      targetTopicInfo.style = targetTopicInfo.style || {};
-      targetTopicInfo.style.isFontLineThrough = action.isFontLineThrough;
+      changeStyle('isFontLineThrough');
       break;
     }
 
     case types.UPDATE_TOPIC_SHAPECLASS :
     {
-      targetTopicInfo.style = targetTopicInfo.style || {};
-      targetTopicInfo.style.shapeClass = action.shapeClass;
+      changeStyle('shapeClass');
+      break;
+    }
+
+    case types.UPDATE_TOPIC_STROKEWIDTH :
+    {
+      changeStyle('strokeWidth');
+      break;
+    }
+
+    case types.UPDATE_TOPIC_STROKECOLOR :
+    {
+      changeStyle('strokeColor');
       break;
     }
 
     case types.UPDATE_TOPIC_LINECLASS :
     {
-      targetTopicInfo.style = targetTopicInfo.style || {};
-      targetTopicInfo.style.lineClass = action.lineClass;
+      changeStyle('lineClass');
       break;
     }
 
     case types.UPDATE_TOPIC_FILLCOLOR :
     {
-      targetTopicInfo.style = targetTopicInfo.style || {};
-      targetTopicInfo.style.fillColor = action.fillColor;
+      changeStyle('fillColor');
       break;
     }
 

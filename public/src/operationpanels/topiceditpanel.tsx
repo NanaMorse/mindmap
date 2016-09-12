@@ -16,7 +16,6 @@ const AddParentTopicButton = WidgetGenerator.buttonGenerator('Add Parent Topic',
 
 const RemoveTopicButton = WidgetGenerator.buttonGenerator('Remove Topic', 'onRemoveSelfTopic');
 
-
 const UpdateFontSizeSelector = WidgetGenerator.selectorGenerator('Font Size', 'onUpdateFontSize', {
   '8px': '8', '9px': '9', '10px': '10', '11px': '11', '12px': '12', '13px': '13', '14px': '14', '16px': '16',
   '18px': '18', '20px': '20', '22px': '22', '24px': '24', '36px': '36', '48px': '48', '56px': '56'
@@ -36,6 +35,15 @@ const UpdateShapeClassSelector = WidgetGenerator.selectorGenerator('Shape Class'
   [CommonConstant.SHAPE_PARALLELOGRAM]: 'Parallelogram'
 });
 
+const UpdateStrokeWidthSelector = WidgetGenerator.selectorGenerator('Border Width', 'onUpdateStrokeWidth', {
+  [CommonConstant.STROKE_NONE]: 'None',
+  [CommonConstant.STROKE_THIN]: 'Thin',
+  [CommonConstant.STROKE_MIDDLE]: 'Middle',
+  [CommonConstant.STROKE_FAT]: 'Fat'
+});
+
+const UpdateStrokeColorPicker = WidgetGenerator.colorPickerGenerator('Border Color', 'onUpdateStrokeColor');
+
 const UpdateLineClassSelector = WidgetGenerator.selectorGenerator('Line Class', 'onUpdateLineClass', {
   [CommonConstant.LINE_NONE]: 'None',
   [CommonConstant.LINE_RIGHT_ANGLE]: 'Right Angle',
@@ -47,19 +55,22 @@ const UpdateFillColorPicker = WidgetGenerator.colorPickerGenerator('Fill Color',
 const UpdateLabelTextInput = WidgetGenerator.textInputGenerator('Label Text', 'onUpdateLabel');
 
 interface TopicEditPanelState {
-  show?: boolean,
-  isTargetRoot?: boolean,
+  show?: boolean;
+  isTargetRoot?: boolean;
 
-  fontSize?: string,
-  fontColor?: string,
-  isFontBold?: boolean,
-  isFontItalic?: boolean,
-  isFontLineThrough?: boolean,
+  fontSize?: string;
+  fontColor?: string;
+  isFontBold?: boolean;
+  isFontItalic?: boolean;
+  isFontLineThrough?: boolean;
 
-  fillColor?: string,
-  shapeClass?: string,
-  lineClass?: string,
-  labelText?: string
+  fillColor?: string;
+  strokeWidth?: string;
+  strokeColor?: string;
+
+  shapeClass?: string;
+  lineClass?: string;
+  labelText?: string;
 }
 
 class TopicEditPanel extends React.Component<void, TopicEditPanelState> {
@@ -77,6 +88,8 @@ class TopicEditPanel extends React.Component<void, TopicEditPanelState> {
       isFontLineThrough: false,
 
       fillColor: '',
+      strokeWidth: '',
+      strokeColor: '',
       shapeClass: '',
       lineClass: '',
       labelText: ''
@@ -126,8 +139,11 @@ class TopicEditPanel extends React.Component<void, TopicEditPanelState> {
         <UpdateIsFontLineThroughCheckBox {...this.generateCheckBoxProps('isFontLineThrough')}/>
         <hr/>
         <UpdateShapeClassSelector {...this.generateNormalProps('shapeClass')}/>
-        <UpdateLineClassSelector {...this.generateNormalProps('lineClass')}/>
         <UpdateFillColorPicker {...this.generateNormalProps('fillColor')}/>
+        <UpdateStrokeWidthSelector {...this.generateNormalProps('strokeWidth')}/>
+        <UpdateStrokeColorPicker {...this.generateNormalProps('strokeColor')}/>
+        <hr/>
+        <UpdateLineClassSelector {...this.generateNormalProps('lineClass')}/>
         <hr/>
         <UpdateLabelTextInput {...updateLabelProps}/>
       </div>
@@ -194,6 +210,8 @@ class TopicEditPanel extends React.Component<void, TopicEditPanelState> {
       fillColor: topicStyle.fillColor,
       labelText: topicInfo.label || '',
       shapeClass: topicStyle.shapeClass,
+      strokeWidth: topicStyle.strokeWidth,
+      strokeColor: topicStyle.strokeColor,
       lineClass: topicStyle.lineClass,
       isTargetRoot
     });

@@ -99,6 +99,22 @@ export const updateTopicShapeClass:action = (id: string, shapeClass: string) => 
   }
 };
 
+export const updateTopicStrokeWidth:action = (id: string, strokeWidth: string) => {
+  return {
+    type: types.UPDATE_TOPIC_STROKEWIDTH,
+    id,
+    strokeWidth
+  }
+};
+
+export const updateTopicStrokeColor:action = (id: string, strokeColor: string) => {
+  return {
+    type: types.UPDATE_TOPIC_STROKECOLOR,
+    id,
+    strokeColor
+  }
+};
+
 export const updateTopicLineClass:action = (id: string, lineClass: string) => {
   return {
     type: types.UPDATE_TOPIC_LINECLASS,

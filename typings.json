@@ -1,6 +1,5 @@
 {
   "globalDependencies": {
-    "es2015-string": "registry:env/es2015-string#1.0.0+20160526151700",
     "es6-shim": "registry:dt/es6-shim#0.31.2+20160602141504",
     "node": "registry:dt/node#6.0.0+20160906151955",
     "react": "registry:dt/react#0.14.0+20160829191040",

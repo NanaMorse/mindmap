@@ -10,6 +10,12 @@ export const SHAPE_RECT = 'SHAPE_RECT';
 export const SHAPE_ROUNDED_RECT = 'SHAPE_ROUNDED_RECT';
 export const SHAPE_PARALLELOGRAM = 'SHAPE_PARALLELOGRAM';
 
+// Topic Stroke Width Types
+export const STROKE_NONE = 'STROKE_NONE';
+export const STROKE_THIN = '1px';
+export const STROKE_MIDDLE = '4px';
+export const STROKE_FAT = '8px';
+
 // Connect Line Types
 export const LINE_NONE = 'LINE_NONE';
 export const LINE_RIGHT_ANGLE = 'LINE_RIGHT_ANGLE';

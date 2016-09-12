@@ -11,6 +11,8 @@ export interface TopicDispatchFuncs {
   onRemoveSelfTopic: Function
   onUpdateLabel: Function
   onUpdateShapeClass: Function
+  onUpdateStrokeWidth: Function
+  onUpdateStrokeColor: Function
   onUpdateLineClass: Function
   onUpdateFontColor: Function
   onUpdateIsFontBold: Function

@@ -19,8 +19,8 @@ import layoutTopics from '../layout';
 import { TopicDispatchFuncs } from '../interface';
 
 // Topic Shape
-const TopicShape = ({d}) => {
-  return <path className="topic-shape" d={ d } stroke="#000"></path>;
+const TopicShape = ({d, strokeWidth, strokeColor}) => {
+  return <path className="topic-shape" d={ d } stroke={strokeColor} strokeWidth={strokeWidth}></path>;
 };
 
 // Topic Fill
@@ -149,6 +149,10 @@ interface TopicInfo {
 
     fillColor: string
 
+    strokeWidth: string
+
+    strokeColor: string
+
     fontSize: string
 
     fontColor: string
@@ -160,7 +164,6 @@ interface TopicInfo {
     isFontLineThrough?: boolean
 
     lineClass: string
-
   }
 
   originTopicInfo: Object
@@ -214,6 +217,12 @@ class Topic extends React.Component<TopicProps, TopicState> {
       fillColor: style.fillColor
     };
 
+    const TopicShapeProps = {
+      d: topicShapePath,
+      strokeWidth: style.strokeWidth,
+      strokeColor: style.strokeColor
+    };
+
     const title = topicInfo.title == null ? 'Topic' : topicInfo.title;
     const TopicTitleProps = {
       ref: 'TopicTitle',
@@ -241,12 +250,13 @@ class Topic extends React.Component<TopicProps, TopicState> {
 
     const needConnectLine = style.lineClass !== CommonConstant.LINE_NONE && topicInfo.children && topicInfo.children.length;
     const needLabel = topicInfo.label;
+    const needShape = style.strokeWidth !== CommonConstant.STROKE_NONE;
 
     return (
       <g {...TopicGroupProps} >
         {needLabel ? <Label topicInfo={topicInfo}/> : []}
         <g {...TopicBoxGroupProps}>
-          <TopicShape d={topicShapePath}/>
+          {needShape ? <TopicShape {...TopicShapeProps}/> : []}
           <TopicFill {...TopicFillProps}/>
           <TopicTitle {...TopicTitleProps}/>
         </g>
@@ -379,6 +389,14 @@ class Topic extends React.Component<TopicProps, TopicState> {
     this.props.onUpdateShapeClass(this.props.id, shapeClass);
   }
 
+  onUpdateStrokeWidth(strokeWidth) {
+    this.props.onUpdateStrokeWidth(this.props.id, strokeWidth);
+  }
+
+  onUpdateStrokeColor(strokeColor) {
+    this.props.onUpdateStrokeColor(this.props.id, strokeColor);
+  }
+
   onUpdateLineClass(lineClass) {
     this.props.onUpdateLineClass(this.props.id, lineClass);
   }
@@ -462,6 +480,8 @@ class Topics extends React.Component<TopicsProps, void> {
       onRemoveSelfTopic,
       onUpdateLabel,
       onUpdateShapeClass,
+      onUpdateStrokeWidth,
+      onUpdateStrokeColor,
       onUpdateLineClass,
       onUpdateFontColor,
       onUpdateIsFontBold,
@@ -489,6 +509,8 @@ class Topics extends React.Component<TopicsProps, void> {
         onRemoveSelfTopic,
         onUpdateLabel,
         onUpdateShapeClass,
+        onUpdateStrokeWidth,
+        onUpdateStrokeColor,
         onUpdateLineClass,
         onUpdateFontColor,
         onUpdateIsFontBold,

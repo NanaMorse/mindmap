@@ -6,6 +6,8 @@ export default {
     "fontColor": "#4c4c4c",
     "isFontBold": true,
     "shapeClass": CommonConstant.SHAPE_ROUNDED_RECT,
+    "strokeWidth": '1px',
+    "strokeColor": "#000000",
     "lineClass": CommonConstant.LINE_ROUNDED,
     "fillColor": "#cbdefd"
   },
@@ -13,6 +15,8 @@ export default {
     "fontSize": "18px",
     "fontColor": "#4c4c4c",
     "shapeClass": CommonConstant.SHAPE_ROUNDED_RECT,
+    "strokeWidth": '1px',
+    "strokeColor": "#000000",
     "lineClass": CommonConstant.LINE_RIGHT_ANGLE,
     "fillColor": "#fef4ec"
   },
@@ -20,6 +24,8 @@ export default {
     "fontSize": "16px",
     "fontColor": "#4c4c4c", 
     "shapeClass": CommonConstant.SHAPE_ROUNDED_RECT,
+    "strokeWidth": '1px',
+    "strokeColor": "#000000",
     "lineClass": CommonConstant.LINE_RIGHT_ANGLE,
     "fillColor": "#fef4ec"
   },

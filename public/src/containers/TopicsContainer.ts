@@ -48,6 +48,14 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(actions.updateTopicShapeClass(id, shapeClass));
     },
 
+    onUpdateStrokeWidth: (id, strokeWidth) => {
+      dispatch(actions.updateTopicStrokeWidth(id, strokeWidth));
+    },
+
+    onUpdateStrokeColor: (id, strokeColor) => {
+      dispatch(actions.updateTopicStrokeColor(id, strokeColor));
+    },
+
     onUpdateLineClass: (id, lineClass) => {
       dispatch(actions.updateTopicLineClass(id, lineClass));
     },
