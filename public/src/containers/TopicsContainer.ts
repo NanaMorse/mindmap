@@ -60,6 +60,14 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(actions.updateTopicLineClass(id, lineClass));
     },
 
+    onUpdateLineWidth: (id, lineWidth) => {
+      dispatch(actions.updateTopicLineWidth(id, lineWidth));
+    },
+
+    onUpdateLineColor: (id, lineColor) => {
+      dispatch(actions.updateTopicLineColor(id, lineColor));
+    },
+
     onUpdateLabel: (id, labelText) => {
       dispatch(actions.updateTopicLabel(id, labelText));
     },

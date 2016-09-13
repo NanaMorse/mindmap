@@ -36,10 +36,10 @@ const UpdateShapeClassSelector = WidgetGenerator.selectorGenerator('Shape Class'
 });
 
 const UpdateStrokeWidthSelector = WidgetGenerator.selectorGenerator('Border Width', 'onUpdateStrokeWidth', {
-  [CommonConstant.STROKE_NONE]: 'None',
-  [CommonConstant.STROKE_THIN]: 'Thin',
-  [CommonConstant.STROKE_MIDDLE]: 'Middle',
-  [CommonConstant.STROKE_FAT]: 'Fat'
+  [CommonConstant.STROKE_WIDTH_NONE]: 'None',
+  [CommonConstant.STROKE_WIDTH_THIN]: 'Thin',
+  [CommonConstant.STROKE_WIDTH_MIDDLE]: 'Middle',
+  [CommonConstant.STROKE_WIDTH_FAT]: 'Fat'
 });
 
 const UpdateStrokeColorPicker = WidgetGenerator.colorPickerGenerator('Border Color', 'onUpdateStrokeColor');
@@ -49,6 +49,15 @@ const UpdateLineClassSelector = WidgetGenerator.selectorGenerator('Line Class', 
   [CommonConstant.LINE_RIGHT_ANGLE]: 'Right Angle',
   [CommonConstant.LINE_ROUNDED]: 'Rounded'
 });
+
+const UpdateLineWidthSelector = WidgetGenerator.selectorGenerator('Line Width', 'onUpdateLineWidth', {
+  [CommonConstant.LINE_WIDTH_NONE]: 'None',
+  [CommonConstant.LINE_WIDTH_THIN]: 'Thin',
+  [CommonConstant.LINE_WIDTH_MIDDLE]: 'Middle',
+  [CommonConstant.LINE_WIDTH_FAT]: 'Fat'
+});
+
+const UpdateLineColorPicker = WidgetGenerator.colorPickerGenerator('Line Color', 'onUpdateLineColor');
 
 const UpdateFillColorPicker = WidgetGenerator.colorPickerGenerator('Fill Color', 'onUpdateFillColor');
 
@@ -63,13 +72,16 @@ interface TopicEditPanelState {
   isFontBold?: boolean;
   isFontItalic?: boolean;
   isFontLineThrough?: boolean;
-
+  
+  shapeClass?: string;
   fillColor?: string;
   strokeWidth?: string;
   strokeColor?: string;
-
-  shapeClass?: string;
+  
   lineClass?: string;
+  lineWidth?: string;
+  lineColor?: string;
+  
   labelText?: string;
 }
 
@@ -86,12 +98,16 @@ class TopicEditPanel extends React.Component<void, TopicEditPanelState> {
       isFontBold: false,
       isFontItalic: false,
       isFontLineThrough: false,
-
+      
+      shapeClass: '',
       fillColor: '',
       strokeWidth: '',
       strokeColor: '',
-      shapeClass: '',
+      
       lineClass: '',
+      lineWidth: '',
+      lineColor: '',
+      
       labelText: ''
     }
   }
@@ -144,6 +160,8 @@ class TopicEditPanel extends React.Component<void, TopicEditPanelState> {
         <UpdateStrokeColorPicker {...this.generateNormalProps('strokeColor')}/>
         <hr/>
         <UpdateLineClassSelector {...this.generateNormalProps('lineClass')}/>
+        <UpdateLineWidthSelector {...this.generateNormalProps('lineWidth')}/>
+        <UpdateLineColorPicker {...this.generateNormalProps('lineColor')}/>
         <hr/>
         <UpdateLabelTextInput {...updateLabelProps}/>
       </div>
@@ -206,13 +224,17 @@ class TopicEditPanel extends React.Component<void, TopicEditPanelState> {
       isFontBold: !!topicStyle.isFontBold,
       isFontItalic: !!topicStyle.isFontItalic,
       isFontLineThrough: !!topicStyle.isFontLineThrough,
-
-      fillColor: topicStyle.fillColor,
-      labelText: topicInfo.label || '',
+      
       shapeClass: topicStyle.shapeClass,
+      fillColor: topicStyle.fillColor,
       strokeWidth: topicStyle.strokeWidth,
       strokeColor: topicStyle.strokeColor,
+
       lineClass: topicStyle.lineClass,
+      lineWidth: topicStyle.lineWidth,
+      lineColor: topicStyle.lineColor,
+  
+      labelText: topicInfo.label || '',
       isTargetRoot
     });
   }

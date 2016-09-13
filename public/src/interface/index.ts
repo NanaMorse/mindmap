@@ -14,6 +14,8 @@ export interface TopicDispatchFuncs {
   onUpdateStrokeWidth: Function
   onUpdateStrokeColor: Function
   onUpdateLineClass: Function
+  onUpdateLineWidth: Function
+  onUpdateLineColor: Function
   onUpdateFontColor: Function
   onUpdateIsFontBold: Function
   onUpdateIsFontItalic: Function

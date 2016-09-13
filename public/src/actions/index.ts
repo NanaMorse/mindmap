@@ -123,6 +123,22 @@ export const updateTopicLineClass:action = (id: string, lineClass: string) => {
   }
 };
 
+export const updateTopicLineWidth:action = (id: string, lineWidth: string) => {
+  return {
+    type: types.UPDATE_TOPIC_LINEWIDTH,
+    id,
+    lineWidth
+  }
+};
+
+export const updateTopicLineColor:action = (id: string, lineColor: string) => {
+  return {
+    type: types.UPDATE_TOPIC_LINECOLOR,
+    id,
+    lineColor
+  }
+};
+
 export const updateTopicFillColor:action = (id: string, fillColor: string) => {
   return {
     type: types.UPDATE_TOPIC_FILLCOLOR,

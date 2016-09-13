@@ -9,6 +9,8 @@ export default {
     "strokeWidth": '1px',
     "strokeColor": "#000000",
     "lineClass": CommonConstant.LINE_ROUNDED,
+    "lineWidth": "1px",
+    "lineColor": "#7f7f7f",
     "fillColor": "#cbdefd"
   },
   [CommonConstant.TOPIC_MAIN]: {
@@ -18,6 +20,8 @@ export default {
     "strokeWidth": '1px',
     "strokeColor": "#000000",
     "lineClass": CommonConstant.LINE_RIGHT_ANGLE,
+    "lineWidth": "1px",
+    "lineColor": "#7f7f7f",
     "fillColor": "#fef4ec"
   },
   [CommonConstant.TOPIC_SUB]: {
@@ -27,6 +31,8 @@ export default {
     "strokeWidth": '1px',
     "strokeColor": "#000000",
     "lineClass": CommonConstant.LINE_RIGHT_ANGLE,
+    "lineWidth": "1px",
+    "lineColor": "#7f7f7f",
     "fillColor": "#fef4ec"
   },
   

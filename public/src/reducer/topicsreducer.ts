@@ -83,6 +83,18 @@ export default (currentState = {}, action) => {
       changeStyle('lineClass');
       break;
     }
+      
+    case types.UPDATE_TOPIC_LINEWIDTH :
+    {
+      changeStyle('lineWidth');
+      break;
+    }
+
+    case types.UPDATE_TOPIC_LINECOLOR :
+    {
+      changeStyle('lineColor');
+      break;
+    }
 
     case types.UPDATE_TOPIC_FILLCOLOR :
     {

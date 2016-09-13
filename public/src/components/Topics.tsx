@@ -84,10 +84,10 @@ class TopicTitle extends React.Component<TopicTitleProps, void> {
 
 // Connect line
 const ConnectLine = ({topicInfo}) => {
-  const lineClass = topicInfo.style.lineClass;
+  const {lineClass, lineWidth, lineColor} = topicInfo.style;
   const path = CalcConnectLine[lineClass](topicInfo);
 
-  return <path className="connect-line" d={path} stroke={DefaultStyle.connectLine.stroke} fill="none"></path>
+  return <path className="connect-line" d={path} stroke={lineColor} strokeWidth={lineWidth} fill="none"></path>
 };
 
 // Label
@@ -170,6 +170,10 @@ interface TopicInfo {
     isFontLineThrough?: boolean
 
     lineClass: string
+
+    lineWidth: string
+
+    lineColor: string
   }
 
   originTopicInfo: Object
@@ -254,9 +258,12 @@ class Topic extends React.Component<TopicProps, TopicState> {
       hovered: this.state.hovered
     };
 
-    const needConnectLine = style.lineClass !== CommonConstant.LINE_NONE && topicInfo.children && topicInfo.children.length;
+    const needConnectLine = 
+      style.lineClass !== CommonConstant.LINE_NONE && 
+      style.lineWidth !== CommonConstant.LINE_WIDTH_NONE && 
+      topicInfo.children && topicInfo.children.length;
     const needLabel = topicInfo.label;
-    const needShape = style.strokeWidth !== CommonConstant.STROKE_NONE;
+    const needShape = style.strokeWidth !== CommonConstant.STROKE_WIDTH_NONE;
 
     return (
       <g {...TopicGroupProps} >
@@ -407,6 +414,14 @@ class Topic extends React.Component<TopicProps, TopicState> {
     this.props.onUpdateLineClass(this.props.id, lineClass);
   }
 
+  onUpdateLineWidth(lineWidth) {
+    this.props.onUpdateLineWidth(this.props.id, lineWidth);
+  }
+
+  onUpdateLineColor(lineColor) {
+    this.props.onUpdateLineColor(this.props.id, lineColor);
+  }
+
   onAddTopicBefore() {
     this.props.onAddChildTopic(this.props.parentId, {id: CommonFunc.generateUUID()}, this.props.index);
   }
@@ -489,6 +504,8 @@ class Topics extends React.Component<TopicsProps, void> {
       onUpdateStrokeWidth,
       onUpdateStrokeColor,
       onUpdateLineClass,
+      onUpdateLineWidth,
+      onUpdateLineColor,
       onUpdateFontColor,
       onUpdateIsFontBold,
       onUpdateIsFontItalic,
@@ -518,6 +535,8 @@ class Topics extends React.Component<TopicsProps, void> {
         onUpdateStrokeWidth,
         onUpdateStrokeColor,
         onUpdateLineClass,
+        onUpdateLineWidth,
+        onUpdateLineColor,
         onUpdateFontColor,
         onUpdateIsFontBold,
         onUpdateIsFontItalic,
@@ -585,7 +604,7 @@ class Topics extends React.Component<TopicsProps, void> {
       const boxSize = {width: 0, height: 0};
       const {paddingLeft, paddingTop} = Distance.TopicPaddingOverride[topicType][topicTree.style.shapeClass];
       const fontSizeNumber = parseInt(fontSize);
-      const strokeWidthNumber = topicTree.style.strokeWidth === CommonConstant.STROKE_NONE ? 0 : parseInt(topicTree.style.strokeWidth);
+      const strokeWidthNumber = topicTree.style.strokeWidth === CommonConstant.STROKE_WIDTH_NONE ? 0 : parseInt(topicTree.style.strokeWidth);
       boxSize.width = titleAreaSize.width + fontSizeNumber * paddingLeft * 2 + strokeWidthNumber;
       boxSize.height = titleAreaSize.height + fontSizeNumber * paddingTop * 2 + strokeWidthNumber;
 
