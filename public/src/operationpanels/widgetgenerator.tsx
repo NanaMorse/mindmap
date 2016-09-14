@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { SketchPicker } from 'react-color';
-import * as Draggable from 'react-draggable';
+import { SwatchesPicker } from 'react-color';
 
 import FormEvent = __React.FormEvent;
 import MouseEvent = __React.MouseEvent;
@@ -83,7 +82,7 @@ export function checkBoxGenerator(label: string, id: string) {
   }
 }
 
-interface sketchWrapperProps extends colorPickerProps {
+interface colorPickerWrapperProps extends colorPickerProps {
   id: string
 }
 
@@ -91,7 +90,7 @@ interface choiceColor {
   hex: string
 }
 
-class SketchColorPicker extends React.Component<sketchWrapperProps, any> {
+class ColorPicker extends React.Component<colorPickerWrapperProps, any> {
 
   constructor() {
     super();
@@ -141,7 +140,7 @@ class SketchColorPicker extends React.Component<sketchWrapperProps, any> {
       onClick: () => this.onClosePicker()
     };
 
-    const sketchPickerProps = {
+    const pickerProps = {
       color: showColor,
       onChange: (color) => this.onColorChange(color),
       onChangeComplete: (color) => this.onColorChangeComplete(color)
@@ -155,7 +154,7 @@ class SketchColorPicker extends React.Component<sketchWrapperProps, any> {
         { this.state.displayColorPicker ? 
           <div className="color-picker-popover">
             <div {...coverProps}></div>
-            <SketchPicker {...sketchPickerProps} />
+            <SwatchesPicker {...pickerProps} />
           </div> : null 
         }
       </div>
@@ -168,7 +167,7 @@ export function colorPickerGenerator(label: string, id: string) {
     return (
       <div>
         <label>{ label + ': ' }</label>
-        <SketchColorPicker id={id} {...props} />
+        <ColorPicker id={id} {...props} />
       </div>
     );
   }
