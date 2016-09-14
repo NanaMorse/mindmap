@@ -21,9 +21,12 @@ text {
 }
 
 .header {
+  width: 100%;
   height: 50px;
   background-color: #29333e;
   line-height: 50px;
+  position: fixed;
+  top: 0;
 }
 
 /* copy from bootstrap */

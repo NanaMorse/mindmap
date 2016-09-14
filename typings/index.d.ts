@@ -4,4 +4,6 @@
 /// <reference path="globals/react/index.d.ts" />
 /// <reference path="globals/redux/index.d.ts" />
 /// <reference path="globals/wolfy87-eventemitter/index.d.ts" />
+
 /// <reference path="selfs/react-draggable/index.d.ts" />
+/// <reference path="selfs/react-color/index.d.ts" />

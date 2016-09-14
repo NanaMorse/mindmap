@@ -149,23 +149,37 @@ class TopicEditPanel extends React.Component<void, TopicEditPanelState> {
         <RemoveTopicButton {...removeTopicProps}/>
         <hr/>
         <UpdateFontSizeSelector {...this.generateNormalProps('fontSize')}/>
-        <UpdateFontColorPicker {...this.generateNormalProps('fontColor')}/>
+        <UpdateFontColorPicker {...this.generateColorPickerProps('fontColor')}/>
         <UpdateIsFontBoldCheckBox {...this.generateCheckBoxProps('isFontBold')}/>
         <UpdateIsFontItalicCheckBox {...this.generateCheckBoxProps('isFontItalic')}/>
         <UpdateIsFontLineThroughCheckBox {...this.generateCheckBoxProps('isFontLineThrough')}/>
         <hr/>
         <UpdateShapeClassSelector {...this.generateNormalProps('shapeClass')}/>
-        <UpdateFillColorPicker {...this.generateNormalProps('fillColor')}/>
+        <UpdateFillColorPicker {...this.generateColorPickerProps('fillColor')}/>
         <UpdateStrokeWidthSelector {...this.generateNormalProps('strokeWidth')}/>
-        <UpdateStrokeColorPicker {...this.generateNormalProps('strokeColor')}/>
+        <UpdateStrokeColorPicker {...this.generateColorPickerProps('strokeColor')}/>
         <hr/>
         <UpdateLineClassSelector {...this.generateNormalProps('lineClass')}/>
         <UpdateLineWidthSelector {...this.generateNormalProps('lineWidth')}/>
-        <UpdateLineColorPicker {...this.generateNormalProps('lineColor')}/>
+        <UpdateLineColorPicker {...this.generateColorPickerProps('lineColor')}/>
         <hr/>
         <UpdateLabelTextInput {...updateLabelProps}/>
       </div>
     );
+  }
+
+  generateColorPickerProps(stateKey) {
+    return {
+      value: this.state[stateKey],
+      onChange: (id, color) => {
+        selectionsManager.getSelectionsArray().forEach((component) => {
+          component[id](color);
+        });
+        this.setState({
+          [stateKey]: color
+        });
+      }
+    }
   }
 
   generateNormalProps(stateKey) {

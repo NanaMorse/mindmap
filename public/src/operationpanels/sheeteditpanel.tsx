@@ -26,12 +26,24 @@ export default class extends React.Component<void, any> {
         display: this.state.show ? 'block' : 'none'
       }
     };
-
+    
     return (
       <div {...panelProps}>
-        <UpdateSheetBgColorPicker {...this.generateNormalProps('bgColor')}/>
+        <UpdateSheetBgColorPicker {...this.generateColorPickerProps('bgColor')}/>
       </div>
     );
+  }
+  
+  generateColorPickerProps(stateKey) {
+    return {
+      value: this.state[stateKey],
+      onChange: (id, color) => {
+        componentMapManager.sheetComponent[id](color);
+        this.setState({
+          [stateKey]: color
+        });
+      }
+    }
   }
 
   generateNormalProps(stateKey) {

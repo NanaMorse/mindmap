@@ -1,4 +1,7 @@
 import * as React from 'react';
+import { SketchPicker } from 'react-color';
+import * as Draggable from 'react-draggable';
+
 import FormEvent = __React.FormEvent;
 import MouseEvent = __React.MouseEvent;
 import FocusEvent = __React.FocusEvent;
@@ -32,7 +35,7 @@ interface checkBoxProps {
 
 interface colorPickerProps {
   value: string;
-  onChange: (event: FormEvent) => void
+  onChange: (id: string, colorHex: string) => void
 }
 
 export function selectorGenerator(label: string, id: string, selectorOptions: selectorOptionsObject) {
@@ -80,12 +83,92 @@ export function checkBoxGenerator(label: string, id: string) {
   }
 }
 
+interface sketchWrapperProps extends colorPickerProps {
+  id: string
+}
+
+interface choiceColor {
+  hex: string
+}
+
+class SketchColorPicker extends React.Component<sketchWrapperProps, any> {
+
+  constructor() {
+    super();
+    this.state = {
+      displayColorPicker: false,
+      color: ''
+    }
+  }
+
+  onClickSwatch() {
+    this.setState({ displayColorPicker: !this.state.displayColorPicker });
+  }
+
+  onClosePicker() {
+    this.setState({ displayColorPicker: false });
+  }
+
+  onColorChange(color: choiceColor) {
+    this.setState({color: color.hex})
+  }
+
+  onColorChangeComplete(color: choiceColor) {
+    this.props.onChange(this.props.id, color.hex);
+  }
+
+  render() {
+
+    const swatchProps = {
+      className: 'color-picker-swatch',
+      onClick: () => this.onClickSwatch()
+    };
+
+    let showColor;
+    if (this.state.displayColorPicker) {
+      showColor = this.state.color;
+    } else {
+      showColor = this.props.value;
+      this.state.color = this.props.value;
+    }
+
+    const styleColor = {
+      background: showColor
+    };
+
+    const coverProps = {
+      className: 'color-picker-cover',
+      onClick: () => this.onClosePicker()
+    };
+
+    const sketchPickerProps = {
+      color: showColor,
+      onChange: (color) => this.onColorChange(color),
+      onChangeComplete: (color) => this.onColorChangeComplete(color)
+    };
+
+    return (
+      <div className="sketch-color-picker">
+        <div {...swatchProps}>
+          <div style={styleColor} ></div>
+        </div>
+        { this.state.displayColorPicker ? 
+          <div className="color-picker-popover">
+            <div {...coverProps}></div>
+            <SketchPicker {...sketchPickerProps} />
+          </div> : null 
+        }
+      </div>
+    )
+  }
+}
+
 export function colorPickerGenerator(label: string, id: string) {
   return function (props: colorPickerProps) {
     return (
       <div>
         <label>{ label + ': ' }</label>
-        <input id={ id } type="color" {...props}/>
+        <SketchColorPicker id={id} {...props} />
       </div>
     );
   }
