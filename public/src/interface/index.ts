@@ -1,5 +1,6 @@
 export interface SheetDispatchFuncs {
   updateSheetBgColor: Function
+  updateSheetInfoItemMode: Function
 }
 
 export interface TopicDispatchFuncs {

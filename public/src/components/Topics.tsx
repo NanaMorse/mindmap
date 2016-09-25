@@ -99,8 +99,6 @@ interface labelProps {
 }
 
 const Label = ({topicInfo, displayMode, x}: labelProps) => {
-  console.log(displayMode);
-
   let {boxSize: {width: parentWidth, height: parentHeight}, labelBoxSize: {width: labelWidth, height: labelHeight} , label: labelText} = topicInfo;
   
   if (displayMode === CommonConstant.INFO_ITEM_CARD_MODE) {
@@ -287,7 +285,6 @@ class Topic extends React.Component<TopicProps, TopicState> {
       style.lineClass !== CommonConstant.LINE_NONE && 
       style.lineWidth !== CommonConstant.LINE_WIDTH_NONE && 
       topicInfo.children && topicInfo.children.length;
-    const needLabel = topicInfo.label;
     const needShape = style.strokeWidth !== CommonConstant.STROKE_WIDTH_NONE;
 
     return (

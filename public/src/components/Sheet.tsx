@@ -65,6 +65,10 @@ class Sheet extends React.Component<SheetProps, void> {
     this.props.updateSheetBgColor(bgColor);
   }
 
+  onUpdateSheetInfoItemMode(infoItem, mode) {
+    this.props.updateSheetInfoItemMode(infoItem, mode);
+  }
+
   componentDidMount() {
     this.topicsContainer = document.querySelector('.topics-group') as HTMLElement;
     this.editReceiver = document.querySelector('#editReceiver') as HTMLElement;

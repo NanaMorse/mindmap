@@ -3,6 +3,7 @@ export const SHEET_UNDO = 'SHEET_UNDO';
 export const SHEET_REDO = 'SHEET_REDO';
 
 export const UPDATE_SHEET_BGCOLOR = 'UPDATE_SHEET_BGCOLOR';
+export const UPDATE_SHEET_INFO_ITEM_MODE = 'UPDATE_SHEET_INFO_ITEM_MODE';
 
 // constants for topic
 export const TOPICS_UNDO = 'TOPICS_UNDO';

@@ -28,6 +28,14 @@ export const updateSheetBgColor:action = (bgColor: string) => {
   }
 };
 
+export const updateSheetInfoItemMode = (infoItem: string, mode: string) => {
+  return {
+    type: types.UPDATE_SHEET_INFO_ITEM_MODE,
+    infoItem,
+    mode
+  }
+};
+
 // Topic Action
 export const topicsUndo:action = (pastState: Object) => {
   return {

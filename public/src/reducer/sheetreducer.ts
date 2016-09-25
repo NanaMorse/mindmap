@@ -20,6 +20,17 @@ export default (currentState = {}, action) => {
         bgColor : action.bgColor
       });
     }
+      
+    case types.UPDATE_SHEET_INFO_ITEM_MODE : 
+    {
+      return deepAssign({}, currentState, {
+        settings: {
+          infoItem: {
+            [action.infoItem]: action.mode
+          }
+        }
+      });
+    }
 
     default : {
       return currentState;

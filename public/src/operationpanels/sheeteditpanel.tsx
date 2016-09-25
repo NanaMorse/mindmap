@@ -4,17 +4,22 @@ import * as WidgetGenerator from './widgetgenerator';
 import { events, componentMapManager } from '../managers';
 
 import * as EventTags from '../constants/EventTags';
-
+import * as CommonConstant from '../constants/Common';
 
 const UpdateSheetBgColorPicker = WidgetGenerator.colorPickerGenerator('background color', 'onUpdateSheetBgColor');
+const UpdateLabelModeCheckBox = WidgetGenerator.checkBoxGenerator('show label', 'onUpdateSheetInfoItemMode');
+
 
 export default class extends React.Component<void, any> {
   constructor() {
     super();
 
+    const sheetProps = componentMapManager.sheetComponent.props;
+    
     this.state = {
       show: true,
-      bgColor: componentMapManager.sheetComponent.props.bgColor
+      bgColor: sheetProps.bgColor,
+      isLabelCard: sheetProps.settings.infoItem.label === CommonConstant.INFO_ITEM_CARD_MODE
     }
   }
 
@@ -30,6 +35,7 @@ export default class extends React.Component<void, any> {
     return (
       <div {...panelProps}>
         <UpdateSheetBgColorPicker {...this.generateColorPickerProps('bgColor')}/>
+        <UpdateLabelModeCheckBox {...this.generateInfoItemModeCheckBoxProps('isLabelCard', 'label')}/>
       </div>
     );
   }
@@ -43,6 +49,25 @@ export default class extends React.Component<void, any> {
           [stateKey]: color
         });
       }
+    }
+  }
+  
+  generateInfoItemModeCheckBoxProps(stateKey: string, infoItem: string) {
+    return {
+      checked: this.state[stateKey],
+      onClick: (e) => {
+        const widgetId = e.target.id;
+        const checked = e.target.checked;
+        
+        const mode = checked ? CommonConstant.INFO_ITEM_CARD_MODE : CommonConstant.INFO_ITEM_ICON_MODE;
+
+        componentMapManager.sheetComponent[widgetId](infoItem, mode);
+
+        this.setState({
+          [stateKey]: checked
+        });
+      },
+      onChange: () => {}
     }
   }
 
@@ -70,7 +95,8 @@ export default class extends React.Component<void, any> {
     const sheetProps = componentMapManager.sheetComponent.props;
 
     this.setState({
-      bgColor: sheetProps.bgColor
+      bgColor: sheetProps.bgColor,
+      isLabelCard: sheetProps.isLabelCard
     });
   }
 
