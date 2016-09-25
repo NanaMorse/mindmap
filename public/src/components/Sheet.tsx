@@ -9,7 +9,10 @@ import { dragSelectReceiver } from '../apptools/addon';
 import { SheetDispatchFuncs } from '../interface';
 
 interface SheetProps extends SheetDispatchFuncs {
-  bgColor: string
+  bgColor: string;
+  settings: {
+    infoItem: {}
+  }
 }
 
 class Sheet extends React.Component<SheetProps, void> {
@@ -17,25 +20,6 @@ class Sheet extends React.Component<SheetProps, void> {
   topicsContainer: HTMLElement;
 
   editReceiver: HTMLElement;
-
-  render() {
-    const sheetProps = {
-      id: 'sheet',
-      style: {
-        backgroundColor: this.props.bgColor
-      }
-    };
-
-    const sheetEvents = {
-      onClick: () => this.onClick(),
-      onWheel: (e) => this.onWheel(e),
-      onMouseDown: (e) => this.onMouseDown(e)
-    };
-
-    return <svg { ...sheetProps } { ...sheetEvents } >
-      <TopicsContainer />
-    </svg>;
-  }
 
   onClick() {
     //selectionsManager.clearSelection();
@@ -86,6 +70,29 @@ class Sheet extends React.Component<SheetProps, void> {
     this.editReceiver = document.querySelector('#editReceiver') as HTMLElement;
 
     componentMapManager.sheetComponent = this;
+  }
+
+  render() {
+    const sheetProps = {
+      id: 'sheet',
+      style: {
+        backgroundColor: this.props.bgColor
+      }
+    };
+
+    const sheetEvents = {
+      onClick: () => this.onClick(),
+      onWheel: (e) => this.onWheel(e),
+      onMouseDown: (e) => this.onMouseDown(e)
+    };
+    
+    const topicSettings = {
+      infoItem: this.props.settings.infoItem
+    };
+
+    return <svg { ...sheetProps } { ...sheetEvents } >
+      <TopicsContainer {...topicSettings}/>
+    </svg>;
   }
 }
 

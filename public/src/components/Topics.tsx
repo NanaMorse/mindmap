@@ -62,12 +62,13 @@ interface TopicTitleProps {
   isFontBold: boolean
   isFontItalic: boolean
   isFontLineThrough: boolean
+  x: number
 }
 
 class TopicTitle extends React.Component<TopicTitleProps, void> {
   render() {
 
-    const {title, fontSize, fontColor, isFontBold, isFontItalic, isFontLineThrough} = this.props;
+    const {title, fontSize, fontColor, isFontBold, isFontItalic, isFontLineThrough, x} = this.props;
 
     const style: any = {
       fontSize: fontSize,
@@ -78,7 +79,7 @@ class TopicTitle extends React.Component<TopicTitleProps, void> {
     if (isFontItalic) style.fontStyle = 'italic';
     if (isFontLineThrough) style.textDecoration = 'line-through';
 
-    return <text ref='title' style={ style }>{ title }</text>;
+    return <text ref='title' style={ style } x={x}>{ title }</text>;
   }
 }
 
@@ -91,31 +92,55 @@ const ConnectLine = ({topicInfo}) => {
 };
 
 // Label
-const Label = ({topicInfo}) => {
-  let {boxSize: {width: parentWidth, height: parentHeight}, labelBoxSize, label: labelText} = topicInfo;
+interface labelProps {
+  topicInfo: TopicInfo
+  displayMode: 'card' | 'icon'
+  x?: number
+}
 
-  const halfParentWidth = parentWidth / 2;
-  const halfParentHeight = parentHeight / 2;
+const Label = ({topicInfo, displayMode, x}: labelProps) => {
+  console.log(displayMode);
 
-  let {width: labelWidth, height: labelHeight} = labelBoxSize;
-  if (labelWidth > parentWidth) labelWidth = parentWidth;
+  let {boxSize: {width: parentWidth, height: parentHeight}, labelBoxSize: {width: labelWidth, height: labelHeight} , label: labelText} = topicInfo;
+  
+  if (displayMode === CommonConstant.INFO_ITEM_CARD_MODE) {
+    
+    const halfParentWidth = parentWidth / 2;
+    const halfParentHeight = parentHeight / 2;
 
-  let path = `M ${-halfParentWidth} ${halfParentHeight + 1} h ${labelWidth} v ${labelHeight} h ${-labelWidth} v ${-labelHeight} z`;
+    if (labelWidth > parentWidth) labelWidth = parentWidth;
 
-  const labelTextStartX = -halfParentWidth + Distance.LabelPadding.paddingLeft;
-  const labelTextStartY = halfParentHeight + 1 + labelHeight / 2;
+    let path = `M ${-halfParentWidth} ${halfParentHeight + 1} h ${labelWidth} v ${labelHeight} h ${-labelWidth} v ${-labelHeight} z`;
 
+    const labelTextStartX = -halfParentWidth + Distance.LabelPadding.paddingLeft;
+    const labelTextStartY = halfParentHeight + 1 + labelHeight / 2;
 
-  const {fontSize, fillColor} = DefaultStyle.label;
+    const {fontSize, fillColor} = DefaultStyle.label;
 
-  labelText = CommonFunc.wrapTextWithEllipsis(labelText, fontSize, labelWidth - Distance.LabelPadding.paddingLeft - Distance.LabelPadding.paddingRight);
+    labelText = CommonFunc.wrapTextWithEllipsis(labelText, fontSize, labelWidth - Distance.LabelPadding.paddingLeft - Distance.LabelPadding.paddingRight);
 
-  return (
-    <g className="label">
-      <path className="label-shape" d={path} stroke="none" fill={fillColor}/>
-      <text fontSize={fontSize} x={labelTextStartX} y={labelTextStartY}>{labelText}</text>
-    </g>
-  )
+    return (
+      <g className="label">
+        <path className="label-shape" d={path} stroke="none" fill={fillColor}/>
+        <text fontSize={fontSize} x={labelTextStartX} y={labelTextStartY}>{labelText}</text>
+      </g>
+    )
+  } else {
+    
+    const imageProps = {
+      xlinkHref: '../../images/label.png',
+      width: 20,
+      height: 20,
+      x: x,
+      y: -10
+    };
+    
+    return (
+      <g className="label">
+        <image {...imageProps}></image>
+      </g>
+    );
+  }
 };
 
 interface TopicInfo {
@@ -137,6 +162,11 @@ interface TopicInfo {
   }
 
   labelBoxSize: {
+    width: number
+    height: number
+  }
+
+  titleAreaSize: {
     width: number
     height: number
   }
@@ -179,6 +209,10 @@ interface TopicInfo {
   originTopicInfo: Object
 }
 
+interface infoItem {
+  label: 'card' | 'icon'
+}
+
 interface TopicProps extends TopicDispatchFuncs {
   id: string
 
@@ -187,6 +221,8 @@ interface TopicProps extends TopicDispatchFuncs {
   index: number
 
   topicInfo: TopicInfo
+
+  infoItem: infoItem
 }
 
 
@@ -233,17 +269,6 @@ class Topic extends React.Component<TopicProps, TopicState> {
       strokeColor: style.strokeColor
     };
 
-    const title = topicInfo.title == null ? 'Topic' : topicInfo.title;
-    const TopicTitleProps = {
-      ref: 'TopicTitle',
-      title: title,
-      fontSize: style.fontSize,
-      fontColor: style.fontColor,
-      isFontBold: style.isFontBold,
-      isFontItalic: style.isFontItalic,
-      isFontLineThrough: style.isFontLineThrough
-    };
-
     const TopicBoxGroupProps = {
       className: 'topic-box-group',
       onClick: (e) => this.onTopicClick(e),
@@ -267,14 +292,68 @@ class Topic extends React.Component<TopicProps, TopicState> {
 
     return (
       <g {...TopicGroupProps} >
-        {needLabel ? <Label topicInfo={topicInfo}/> : []}
         <g {...TopicBoxGroupProps}>
           {needShape ? <TopicShape {...TopicShapeProps}/> : []}
           <TopicFill {...TopicFillProps}/>
-          <TopicTitle {...TopicTitleProps}/>
+          {this.renderInnerItem()}
         </g>
         <TopicSelectBox {...TopicSelectBoxProps}/>
+        {this.renderCardItem()}
         {needConnectLine ? <ConnectLine topicInfo={topicInfo}/> : []}
+      </g>
+    );
+  }
+  
+  renderInnerItem() {
+
+    let innerGroupWidth = 0;
+
+    const topicInfo = this.props.topicInfo;
+    
+    const style = topicInfo.style;
+    const title = topicInfo.title == null ? 'Topic' : topicInfo.title;
+
+    const TopicTitleProps = {
+      ref: 'TopicTitle',
+      title: title,
+      fontSize: style.fontSize,
+      fontColor: style.fontColor,
+      isFontBold: style.isFontBold,
+      isFontItalic: style.isFontItalic,
+      isFontLineThrough: style.isFontLineThrough
+    };
+
+    innerGroupWidth += this.props.topicInfo.titleAreaSize.width;
+
+    const needLabel = topicInfo.label;
+    const isLabelIcon = this.props.infoItem.label === CommonConstant.INFO_ITEM_ICON_MODE;
+    const doRenderIconLabel = needLabel && isLabelIcon;
+    
+    let labelX: number;
+    
+    if (doRenderIconLabel) {
+      innerGroupWidth += 5 + topicInfo.labelBoxSize.width;
+      labelX = topicInfo.titleAreaSize.width - innerGroupWidth / 2 + 5;
+    }
+
+    return (
+      <g className="inner-item-group">
+        <TopicTitle {...TopicTitleProps} x={- innerGroupWidth / 2}/>
+        {doRenderIconLabel ? <Label topicInfo={topicInfo} displayMode={this.props.infoItem.label} x={labelX}/> : null}
+      </g>
+    );
+    
+  }
+  
+  renderCardItem() {
+    const topicInfo = this.props.topicInfo;
+    const needLabel = topicInfo.label;
+    const isLabelCard = this.props.infoItem.label === CommonConstant.INFO_ITEM_CARD_MODE;
+    const doRenderCardLabel = needLabel && isLabelCard;
+    
+    return (
+      <g className="card-item-group">
+        {doRenderCardLabel ? <Label topicInfo={topicInfo} displayMode={this.props.infoItem.label}/> : null}
       </g>
     );
   }
@@ -484,7 +563,9 @@ class Topic extends React.Component<TopicProps, TopicState> {
   }
 }
 
-interface TopicsProps extends TopicDispatchFuncs {}
+interface TopicsProps extends TopicDispatchFuncs {
+  infoItem: infoItem
+}
 
 class Topics extends React.Component<TopicsProps, void> {
 
@@ -524,6 +605,7 @@ class Topics extends React.Component<TopicsProps, void> {
         parentId: topicInfo.parentId,
         index: topicInfo.index,
         topicInfo: topicInfo,
+        infoItem: this.props.infoItem,
         onUpdateTitle,
         onUpdateFontSize,
         onUpdateFillColor,
@@ -562,6 +644,8 @@ class Topics extends React.Component<TopicsProps, void> {
 
   // calculate topics info, include boxSize and topic type
   calculateTopicsExtendInfo () {
+    const infoItemSettings: infoItem = this.props.infoItem;
+
     const topicsCopy = CommonFunc.deepClone(this.props);
 
     _calculate();
@@ -600,6 +684,7 @@ class Topics extends React.Component<TopicsProps, void> {
       const fontSize = topicTree.style.fontSize;
 
       const titleAreaSize = CommonFunc.getTextSize(topicTree.title || 'Topic', fontSize);
+      topicTree.titleAreaSize = titleAreaSize;
 
       const boxSize = {width: 0, height: 0};
       const {paddingLeft, paddingTop} = Distance.TopicPaddingOverride[topicType][topicTree.style.shapeClass];
@@ -610,13 +695,25 @@ class Topics extends React.Component<TopicsProps, void> {
 
       // if has label
       if (topicTree.label) {
-        const {width: labelTextWidth, height: labelTextHeight} = CommonFunc.getTextSize(topicTree.label, DefaultStyle.label.fontSize);
+        
+        interface labelBoxSize { width: number, height: number, mode: string }
+        
+        let labelBoxSize: labelBoxSize;
 
-        const labelPadding = Distance.LabelPadding;
-        const labelWidth = labelPadding.paddingLeft + labelTextWidth + labelPadding.paddingRight;
-        const labelHeight = labelPadding.paddingTop + labelTextHeight + labelPadding.paddingBottom;
+        if (infoItemSettings.label === CommonConstant.INFO_ITEM_CARD_MODE) {
+          const {width: labelTextWidth, height: labelTextHeight} = CommonFunc.getTextSize(topicTree.label, DefaultStyle.label.fontSize);
 
-        topicTree.labelBoxSize = {width: labelWidth, height: labelHeight};
+          const labelPadding = Distance.LabelPadding;
+          const labelWidth = labelPadding.paddingLeft + labelTextWidth + labelPadding.paddingRight;
+          const labelHeight = labelPadding.paddingTop + labelTextHeight + labelPadding.paddingBottom;
+
+          labelBoxSize = {width: labelWidth, height: labelHeight, mode: infoItemSettings.label};
+        } else {
+          labelBoxSize = {width: 20, height: 20, mode: infoItemSettings.label};
+          boxSize.width += labelBoxSize.width;
+        }
+        
+        topicTree.labelBoxSize = labelBoxSize;
       }
 
       topicTree.boxSize = boxSize;

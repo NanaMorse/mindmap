@@ -21,7 +21,7 @@ export default function logicToRight(parentTree) {
     topHeight += childTreeBounds.height + marginTop;
 
     // fix label height
-    if (childTree.labelBoxSize && children.length !== 1) {
+    if (childTree.labelBoxSize && childTree.labelBoxSize.mode === 'card' && children.length !== 1) {
       y -= childTree.labelBoxSize.height / 2;
     }
 

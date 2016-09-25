@@ -19,7 +19,11 @@ export default (topicTree) => {
 
     // if has label
     if (parentTree.labelBoxSize) {
-      bounds.height += parentTree.labelBoxSize.height;
+      if (parentTree.labelBoxSize.mode === CommonConstant.INFO_ITEM_CARD_MODE) {
+        bounds.height += parentTree.labelBoxSize.height;
+      } else {
+        bounds.width += parentTree.labelBoxSize.width;
+      }
     }
 
     const childrenBounds = { width : 0, height : 0 };
@@ -50,7 +54,7 @@ export default (topicTree) => {
   function calcChildrenPosition(parentTree) {
     const parentId = parentTree.id;
 
-    // todo æ ¹æ®structureå†³å®šæ‘†æ”¾ä½ç½®çš„æ–¹å¼
+    // todo
 
     const children = parentTree.children;
 

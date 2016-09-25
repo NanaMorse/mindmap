@@ -1,6 +1,11 @@
 export default {
   "sheet": {
-    "bgColor": "#ffffff"
+    "bgColor": "#ffffff",
+    "settings": {
+      "infoItem": {
+        "label": "icon"
+      }
+    }
   },
 
   "topics": {

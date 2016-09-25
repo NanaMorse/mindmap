@@ -26,3 +26,7 @@ export const LINE_WIDTH_NONE = 'LINE_NONE';
 export const LINE_WIDTH_THIN = '1px';
 export const LINE_WIDTH_MIDDLE = '4px';
 export const LINE_WIDTH_FAT = '8px';
+
+// Info item display mode
+export const INFO_ITEM_ICON_MODE = 'icon';
+export const INFO_ITEM_CARD_MODE = 'card';

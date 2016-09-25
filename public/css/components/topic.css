@@ -13,7 +13,6 @@
 
 /* topic text style */
 .topic-group text, .label text {
-    text-anchor : middle;
     dominant-baseline : central;
     cursor : default;
 
