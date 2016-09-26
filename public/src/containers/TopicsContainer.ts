@@ -6,10 +6,6 @@ import * as actions from '../actions';
 
 import Topics from '../components/Topics';
 
-import reduxUndo from '../managers/reduxundo';
-
-const reducerKey = 'topics';
-
 const mapStateToProps = (state) => {
   return state.topics;
 };
@@ -87,6 +83,6 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 
-const TopicsContainer = connect(mapStateToProps, reduxUndo(mapDispatchToProps, reducerKey))(Topics);
+const TopicsContainer = connect(mapStateToProps, mapDispatchToProps)(Topics);
 
 export default TopicsContainer;

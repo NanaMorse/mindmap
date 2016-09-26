@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import {events} from '../managers';
-import reduxUndo from '../managers/reduxundo';
+import { events } from '../managers';
+import { undoMiddleware } from '../store/middlewares/undo';
 
 import {PUSH_UNDO_STACK, UNDO_OR_REDO_TRIGGERED} from '../constants/EventTags';
 
@@ -23,9 +23,9 @@ export default class Header extends React.Component<void, HeaderState> {
 
   invokeUndo() {
     setTimeout(() => {
-      reduxUndo.undo();
+      undoMiddleware.undo();
       this.setState({
-        hasUndo: reduxUndo.hasUndo(),
+        hasUndo: undoMiddleware.hasUndo(),
         hasRedo: true
       });
     }, 0)
@@ -33,21 +33,21 @@ export default class Header extends React.Component<void, HeaderState> {
 
   invokeRedo() {
     setTimeout(() => {
-      reduxUndo.redo();
+      undoMiddleware.redo();
       this.setState({
         hasUndo: true,
-        hasRedo: reduxUndo.hasRedo()
+        hasRedo: undoMiddleware.hasRedo()
       });
     }, 0)
   }
 
   componentDidMount() {
     events.on(PUSH_UNDO_STACK, () => {
-      this.setState({hasUndo: true, hasRedo: reduxUndo.hasRedo()});
+      this.setState({hasUndo: true, hasRedo: undoMiddleware.hasRedo()});
     });
 
     events.on(UNDO_OR_REDO_TRIGGERED, () => {
-      this.setState({hasUndo: reduxUndo.hasUndo(), hasRedo: reduxUndo.hasRedo()});
+      this.setState({hasUndo: undoMiddleware.hasUndo(), hasRedo: undoMiddleware.hasRedo()});
     })
   }
 

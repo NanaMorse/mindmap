@@ -7,20 +7,6 @@ interface action {
 }
 
 // Sheet Action
-export const sheetUndo:action = (pastState: Object) => {
-  return {
-    type: types.SHEET_UNDO,
-    pastState
-  }
-};
-
-export const sheetRedo:action = (futureState: Object) => {
-  return {
-    type: types.SHEET_REDO,
-    futureState
-  }
-};
-
 export const updateSheetBgColor:action = (bgColor: string) => {
   return {
     type: types.UPDATE_SHEET_BGCOLOR,
@@ -37,20 +23,6 @@ export const updateSheetInfoItemMode = (infoItem: string, mode: string) => {
 };
 
 // Topic Action
-export const topicsUndo:action = (pastState: Object) => {
-  return {
-    type: types.TOPICS_UNDO,
-    pastState
-  }
-};
-
-export const topicsRedo:action = (futureState: Object) => {
-  return {
-    type: types.TOPICS_REDO,
-    futureState
-  }
-};
-
 export const updateTopicTitle:action = (id: string, title: string) => {
   return {
     type: types.UPDATE_TOPIC_TITLE,

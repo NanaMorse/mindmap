@@ -14,16 +14,6 @@ export default (currentState = {}, action) => {
   }
 
   switch (action.type) {
-    case types.TOPICS_UNDO :
-    {
-      return action.pastState;
-    }
-
-    case types.TOPICS_REDO :
-    {
-      return action.futureState;
-    }
-
     case types.UPDATE_TOPIC_TITLE :
     {
       targetTopicInfo.title = action.title;
