@@ -93,10 +93,10 @@ export default class extends React.Component<void, any> {
 
   setPanelWidgetValue() {
     const sheetProps = componentMapManager.sheetComponent.props;
-
+    
     this.setState({
       bgColor: sheetProps.bgColor,
-      isLabelCard: sheetProps.isLabelCard
+      isLabelCard: sheetProps.settings.infoItem.label === CommonConstant.INFO_ITEM_CARD_MODE
     });
   }
 

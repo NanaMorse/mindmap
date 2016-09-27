@@ -384,7 +384,8 @@ class Topic extends React.Component<TopicProps, TopicState> {
   }
 
   onTopicMouseOut(e) {
-    if (e.target.getAttribute('class').includes('topic-fill') && this.state.hovered) {
+    const targetClass = e.target.getAttribute('class');
+    if (targetClass && targetClass.includes('topic-fill') && this.state.hovered) {
       this.setState({hovered: false});
     }
   }
