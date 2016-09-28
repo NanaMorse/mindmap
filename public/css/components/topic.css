@@ -12,6 +12,10 @@
 }
 
 /* topic text style */
+.label {
+    pointer-events: none;
+}
+
 .topic-group text, .label text {
     dominant-baseline : central;
     cursor : default;
