@@ -1,6 +1,5 @@
 import { createStore, applyMiddleware } from 'redux';
 
-import demo from '../../demo';
 import reducer from '../reducer';
 
 import { events } from '../managers'
@@ -19,14 +18,18 @@ undoMiddleware.onUndoOrRedoInvoke = () => {
 
 const createStoreWithMiddleware = applyMiddleware(undoMiddleware)(createStore);
 
-const initialState = JSON.parse(localStorage.getItem('mindmap')) || demo;
+let store;
 
-const store = createStoreWithMiddleware(CombineUndoReducer(reducer), initialState);
+export const initStoreWithData = (storeData) => {
+  store = createStoreWithMiddleware(CombineUndoReducer(reducer), storeData);
 
-const saveToLocalStorage = () => {
-  localStorage.setItem('mindmap', JSON.stringify(store.getState()));
+  const saveToLocalStorage = () => {
+    localStorage.setItem('mindmap', JSON.stringify(store.getState()));
+  };
+
+  store.subscribe(saveToLocalStorage);
+  
+  return store;
 };
 
-store.subscribe(saveToLocalStorage);
-
-export default store;
+export const getStore = () => store;

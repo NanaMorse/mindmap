@@ -3,8 +3,6 @@ import * as React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 
-import store from './store';
-
 import './components/KeyBind';
 
 import Header from './components/Header';
@@ -14,15 +12,32 @@ import SheetContainer from './containers/SheetContainer';
 import SheetEditPanel from './operationpanels/sheeteditpanel';
 import TopicEditPanel from './operationpanels/topiceditpanel';
 
-render(
-  <Provider store = { store }>
-    <SheetContainer />
-  </Provider>,
-  document.getElementById('sheet-container')
-);
+import { initStoreWithData, getStore } from './store';
 
-render(<Header />, document.getElementById('header-container'));
-render(<div>
-  <TopicEditPanel />
-  <SheetEditPanel />
-</div>, document.getElementById('operation-panel-container'));
+const ws = new WebSocket('ws://localhost:3000');
+
+ws.onmessage = function (msg) {
+  const parsedData = JSON.parse(msg.data);
+  
+  switch (parsedData.type) {
+    case 'getStoreData': {
+      renderApp(initStoreWithData(JSON.parse(parsedData.data)));
+    }
+  }
+};
+
+const renderApp = (store) => {
+  render(
+    <Provider store = { store }>
+      <SheetContainer />
+    </Provider>,
+    document.getElementById('sheet-container')
+  );
+
+  render(<Header />, document.getElementById('header-container'));
+
+  render(<div>
+    <TopicEditPanel />
+    <SheetEditPanel />
+  </div>, document.getElementById('operation-panel-container'));
+};
