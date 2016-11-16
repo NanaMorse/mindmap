@@ -1,6 +1,6 @@
 import * as EventEmitter from 'wolfy87-eventemitter';
 
-import store from '../store';
+import { getStore } from '../store';
 
 import {TOPIC_ROOT} from '../constants/Common';
 
@@ -59,7 +59,7 @@ export const selectionsManager = (() => {
   const getAncestorCheckMethod = (selections) => {
     const ancestorMap = {};
 
-    const topicsInfo = store.getState().topics;
+    const topicsInfo = getStore().getState().topics;
 
     selections.forEach((selection) => {
       getSelectionsAncestorList(selection);
