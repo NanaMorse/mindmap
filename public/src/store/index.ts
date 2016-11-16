@@ -6,6 +6,7 @@ import { events } from '../managers'
 import * as EventTags from '../constants/EventTags';
 
 import { undoMiddleware, CombineUndoReducer } from './middlewares/undo';
+import { createActionSocketMiddleware, createSyncStoreSocketMiddleware } from './middlewares/createWebSocketMiddleware';
 
 // register undo middleware callback
 undoMiddleware.onUndoPush = () => {
@@ -16,11 +17,12 @@ undoMiddleware.onUndoOrRedoInvoke = () => {
   events.emit(EventTags.UNDO_OR_REDO_TRIGGERED);
 };
 
-const createStoreWithMiddleware = applyMiddleware(undoMiddleware)(createStore);
 
 let store;
 
-export const initStoreWithData = (storeData) => {
+export const initStoreWithData = (ws, storeData) => {
+  const createStoreWithMiddleware = applyMiddleware(undoMiddleware, createActionSocketMiddleware(ws), createSyncStoreSocketMiddleware(ws))(createStore);
+
   store = createStoreWithMiddleware(CombineUndoReducer(reducer), storeData);
 
   const saveToLocalStorage = () => {

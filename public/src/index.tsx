@@ -21,7 +21,11 @@ ws.onmessage = function (msg) {
   
   switch (parsedData.type) {
     case 'getStoreData': {
-      renderApp(initStoreWithData(JSON.parse(parsedData.data)));
+      return renderApp(initStoreWithData(ws, JSON.parse(parsedData.data)));
+    }
+      
+    case 'receiveBroadcastAction': {
+      return getStore().dispatch(JSON.parse(parsedData.data));
     }
   }
 };
