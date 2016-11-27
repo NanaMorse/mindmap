@@ -22,3 +22,69 @@ export interface TopicDispatchFuncs {
   onUpdateIsFontItalic: Function
   onUpdateIsFontLineThrough: Function
 }
+
+export interface TopicInfo {
+  id: string
+
+  type: string
+
+  title: string
+
+  label: string
+
+  parentId?: string
+
+  index: number
+
+  boxSize: {
+    width: number
+    height: number
+  }
+
+  labelBoxSize: {
+    width: number
+    height: number
+  }
+
+  titleAreaSize: {
+    width: number
+    height: number
+  }
+
+  bounds: {
+    width: number
+    height: number
+  }
+
+  position: [number, number]
+
+  children: TopicInfo[]
+
+  style: {
+    shapeClass: string
+
+    fillColor: string
+
+    strokeWidth: string
+
+    strokeColor: string
+
+    fontSize: string
+
+    fontColor: string
+
+    isFontBold?: boolean
+
+    isFontItalic?: boolean
+
+    isFontLineThrough?: boolean
+
+    lineClass: string
+
+    lineWidth: string
+
+    lineColor: string
+  }
+
+  originTopicInfo: Object
+}

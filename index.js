@@ -9,7 +9,6 @@ app.use(serve('./public'));
 const wss = new WebSocketServer({server: app.listen(3000)});
 
 wss.on('connection', function (ws) {
-  console.log('connection!');
 
   ws.send(JSON.stringify({
     type: 'getStoreData',

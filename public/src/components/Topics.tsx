@@ -6,6 +6,8 @@ import {events, selectionsManager, pasteInfoManager, componentMapManager} from '
 import * as AddOn from '../apptools/addon';
 import * as CommonFunc from '../apptools/commonfunc';
 
+import Label from './Label';
+
 import * as CommonConstant from '../constants/Common';
 import * as Distance from '../constants/Distance';
 import * as EventTags from '../constants/EventTags';
@@ -16,34 +18,34 @@ import CalcConnectLine from '../calcpath/connectline';
 
 import layoutTopics from '../layout';
 
-import { TopicDispatchFuncs } from '../interface';
+import { TopicInfo, TopicDispatchFuncs } from '../interface';
 
 // Topic Shape
-interface topicShapeProps {
+interface TopicShapeProps {
   d: string;
   strokeWidth: string;
   strokeColor: string;
 }
-const TopicShape = ({d, strokeWidth, strokeColor}: topicShapeProps) => {
+const TopicShape = ({d, strokeWidth, strokeColor}: TopicShapeProps) => {
   return <path className="topic-shape" d={ d } stroke={strokeColor} strokeWidth={strokeWidth}></path>;
 };
 
 // Topic Fill
-interface topicFillProps {
+interface TopicFillProps {
   d: string;
   fillColor: string
 }
-const TopicFill = ({d, fillColor}: topicFillProps) => {
+const TopicFill = ({d, fillColor}: TopicFillProps) => {
   return <path className="topic-fill" d={ d } fill={ fillColor } stroke="none"></path>;
 };
 
 // Topic Select Box
-interface topicSelectBoxProps {
+interface TopicSelectBoxProps {
   d: string;
   selected: boolean;
   hovered: boolean;
 }
-const TopicSelectBox = ({d, selected, hovered}: topicSelectBoxProps) => {
+const TopicSelectBox = ({d, selected, hovered}: TopicSelectBoxProps) => {
   const style = {
     visibility: selected || hovered ? 'visible' : 'hidden'
   };
@@ -91,123 +93,8 @@ const ConnectLine = ({topicInfo}) => {
   return <path className="connect-line" d={path} stroke={lineColor} strokeWidth={lineWidth} fill="none"></path>
 };
 
-// Label
-interface labelProps {
-  topicInfo: TopicInfo
-  displayMode: 'card' | 'icon'
-  x?: number
-}
 
-const Label = ({topicInfo, displayMode, x}: labelProps) => {
-  let {boxSize: {width: parentWidth, height: parentHeight}, labelBoxSize: {width: labelWidth, height: labelHeight} , label: labelText} = topicInfo;
-  
-  if (displayMode === CommonConstant.INFO_ITEM_CARD_MODE) {
-    
-    const halfParentWidth = parentWidth / 2;
-    const halfParentHeight = parentHeight / 2;
-
-    if (labelWidth > parentWidth) labelWidth = parentWidth;
-
-    let path = `M ${-halfParentWidth} ${halfParentHeight + 1} h ${labelWidth} v ${labelHeight} h ${-labelWidth} v ${-labelHeight} z`;
-
-    const labelTextStartX = -halfParentWidth + Distance.LabelPadding.paddingLeft;
-    const labelTextStartY = halfParentHeight + 1 + labelHeight / 2;
-
-    const {fontSize, fillColor} = DefaultStyle.label;
-
-    labelText = CommonFunc.wrapTextWithEllipsis(labelText, fontSize, labelWidth - Distance.LabelPadding.paddingLeft - Distance.LabelPadding.paddingRight);
-
-    return (
-      <g className="label">
-        <path className="label-shape" d={path} stroke="none" fill={fillColor}/>
-        <text fontSize={fontSize} x={labelTextStartX} y={labelTextStartY}>{labelText}</text>
-      </g>
-    )
-  } else {
-    
-    const imageProps = {
-      xlinkHref: '../../images/label.png',
-      width: 20,
-      height: 20,
-      x: x,
-      y: -10
-    };
-    
-    return (
-      <g className="label">
-        <image {...imageProps}></image>
-      </g>
-    );
-  }
-};
-
-interface TopicInfo {
-  id: string
-
-  type: string
-
-  title: string
-
-  label: string
-
-  parentId?: string
-
-  index: number
-
-  boxSize: {
-    width: number
-    height: number
-  }
-
-  labelBoxSize: {
-    width: number
-    height: number
-  }
-
-  titleAreaSize: {
-    width: number
-    height: number
-  }
-
-  bounds: {
-    width: number
-    height: number
-  }
-
-  position: [number, number]
-
-  children: TopicInfo[]
-
-  style: {
-    shapeClass: string
-
-    fillColor: string
-
-    strokeWidth: string
-
-    strokeColor: string
-
-    fontSize: string
-
-    fontColor: string
-
-    isFontBold?: boolean
-
-    isFontItalic?: boolean
-
-    isFontLineThrough?: boolean
-
-    lineClass: string
-
-    lineWidth: string
-
-    lineColor: string
-  }
-
-  originTopicInfo: Object
-}
-
-interface infoItem {
+interface InfoItem {
   label: 'card' | 'icon'
 }
 
@@ -220,7 +107,7 @@ interface TopicProps extends TopicDispatchFuncs {
 
   topicInfo: TopicInfo
 
-  infoItem: infoItem
+  infoItem: InfoItem
 }
 
 
@@ -562,7 +449,7 @@ class Topic extends React.Component<TopicProps, TopicState> {
 }
 
 interface TopicsProps extends TopicDispatchFuncs {
-  infoItem: infoItem
+  infoItem: InfoItem
 }
 
 class Topics extends React.Component<TopicsProps, void> {
@@ -642,7 +529,7 @@ class Topics extends React.Component<TopicsProps, void> {
 
   // calculate topics info, include boxSize and topic type
   calculateTopicsExtendInfo () {
-    const infoItemSettings: infoItem = this.props.infoItem;
+    const infoItemSettings: InfoItem = this.props.infoItem;
 
     const topicsCopy = CommonFunc.deepClone(this.props);
 

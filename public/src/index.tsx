@@ -3,7 +3,7 @@ import * as React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 
-import './components/KeyBind';
+import './apptools/KeyBind';
 
 import Header from './components/Header';
 
@@ -28,6 +28,10 @@ ws.onmessage = function (msg) {
       return getStore().dispatch(JSON.parse(parsedData.data));
     }
   }
+};
+
+ws.onclose = function () {
+  console.log('lost connection!');
 };
 
 const renderApp = (store) => {

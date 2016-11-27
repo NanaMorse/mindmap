@@ -5,7 +5,8 @@
     "noImplicitAny": false,
     "module": "commonjs",
     "target": "es5",
-    "jsx": "react"
+    "jsx": "react",
+    "moduleResolution": "node"
   },
   "files": [
     "./typings/index.d.ts"
