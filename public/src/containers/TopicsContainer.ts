@@ -12,72 +12,74 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onUpdateTitle : (id, title) => {
-      dispatch(actions.updateTopicTitle(id, title));
-    },
+    dispatchMethod: {
+      onUpdateTitle : (id, title) => {
+        dispatch(actions.updateTopicTitle(id, title));
+      },
 
-    onUpdateFontSize : (id, fontSize) => {
-      dispatch(actions.updateTopicFontSize(id, fontSize));
-    },
+      onUpdateFontSize : (id, fontSize) => {
+        dispatch(actions.updateTopicFontSize(id, fontSize));
+      },
 
-    onUpdateFontColor : (id, fontColor) => {
-      dispatch(actions.updateTopicFontColor(id, fontColor));
-    },
+      onUpdateFontColor : (id, fontColor) => {
+        dispatch(actions.updateTopicFontColor(id, fontColor));
+      },
 
-    onUpdateIsFontBold : (id, isFontBold) => {
-      dispatch(actions.updateTopicIsFontBold(id, isFontBold));
-    },
+      onUpdateIsFontBold : (id, isFontBold) => {
+        dispatch(actions.updateTopicIsFontBold(id, isFontBold));
+      },
 
-    onUpdateIsFontItalic : (id, isFontItalic) => {
-      dispatch(actions.updateTopicIsFontItalic(id, isFontItalic));
-    },
+      onUpdateIsFontItalic : (id, isFontItalic) => {
+        dispatch(actions.updateTopicIsFontItalic(id, isFontItalic));
+      },
 
-    onUpdateIsFontLineThrough : (id, isFontLineThrough) => {
-      dispatch(actions.updateTopicIsFontLineThrough(id, isFontLineThrough));
-    },
+      onUpdateIsFontLineThrough : (id, isFontLineThrough) => {
+        dispatch(actions.updateTopicIsFontLineThrough(id, isFontLineThrough));
+      },
 
-    onUpdateFillColor : (id, fillColor) => {
-      dispatch(actions.updateTopicFillColor(id, fillColor));
-    },
+      onUpdateFillColor : (id, fillColor) => {
+        dispatch(actions.updateTopicFillColor(id, fillColor));
+      },
 
-    onUpdateShapeClass: (id, shapeClass) => {
-      dispatch(actions.updateTopicShapeClass(id, shapeClass));
-    },
+      onUpdateShapeClass: (id, shapeClass) => {
+        dispatch(actions.updateTopicShapeClass(id, shapeClass));
+      },
 
-    onUpdateStrokeWidth: (id, strokeWidth) => {
-      dispatch(actions.updateTopicStrokeWidth(id, strokeWidth));
-    },
+      onUpdateStrokeWidth: (id, strokeWidth) => {
+        dispatch(actions.updateTopicStrokeWidth(id, strokeWidth));
+      },
 
-    onUpdateStrokeColor: (id, strokeColor) => {
-      dispatch(actions.updateTopicStrokeColor(id, strokeColor));
-    },
+      onUpdateStrokeColor: (id, strokeColor) => {
+        dispatch(actions.updateTopicStrokeColor(id, strokeColor));
+      },
 
-    onUpdateLineClass: (id, lineClass) => {
-      dispatch(actions.updateTopicLineClass(id, lineClass));
-    },
+      onUpdateLineClass: (id, lineClass) => {
+        dispatch(actions.updateTopicLineClass(id, lineClass));
+      },
 
-    onUpdateLineWidth: (id, lineWidth) => {
-      dispatch(actions.updateTopicLineWidth(id, lineWidth));
-    },
+      onUpdateLineWidth: (id, lineWidth) => {
+        dispatch(actions.updateTopicLineWidth(id, lineWidth));
+      },
 
-    onUpdateLineColor: (id, lineColor) => {
-      dispatch(actions.updateTopicLineColor(id, lineColor));
-    },
+      onUpdateLineColor: (id, lineColor) => {
+        dispatch(actions.updateTopicLineColor(id, lineColor));
+      },
 
-    onUpdateLabel: (id, labelText) => {
-      dispatch(actions.updateTopicLabel(id, labelText));
-    },
+      onUpdateLabel: (id, labelText) => {
+        dispatch(actions.updateTopicLabel(id, labelText));
+      },
 
-    onAddChildTopic : (id, childInfo, index) => {
-      dispatch(actions.addChildTopic(id, childInfo, index));
-    },
+      onAddChildTopic : (id, childInfo, index) => {
+        dispatch(actions.addChildTopic(id, childInfo, index));
+      },
 
-    onAddParentTopic : (id, parentId) => {
-      dispatch(actions.addParentTopic(id, parentId));
-    },
+      onAddParentTopic : (id, parentId) => {
+        dispatch(actions.addParentTopic(id, parentId));
+      },
 
-    onRemoveSelfTopic : (id) => {
-      dispatch(actions.removeSelfTopic(id));
+      onRemoveSelfTopic : (id) => {
+        dispatch(actions.removeSelfTopic(id));
+      }
     }
   }
 };

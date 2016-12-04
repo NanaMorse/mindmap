@@ -13,12 +13,14 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    updateSheetBgColor : (bgColor) => {
-      dispatch(actions.updateSheetBgColor(bgColor));
-    },
+    dispatchMethod: {
+      updateSheetBgColor : (bgColor) => {
+        dispatch(actions.updateSheetBgColor(bgColor));
+      },
 
-    updateSheetInfoItemMode: (infoItem, mode) => {
-      dispatch(actions.updateSheetInfoItemMode(infoItem, mode));
+      updateSheetInfoItemMode: (infoItem, mode) => {
+        dispatch(actions.updateSheetInfoItemMode(infoItem, mode));
+      }
     }
   }
 };

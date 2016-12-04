@@ -18,7 +18,7 @@ import CalcConnectLine from '../calcpath/connectline';
 
 import layoutTopics from '../layout';
 
-import { TopicInfo, TopicDispatchFuncs } from '../interface';
+import { TopicInfo, TopicDispatchMethods } from '../interface';
 
 // Topic Shape
 interface TopicShapeProps {
@@ -98,7 +98,7 @@ interface InfoItem {
   label: 'card' | 'icon'
 }
 
-interface TopicProps extends TopicDispatchFuncs {
+interface TopicProps extends TopicDispatchMethods {
   id: string
 
   parentId?: string
@@ -415,7 +415,7 @@ class Topic extends React.Component<TopicProps, TopicState> {
     const stateHasChanged = stringify(this.state) !== stringify(nextState);
     if (stateHasChanged) return true;
 
-    // check selfs props
+    // check self's props
     const topicInfo = this.props.topicInfo;
     const nextTopicInfo = nextProps.topicInfo;
 
@@ -448,8 +448,9 @@ class Topic extends React.Component<TopicProps, TopicState> {
   }
 }
 
-interface TopicsProps extends TopicDispatchFuncs {
+interface TopicsProps {
   infoItem: InfoItem
+  dispatchMethod: TopicDispatchMethods
 }
 
 class Topics extends React.Component<TopicsProps, void> {
@@ -457,27 +458,7 @@ class Topics extends React.Component<TopicsProps, void> {
   render() {
     // calculate layout position first
     const topicsExtend = this.calculateTopicsExtendInfo();
-
-    const {
-      onUpdateTitle,
-      onUpdateFontSize,
-      onUpdateFillColor,
-      onAddChildTopic,
-      onAddParentTopic,
-      onRemoveSelfTopic,
-      onUpdateLabel,
-      onUpdateShapeClass,
-      onUpdateStrokeWidth,
-      onUpdateStrokeColor,
-      onUpdateLineClass,
-      onUpdateLineWidth,
-      onUpdateLineColor,
-      onUpdateFontColor,
-      onUpdateIsFontBold,
-      onUpdateIsFontItalic,
-      onUpdateIsFontLineThrough
-    } = this.props;
-
+    
     const topicsArray = [];
 
     const createTopic = topicInfo => {
@@ -490,27 +471,10 @@ class Topics extends React.Component<TopicsProps, void> {
         parentId: topicInfo.parentId,
         index: topicInfo.index,
         topicInfo: topicInfo,
-        infoItem: this.props.infoItem,
-        onUpdateTitle,
-        onUpdateFontSize,
-        onUpdateFillColor,
-        onAddChildTopic,
-        onAddParentTopic,
-        onRemoveSelfTopic,
-        onUpdateLabel,
-        onUpdateShapeClass,
-        onUpdateStrokeWidth,
-        onUpdateStrokeColor,
-        onUpdateLineClass,
-        onUpdateLineWidth,
-        onUpdateLineColor,
-        onUpdateFontColor,
-        onUpdateIsFontBold,
-        onUpdateIsFontItalic,
-        onUpdateIsFontLineThrough
+        infoItem: this.props.infoItem
       };
-
-      return <Topic { ...topicProps } ></Topic>;
+      
+      return <Topic {...this.props.dispatchMethod} {...topicProps} ></Topic>;
     };
 
     const setTopicArrayData = (topicInfo) => {
@@ -533,14 +497,14 @@ class Topics extends React.Component<TopicsProps, void> {
 
     const topicsCopy = CommonFunc.deepClone(this.props);
 
-    _calculate();
+    _calculate(topicsCopy);
 
     // get bounds and position
     layoutTopics(topicsCopy);
 
     return topicsCopy;
 
-    function _calculate(topicTree: TopicInfo = topicsCopy) {
+    function _calculate(topicTree: TopicInfo) {
       const copyAsOrigin = CommonFunc.deepClone(topicTree);
 
       // get Topic type

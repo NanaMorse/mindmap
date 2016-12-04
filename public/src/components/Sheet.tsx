@@ -6,13 +6,14 @@ import { componentMapManager, selectionsManager } from '../managers';
 
 import { dragSelectReceiver } from '../apptools/addon';
 
-import { SheetDispatchFuncs } from '../interface';
+import { SheetDispatchMethods } from '../interface';
 
-interface SheetProps extends SheetDispatchFuncs {
-  bgColor: string;
+interface SheetProps {
+  bgColor: string
   settings: {
     infoItem: {}
   }
+  dispatchMethod: SheetDispatchMethods
 }
 
 class Sheet extends React.Component<SheetProps, void> {
@@ -62,11 +63,11 @@ class Sheet extends React.Component<SheetProps, void> {
   }
 
   onUpdateSheetBgColor(bgColor) {
-    this.props.updateSheetBgColor(bgColor);
+    this.props.dispatchMethod.updateSheetBgColor(bgColor);
   }
 
   onUpdateSheetInfoItemMode(infoItem, mode) {
-    this.props.updateSheetInfoItemMode(infoItem, mode);
+    this.props.dispatchMethod.updateSheetInfoItemMode(infoItem, mode);
   }
 
   componentDidMount() {

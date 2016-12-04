@@ -1,9 +1,9 @@
-export interface SheetDispatchFuncs {
+export interface SheetDispatchMethods {
   updateSheetBgColor: Function
   updateSheetInfoItemMode: Function
 }
 
-export interface TopicDispatchFuncs {
+export interface TopicDispatchMethods {
   onUpdateTitle: Function
   onUpdateFontSize: Function
   onUpdateFillColor: Function
