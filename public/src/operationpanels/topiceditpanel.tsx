@@ -7,10 +7,11 @@ import * as WidgetGenerator from './widgetgenerator';
 import * as EventTags from '../constants/EventTags';
 import * as CommonConstant from '../constants/Common';
 
-
 const AddChildTopicButton = WidgetGenerator.buttonGenerator('Add Child Topic', 'onAddChildTopic');
 
 const AddTopicBeforeButton = WidgetGenerator.buttonGenerator('Add Topic Before', 'onAddTopicBefore');
+
+const AddTopicAfterButton = WidgetGenerator.buttonGenerator('Add Topic After', 'onAddTopicAfter');
 
 const AddParentTopicButton = WidgetGenerator.buttonGenerator('Add Parent Topic', 'onAddParentTopic');
 
@@ -145,6 +146,7 @@ class TopicEditPanel extends React.Component<void, TopicEditPanelState> {
       <div { ...panelProps } >
         <AddChildTopicButton onClick={e => this.dispatchOperator(e)}/>
         <AddTopicBeforeButton {...actionSingleTopicExceptRootProps}/>
+        <AddTopicAfterButton {...actionSingleTopicExceptRootProps}/>
         <AddParentTopicButton {...actionSingleTopicExceptRootProps}/>
         <RemoveTopicButton {...removeTopicProps}/>
         <hr/>

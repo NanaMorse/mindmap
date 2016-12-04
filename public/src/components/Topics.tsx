@@ -387,7 +387,13 @@ class Topic extends React.Component<TopicProps, TopicState> {
   }
 
   onAddTopicBefore() {
+    if (!this.props.parentId) return;
     this.props.onAddChildTopic(this.props.parentId, {id: CommonFunc.generateUUID()}, this.props.index);
+  }
+
+  onAddTopicAfter() {
+    if (!this.props.parentId) return;
+    this.props.onAddChildTopic(this.props.parentId, {id: CommonFunc.generateUUID()}, this.props.index + 1);
   }
 
   onAddChildTopic() {

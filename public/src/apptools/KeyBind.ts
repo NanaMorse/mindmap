@@ -7,7 +7,7 @@ import KeyboardEvent = __React.KeyboardEvent;
 const elementsIdToStopPropagation = ['onUpdateLabel'];
 
 const operatorMap = {
-  [KeyCode.Z_KEY] (e) {
+  [KeyCode.Z_KEY](e) {
     if (e.metaKey || e.ctrlKey) {
       if (e.shiftKey) {
         undoMiddleware.redo();
@@ -17,14 +17,21 @@ const operatorMap = {
     }
   },
 
-  [KeyCode.TAB_KEY] (e) {
+  [KeyCode.TAB_KEY](e) {
     e.preventDefault();
     selectionsManager.getSelectionsArray().forEach((selection) => {
       selection.onAddChildTopic();
     });
   },
+  
+  [KeyCode.ENTER_KEY](e) {
+    e.preventDefault();
+    selectionsManager.getSelectionsArray().forEach((selection) => {
+      selection.onAddTopicAfter();
+    });
+  },
 
-  [KeyCode.DELETE_KEY] (e) {
+  [KeyCode.DELETE_KEY](e) {
     e.preventDefault();
     selectionsManager.getSelectionsArrayWithoutChild().forEach((selection) => {
       selection.onRemoveSelfTopic();
