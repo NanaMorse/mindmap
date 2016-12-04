@@ -1,33 +1,24 @@
-interface options {
-  msgType?: string;
+const broadcastTriggerFilter = '_isBroadcast';
+
+function webSocketMiddlewareGenerator(msgType: string, getData: (getState, dispatch, action) => String) {
+  return (ws) => ({getState, dispatch}) => next => action => {
+    next(action);
+
+    if (!action[broadcastTriggerFilter]) {
+      const sendMsg = {
+        type: msgType,
+        data: getData(getState, dispatch, action)
+      };
+
+      ws.send(JSON.stringify(sendMsg));
+    }
+  }
 }
 
-interface socketOptions extends options{
-  broadcastTriggerFilter?: string;
-}
+export const createActionSocketMiddleware = webSocketMiddlewareGenerator('syncAction', (getState, dispatch, action) => {
+  return JSON.stringify(action);
+});
 
-export const createActionSocketMiddleware = (ws, {broadcastTriggerFilter = '_isBroadcast', msgType = 'syncAction'}: socketOptions = {}) => ({getState, dispatch}) => next => action => {
-  next(action);
-
-  if (!action[broadcastTriggerFilter]) {
-    const sendMsg = {
-      type: msgType,
-      data: JSON.stringify(action)
-    };
-
-    ws.send(JSON.stringify(sendMsg));
-  }
-};
-
-export const createSyncStoreSocketMiddleware = (ws, {broadcastTriggerFilter = '_isBroadcast', msgType = 'syncStore'}: socketOptions = {}) => ({getState, dispatch}) => next => action => {
-  next(action);
-
-  if (!action[broadcastTriggerFilter]) {
-    const sendMsg = {
-      type: msgType,
-      data: JSON.stringify(getState())
-    };
-
-    ws.send(JSON.stringify(sendMsg));
-  }
-};
+export const createSyncStoreSocketMiddleware = webSocketMiddlewareGenerator('syncStore', (getState) => {
+  return JSON.stringify(getState());
+});
