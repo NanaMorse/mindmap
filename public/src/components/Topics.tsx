@@ -1,5 +1,5 @@
 import * as React from 'react';
-const Draggable = require('react-draggable').default;
+const Draggable = require('react-draggable');
 
 import {events, selectionsManager, pasteInfoManager, componentMapManager} from '../managers';
 

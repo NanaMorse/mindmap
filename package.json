@@ -1,11 +1,10 @@
 {
-  "name": "mindmap",
+  "name": "react-mindmap",
   "version": "0.0.1",
-  "description": "a mind map based on react",
-  "main": "index.js",
+  "description": "a mind map application based on react",
   "scripts": {
-    "build": "webpack",
-    "start": "node index.js"
+    "build": "webpack --watch & cd server && tsc",
+    "start": "node server/dist/index.js"
   },
   "author": "morse",
   "license": "MIT",
@@ -21,6 +20,7 @@
     "ws": "^1.1.1"
   },
   "devDependencies": {
+    "@types/koa": "^2.0.39",
     "@types/node": "^7.0.8",
     "@types/react": "^15.0.17",
     "@types/react-color": "^2.11.0",

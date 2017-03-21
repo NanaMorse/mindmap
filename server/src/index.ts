@@ -14,6 +14,7 @@ wss.on('connection', function (ws) {
     type: 'getStoreData',
     data: getStoreData()
   }));
+
   
   ws.on('message', function (msg) {
     const parsedMsg = JSON.parse(msg);
