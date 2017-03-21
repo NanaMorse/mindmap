@@ -27,9 +27,9 @@ declare namespace reactDraggable {
     onMouseDown: (event, ui) => boolean
   }
 
-  export default class Draggable extends __React.Component<DraggableProps, any> {}
+  export default class Draggable {}
 
-  export class DraggableCore extends __React.Component<DraggableCoreProps, any> {}
+  export class DraggableCore {}
 }
 
 declare module 'react-draggable' {

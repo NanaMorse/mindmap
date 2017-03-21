@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as Draggable from 'react-draggable';
+const Draggable = require('react-draggable').default;
 
 import {events, selectionsManager, pasteInfoManager, componentMapManager} from '../managers';
 
@@ -27,7 +27,7 @@ interface TopicShapeProps {
   strokeColor: string;
 }
 const TopicShape = ({d, strokeWidth, strokeColor}: TopicShapeProps) => {
-  return <path className="topic-shape" d={ d } stroke={strokeColor} strokeWidth={strokeWidth}></path>;
+  return <path className="topic-shape" d={ d } stroke={strokeColor} strokeWidth={strokeWidth} />;
 };
 
 // Topic Fill
@@ -36,7 +36,7 @@ interface TopicFillProps {
   fillColor: string
 }
 const TopicFill = ({d, fillColor}: TopicFillProps) => {
-  return <path className="topic-fill" d={ d } fill={ fillColor } stroke="none"></path>;
+  return <path className="topic-fill" d={ d } fill={ fillColor } stroke="none" />;
 };
 
 // Topic Select Box
@@ -53,7 +53,7 @@ const TopicSelectBox = ({d, selected, hovered}: TopicSelectBoxProps) => {
   const hoveredStroke = 'rgb(199, 217, 231)';
   const selectedStroke = 'rgb(75, 111, 189)';
 
-  return <path d={ d } className="topic-select-box" fill="none" stroke={selected ? selectedStroke : hoveredStroke} strokeWidth="3" style={ style }></path>;
+  return <path d={ d } className="topic-select-box" fill="none" stroke={selected ? selectedStroke : hoveredStroke} strokeWidth="3" style={ style } />;
 };
 
 // Topic Title
@@ -90,7 +90,7 @@ const ConnectLine = ({topicInfo}) => {
   const {lineClass, lineWidth, lineColor} = topicInfo.style;
   const path = CalcConnectLine[lineClass](topicInfo);
 
-  return <path className="connect-line" d={path} stroke={lineColor} strokeWidth={lineWidth} fill="none"></path>
+  return <path className="connect-line" d={path} stroke={lineColor} strokeWidth={lineWidth} fill="none" />
 };
 
 
@@ -533,7 +533,7 @@ class Topics extends React.Component<TopicsProps, void> {
       topicTree.index = parent ? parent.children.indexOf(topicTree) : 0;
 
       // mix topic style
-      topicTree.style = Object.assign({}, DefaultStyle[topicType], topicTree.style || {});
+      topicTree.style = (Object as any).assign({}, DefaultStyle[topicType], topicTree.style || {});
 
       // get boxSize
       const fontSize = topicTree.style.fontSize;

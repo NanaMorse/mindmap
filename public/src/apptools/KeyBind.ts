@@ -2,7 +2,6 @@ import * as KeyCode from '../constants/KeyCode';
 import {selectionsManager} from '../managers';
 
 import { undoMiddleware } from '../store/middlewares/undo';
-import KeyboardEvent = __React.KeyboardEvent;
 
 const elementsIdToStopPropagation = ['onUpdateLabel'];
 

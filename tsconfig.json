@@ -3,12 +3,13 @@
     "outDir": "./public/dist/",
     "sourceMap": true,
     "noImplicitAny": false,
+    "watch": true,
     "module": "commonjs",
-    "target": "es5",
+    "target": "es6",
     "jsx": "react",
-    "moduleResolution": "node"
+    "types": ["node"]
   },
   "files": [
-    "./typings/index.d.ts"
+    "./interface/definefiles/index.d.ts"
   ]
 }

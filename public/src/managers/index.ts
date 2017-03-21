@@ -1,4 +1,4 @@
-import * as EventEmitter from 'wolfy87-eventemitter';
+import * as EventEmitter from 'events';
 
 import { getStore } from '../store';
 

@@ -1,14 +1,9 @@
 import * as React from 'react';
 import { SwatchesPicker } from 'react-color';
 
-import FormEvent = __React.FormEvent;
-import MouseEvent = __React.MouseEvent;
-import FocusEvent = __React.FocusEvent;
-import KeyboardEvent = __React.KeyboardEvent;
-
 interface selectorProps {
   value: string;
-  onChange: (event: FormEvent) => void;
+  onChange: (event) => void;
 }
 
 interface selectorOptionsObject {
@@ -17,19 +12,19 @@ interface selectorOptionsObject {
 
 interface buttonProps {
   disabled?: boolean;
-  onClick: (event: MouseEvent) => void;
+  onClick: (event) => void;
 }
 
 interface textInputProps {
   value: string;
-  onChange: (event: FormEvent) => void;
-  onBlur: (event: FocusEvent) => void;
-  onKeyDown: (event: KeyboardEvent) => void
+  onChange: (event) => void;
+  onBlur: (event) => void;
+  onKeyDown: (event) => void
 }
 
 interface checkBoxProps {
   checked: boolean;
-  onClick: (event: MouseEvent) => void
+  onClick: (event) => void
 }
 
 interface colorPickerProps {
