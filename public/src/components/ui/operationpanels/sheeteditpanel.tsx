@@ -1,10 +1,10 @@
 import * as React from 'react';
 import * as WidgetGenerator from './widgetgenerator';
 
-import { events, componentMapManager } from '../managers';
+import { events, componentMapManager } from '../../../managers';
 
-import * as EventTags from '../constants/EventTags';
-import * as CommonConstant from '../constants/Common';
+import * as EventTags from '../../../constants/EventTags';
+import * as CommonConstant from '../../../constants/Common';
 
 const UpdateSheetBgColorPicker = WidgetGenerator.colorPickerGenerator('background color', 'onUpdateSheetBgColor');
 const UpdateLabelModeCheckBox = WidgetGenerator.checkBoxGenerator('show label', 'onUpdateSheetInfoItemMode');

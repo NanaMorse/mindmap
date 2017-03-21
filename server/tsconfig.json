@@ -10,8 +10,5 @@
   },
   "include": [
     "./src/**/*"
-  ],
-  "files": [
-    "../interface/definefiles/index.d.ts"
   ]
 }

@@ -1,11 +1,11 @@
 import * as React from 'react';
 
-import * as CommonConstant from '../constants/Common';
-import * as Distance from '../constants/Distance';
-import DefaultStyle from '../constants/DefaultStyle';
-import * as CommonFunc from '../apptools/commonfunc';
+import * as CommonConstant from '../../constants/Common';
+import * as Distance from '../../constants/Distance';
+import DefaultStyle from '../../constants/DefaultStyle';
+import * as CommonFunc from '../../apptools/commonfunc';
 
-import { TopicInfo } from '../interface';
+import { TopicInfo } from '../../interface';
 
 interface LabelProps {
   topicInfo: TopicInfo
@@ -50,7 +50,7 @@ const Label = ({topicInfo, displayMode, x}: LabelProps) => {
 
     return (
       <g className="label">
-        <image {...imageProps}></image>
+        <image {...imageProps} />
       </g>
     );
   }

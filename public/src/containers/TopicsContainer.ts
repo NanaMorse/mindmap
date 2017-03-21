@@ -4,7 +4,7 @@ import * as React from 'react';
 
 import * as actions from '../actions';
 
-import Topics from '../components/Topics';
+import Topics from '../components/core/Topics';
 
 const mapStateToProps = (state) => {
   return state.topics;

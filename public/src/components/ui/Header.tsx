@@ -1,9 +1,7 @@
 import * as React from 'react';
-
-import { events } from '../managers';
-import { undoMiddleware } from '../store/middlewares/undo';
-
-import {PUSH_UNDO_STACK, UNDO_OR_REDO_TRIGGERED} from '../constants/EventTags';
+import { events } from '../../managers';
+import { undoMiddleware } from '../../store/middlewares/undo';
+import { PUSH_UNDO_STACK, UNDO_OR_REDO_TRIGGERED } from '../../constants/EventTags';
 
 interface HeaderState {
   hasUndo: boolean;

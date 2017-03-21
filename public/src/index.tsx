@@ -1,51 +1,14 @@
 import 'babel-polyfill';
-import * as React from 'react';
-import { render } from 'react-dom';
-import { Provider } from 'react-redux';
-
 import './apptools/KeyBind';
+import SocketHandler from './socketHandler'
+import { renderUIComponent } from './components/ui'
+import { renderCoreComponent } from './components/core'
 
-import Header from './components/Header';
+// init socket handle with callback
+new SocketHandler((store) => {
+  // render core component after store data init
+  renderCoreComponent(store);
 
-import SheetContainer from './containers/SheetContainer';
-
-import SheetEditPanel from './operationpanels/sheeteditpanel';
-import TopicEditPanel from './operationpanels/topiceditpanel';
-
-import { initStoreWithData, getStore } from './store';
-
-const ws = new WebSocket('ws://localhost:3000');
-
-ws.onmessage = function (msg) {
-  const parsedData = JSON.parse(msg.data);
-  
-  switch (parsedData.type) {
-    case 'getStoreData': {
-      return renderApp(initStoreWithData(ws, JSON.parse(parsedData.data)));
-    }
-      
-    case 'receiveBroadcastAction': {
-      return getStore().dispatch(JSON.parse(parsedData.data));
-    }
-  }
-};
-
-ws.onclose = function () {
-  console.log('lost connection!');
-};
-
-const renderApp = (store) => {
-  render(
-    <Provider store = { store }>
-      <SheetContainer />
-    </Provider>,
-    document.getElementById('sheet-container')
-  );
-
-  render(<Header />, document.getElementById('header-container'));
-
-  render(<div>
-    <TopicEditPanel />
-    <SheetEditPanel />
-  </div>, document.getElementById('operation-panel-container'));
-};
+  // render ui component
+  renderUIComponent();
+});

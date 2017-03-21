@@ -1,24 +1,24 @@
 import * as React from 'react';
 const Draggable = require('react-draggable');
 
-import {events, selectionsManager, pasteInfoManager, componentMapManager} from '../managers';
+import {events, selectionsManager, pasteInfoManager, componentMapManager} from '../../managers';
 
-import * as AddOn from '../apptools/addon';
-import * as CommonFunc from '../apptools/commonfunc';
+import * as AddOn from '../../apptools/addon';
+import * as CommonFunc from '../../apptools/commonfunc';
 
 import Label from './Label';
 
-import * as CommonConstant from '../constants/Common';
-import * as Distance from '../constants/Distance';
-import * as EventTags from '../constants/EventTags';
-import DefaultStyle from '../constants/DefaultStyle';
+import * as CommonConstant from '../../constants/Common';
+import * as Distance from '../../constants/Distance';
+import * as EventTags from '../../constants/EventTags';
+import DefaultStyle from '../../constants/DefaultStyle';
 
-import CalcTopicShape from '../calcpath/topicshape';
-import CalcConnectLine from '../calcpath/connectline';
+import CalcTopicShape from '../../calcpath/topicshape';
+import CalcConnectLine from '../../calcpath/connectline';
 
-import layoutTopics from '../layout';
+import layoutTopics from '../../layout';
 
-import { TopicInfo, TopicDispatchMethods } from '../interface';
+import { TopicInfo, TopicDispatchMethods } from '../../interface';
 
 // Topic Shape
 interface TopicShapeProps {

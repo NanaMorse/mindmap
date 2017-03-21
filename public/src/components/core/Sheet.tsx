@@ -1,12 +1,13 @@
 import * as React from 'react';
 
-import TopicsContainer from '../containers/TopicsContainer';
+import TopicsContainer from '../../containers/TopicsContainer';
 
-import { componentMapManager, selectionsManager } from '../managers';
+import { componentMapManager, selectionsManager } from '../../managers';
 
-import { dragSelectReceiver } from '../apptools/addon';
+import { dragSelectReceiver } from '../../apptools/addon';
 
-import { SheetDispatchMethods } from '../interface';
+import { SheetDispatchMethods } from '../../interface';
+
 
 interface SheetProps {
   bgColor: string

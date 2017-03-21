@@ -1,6 +1,4 @@
-import * as React from 'react';
-
-import Sheet from '../components/Sheet';
+import Sheet from '../components/core/Sheet';
 
 import { connect } from 'react-redux';
 

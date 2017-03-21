@@ -10,7 +10,10 @@
     "types": ["node"]
   },
   "files": [
-    "../interface/definefiles/index.d.ts"
+    "./src/interface/definefiles/index.d.ts"
+  ],
+  "include": [
+    "./src/**/*"
   ],
   "exclude": [
     "./dist/*/**"

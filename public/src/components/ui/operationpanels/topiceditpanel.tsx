@@ -1,11 +1,11 @@
 import * as React from 'react';
 
-import {events, selectionsManager} from '../managers';
+import {events, selectionsManager} from '../../../managers';
 
 import * as WidgetGenerator from './widgetgenerator';
 
-import * as EventTags from '../constants/EventTags';
-import * as CommonConstant from '../constants/Common';
+import * as EventTags from '../../../constants/EventTags';
+import * as CommonConstant from '../../../constants/Common';
 
 const AddChildTopicButton = WidgetGenerator.buttonGenerator('Add Child Topic', 'onAddChildTopic');
 
