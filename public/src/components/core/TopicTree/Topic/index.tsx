@@ -1,122 +1,23 @@
 import * as React from 'react';
-const Draggable = require('react-draggable');
+import TopicShape from './Shape';
+import TopicFill from './Fill';
+import TopicSelectBox from './SelectBox';
+import ConnectLine from './ConnectLine';
+import TopicTitle from './Title';
+import Label from '../InfoItem/Label';
 
-import {events, selectionsManager, pasteInfoManager, componentMapManager} from '../../managers';
+import CalcTopicShape from '../../../../calcpath/topicshape';
+import {events, selectionsManager, pasteInfoManager, componentMapManager} from '../../../../managers';
+import * as AddOn from '../../../../apptools/addon';
+import * as EventTags from '../../../../constants/EventTags';
+import * as CommonConstant from '../../../../constants/Common';
+import * as CommonFunc from '../../../../apptools/commonfunc';
 
-import * as AddOn from '../../apptools/addon';
-import * as CommonFunc from '../../apptools/commonfunc';
+import { TopicInfo } from '../../../../interface';
 
-import Label from './Label';
+// todo props and state interface
 
-import * as CommonConstant from '../../constants/Common';
-import * as Distance from '../../constants/Distance';
-import * as EventTags from '../../constants/EventTags';
-import DefaultStyle from '../../constants/DefaultStyle';
-
-import CalcTopicShape from '../../calcpath/topicshape';
-import CalcConnectLine from '../../calcpath/connectline';
-
-import layoutTopics from '../../layout';
-
-import { TopicInfo, TopicDispatchMethods } from '../../interface';
-
-// Topic Shape
-interface TopicShapeProps {
-  d: string;
-  strokeWidth: string;
-  strokeColor: string;
-}
-const TopicShape = ({d, strokeWidth, strokeColor}: TopicShapeProps) => {
-  return <path className="topic-shape" d={ d } stroke={strokeColor} strokeWidth={strokeWidth} />;
-};
-
-// Topic Fill
-interface TopicFillProps {
-  d: string;
-  fillColor: string
-}
-const TopicFill = ({d, fillColor}: TopicFillProps) => {
-  return <path className="topic-fill" d={ d } fill={ fillColor } stroke="none" />;
-};
-
-// Topic Select Box
-interface TopicSelectBoxProps {
-  d: string;
-  selected: boolean;
-  hovered: boolean;
-}
-const TopicSelectBox = ({d, selected, hovered}: TopicSelectBoxProps) => {
-  const style = {
-    visibility: selected || hovered ? 'visible' : 'hidden'
-  };
-
-  const hoveredStroke = 'rgb(199, 217, 231)';
-  const selectedStroke = 'rgb(75, 111, 189)';
-
-  return <path d={ d } className="topic-select-box" fill="none" stroke={selected ? selectedStroke : hoveredStroke} strokeWidth="3" style={ style } />;
-};
-
-// Topic Title
-interface TopicTitleProps {
-  title: string
-  fontSize: string
-  fontColor: string
-  isFontBold: boolean
-  isFontItalic: boolean
-  isFontLineThrough: boolean
-  x: number
-}
-
-class TopicTitle extends React.Component<TopicTitleProps, void> {
-  render() {
-
-    const {title, fontSize, fontColor, isFontBold, isFontItalic, isFontLineThrough, x} = this.props;
-
-    const style: any = {
-      fontSize: fontSize,
-      fill: fontColor
-    };
-
-    if (isFontBold) style.fontWeight = 700;
-    if (isFontItalic) style.fontStyle = 'italic';
-    if (isFontLineThrough) style.textDecoration = 'line-through';
-
-    return <text ref='title' style={ style } x={x}>{ title }</text>;
-  }
-}
-
-// Connect line
-const ConnectLine = ({topicInfo}) => {
-  const {lineClass, lineWidth, lineColor} = topicInfo.style;
-  const path = CalcConnectLine[lineClass](topicInfo);
-
-  return <path className="connect-line" d={path} stroke={lineColor} strokeWidth={lineWidth} fill="none" />
-};
-
-
-interface InfoItem {
-  label: 'card' | 'icon'
-}
-
-interface TopicProps extends TopicDispatchMethods {
-  id: string
-
-  parentId?: string
-
-  index: number
-
-  topicInfo: TopicInfo
-
-  infoItem: InfoItem
-}
-
-
-interface TopicState {
-  selected?: boolean;
-  hovered?: boolean;
-}
-
-class Topic extends React.Component<TopicProps, TopicState> {
+class Topic extends React.Component<any, any> {
 
   refs: any;
 
@@ -168,9 +69,9 @@ class Topic extends React.Component<TopicProps, TopicState> {
       hovered: this.state.hovered
     };
 
-    const needConnectLine = 
-      style.lineClass !== CommonConstant.LINE_NONE && 
-      style.lineWidth !== CommonConstant.LINE_WIDTH_NONE && 
+    const needConnectLine =
+      style.lineClass !== CommonConstant.LINE_NONE &&
+      style.lineWidth !== CommonConstant.LINE_WIDTH_NONE &&
       topicInfo.children && topicInfo.children.length;
     const needShape = style.strokeWidth !== CommonConstant.STROKE_WIDTH_NONE;
 
@@ -187,13 +88,13 @@ class Topic extends React.Component<TopicProps, TopicState> {
       </g>
     );
   }
-  
+
   renderInnerItem() {
 
     let innerGroupWidth = 0;
 
     const topicInfo = this.props.topicInfo;
-    
+
     const style = topicInfo.style;
     const title = topicInfo.title == null ? 'Topic' : topicInfo.title;
 
@@ -212,9 +113,9 @@ class Topic extends React.Component<TopicProps, TopicState> {
     const needLabel = topicInfo.label;
     const isLabelIcon = this.props.infoItem.label === CommonConstant.INFO_ITEM_ICON_MODE;
     const doRenderIconLabel = needLabel && isLabelIcon;
-    
+
     let labelX: number;
-    
+
     if (doRenderIconLabel) {
       innerGroupWidth += 5 + topicInfo.labelBoxSize.width;
       labelX = topicInfo.titleAreaSize.width - innerGroupWidth / 2 + 5;
@@ -226,15 +127,15 @@ class Topic extends React.Component<TopicProps, TopicState> {
         {doRenderIconLabel ? <Label topicInfo={topicInfo} displayMode={this.props.infoItem.label} x={labelX}/> : null}
       </g>
     );
-    
+
   }
-  
+
   renderCardItem() {
     const topicInfo = this.props.topicInfo;
     const needLabel = topicInfo.label;
     const isLabelCard = this.props.infoItem.label === CommonConstant.INFO_ITEM_CARD_MODE;
     const doRenderCardLabel = needLabel && isLabelCard;
-    
+
     return (
       <g className="card-item-group">
         {doRenderCardLabel ? <Label topicInfo={topicInfo} displayMode={this.props.infoItem.label}/> : null}
@@ -454,144 +355,4 @@ class Topic extends React.Component<TopicProps, TopicState> {
   }
 }
 
-interface TopicsProps {
-  infoItem: InfoItem
-  dispatchMethod: TopicDispatchMethods
-}
-
-class Topics extends React.Component<TopicsProps, void> {
-
-  render() {
-    // calculate layout position first
-    const topicsExtend = this.calculateTopicsExtendInfo();
-    
-    const topicsArray = [];
-
-    const createTopic = topicInfo => {
-
-      const id = topicInfo.id;
-
-      const topicProps = {
-        key: id,
-        id: id,
-        parentId: topicInfo.parentId,
-        index: topicInfo.index,
-        topicInfo: topicInfo,
-        infoItem: this.props.infoItem
-      };
-      
-      return <Topic {...this.props.dispatchMethod} {...topicProps} ></Topic>;
-    };
-
-    const setTopicArrayData = (topicInfo) => {
-      topicsArray.push(createTopic(topicInfo));
-      topicInfo.children && topicInfo.children.forEach(childTree => setTopicArrayData(childTree));
-    };
-
-    setTopicArrayData(topicsExtend);
-
-    return (
-      <Draggable handle={`.${CommonConstant.TOPIC_ROOT}`} onMouseDown={e => e.stopPropagation()}>
-        <g><g className="topics-group">{ topicsArray }</g></g>
-      </Draggable>
-    );
-  }
-
-  // calculate topics info, include boxSize and topic type
-  calculateTopicsExtendInfo () {
-    const infoItemSettings: InfoItem = this.props.infoItem;
-
-    const topicsCopy = CommonFunc.deepClone(this.props);
-
-    _calculate(topicsCopy);
-
-    // get bounds and position
-    layoutTopics(topicsCopy);
-
-    return topicsCopy;
-
-    function _calculate(topicTree: TopicInfo) {
-      const copyAsOrigin = CommonFunc.deepClone(topicTree);
-
-      // get Topic type
-      let topicType;
-
-      const parent: TopicInfo = findTopicParent(topicTree);
-
-      if (parent == null) topicType = CommonConstant.TOPIC_ROOT;
-
-      else if (findTopicParent(parent) == null) topicType = CommonConstant.TOPIC_MAIN;
-
-      else topicType = CommonConstant.TOPIC_SUB;
-
-      topicTree.type = topicType;
-
-      topicTree.originTopicInfo = copyAsOrigin;
-
-      topicTree.parentId = parent ? parent.id : null;
-
-      topicTree.index = parent ? parent.children.indexOf(topicTree) : 0;
-
-      // mix topic style
-      topicTree.style = (Object as any).assign({}, DefaultStyle[topicType], topicTree.style || {});
-
-      // get boxSize
-      const fontSize = topicTree.style.fontSize;
-
-      const titleAreaSize = CommonFunc.getTextSize(topicTree.title || 'Topic', fontSize);
-      topicTree.titleAreaSize = titleAreaSize;
-
-      const boxSize = {width: 0, height: 0};
-      const {paddingLeft, paddingTop} = Distance.TopicPaddingOverride[topicType][topicTree.style.shapeClass];
-      const fontSizeNumber = parseInt(fontSize);
-      const strokeWidthNumber = topicTree.style.strokeWidth === CommonConstant.STROKE_WIDTH_NONE ? 0 : parseInt(topicTree.style.strokeWidth);
-      boxSize.width = titleAreaSize.width + fontSizeNumber * paddingLeft * 2 + strokeWidthNumber;
-      boxSize.height = titleAreaSize.height + fontSizeNumber * paddingTop * 2 + strokeWidthNumber;
-
-      // if has label
-      if (topicTree.label) {
-        
-        interface labelBoxSize { width: number, height: number, mode: string }
-        
-        let labelBoxSize: labelBoxSize;
-
-        if (infoItemSettings.label === CommonConstant.INFO_ITEM_CARD_MODE) {
-          const {width: labelTextWidth, height: labelTextHeight} = CommonFunc.getTextSize(topicTree.label, DefaultStyle.label.fontSize);
-
-          const labelPadding = Distance.LabelPadding;
-          const labelWidth = labelPadding.paddingLeft + labelTextWidth + labelPadding.paddingRight;
-          const labelHeight = labelPadding.paddingTop + labelTextHeight + labelPadding.paddingBottom;
-
-          labelBoxSize = {width: labelWidth, height: labelHeight, mode: infoItemSettings.label};
-        } else {
-          labelBoxSize = {width: 20, height: 20, mode: infoItemSettings.label};
-          boxSize.width += labelBoxSize.width;
-        }
-        
-        topicTree.labelBoxSize = labelBoxSize;
-      }
-
-      topicTree.boxSize = boxSize;
-
-      topicTree.children && topicTree.children.forEach(childTree => _calculate(childTree));
-
-    }
-
-    function findTopicParent (topicTree, treeToCheck = topicsCopy)  {
-      if (topicTree === treeToCheck) return;
-
-      const children = treeToCheck.children;
-      if (children) {
-        for (const childTreeToCheck of children) {
-          if (topicTree === childTreeToCheck) return treeToCheck;
-
-          const parentResult = findTopicParent(topicTree, childTreeToCheck);
-          if (parentResult) return parentResult;
-        }
-      }
-    }
-  }
-}
-
-
-export default Topics;
+export default Topic;

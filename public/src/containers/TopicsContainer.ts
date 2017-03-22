@@ -1,10 +1,8 @@
 import { connect } from 'react-redux';
 
-import * as React from 'react';
-
 import * as actions from '../actions';
 
-import Topics from '../components/core/Topics';
+import TopicTree from '../components/core/TopicTree';
 
 const mapStateToProps = (state) => {
   return state.topics;
@@ -85,6 +83,6 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 
-const TopicsContainer = connect(mapStateToProps, mapDispatchToProps)(Topics);
+const TopicsContainer = connect(mapStateToProps, mapDispatchToProps)(TopicTree);
 
 export default TopicsContainer;
