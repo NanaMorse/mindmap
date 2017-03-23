@@ -1,21 +1,25 @@
 {
   "compilerOptions": {
-    "outDir": "./public/dist/",
+    "baseUrl": ".",
+    "outDir": "./dist/",
     "sourceMap": true,
     "noImplicitAny": false,
     "watch": true,
     "module": "commonjs",
     "target": "es6",
     "jsx": "react",
-    "types": ["node"]
+    "types": ["node"],
+    "paths": {
+      "src/*": ["./src/*"]
+    }
   },
   "files": [
-    "./src/interface/definefiles/index.d.ts"
+    "src/interface/definefiles/index.d.ts"
   ],
   "include": [
-    "./src/**/*"
+    "src"
   ],
   "exclude": [
-    "./dist/*/**"
+    "dist"
   ]
 }

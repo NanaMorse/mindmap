@@ -6,14 +6,14 @@ import ConnectLine from './ConnectLine';
 import TopicTitle from './Title';
 import Label from '../InfoItem/Label';
 
-import CalcTopicShape from '../../../../calcpath/topicshape';
-import {events, selectionsManager, pasteInfoManager, componentMapManager} from '../../../../managers';
-import * as AddOn from '../../../../apptools/addon';
-import * as EventTags from '../../../../constants/EventTags';
-import * as CommonConstant from '../../../../constants/Common';
-import * as CommonFunc from '../../../../apptools/commonfunc';
+import CalcTopicShape from 'src/calcpath/topicshape';
+import {events, selectionsManager, pasteInfoManager, componentMapManager} from 'src/managers';
+import * as AddOn from 'src/apptools/addon';
+import * as EventTags from 'src/constants/EventTags';
+import * as CommonConstant from 'src/constants/Common';
+import * as CommonFunc from 'src/apptools/commonfunc';
 
-import { TopicInfo } from '../../../../interface';
+import { TopicInfo } from 'src/interface';
 
 // todo props and state interface
 

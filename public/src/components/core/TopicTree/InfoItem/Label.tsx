@@ -1,11 +1,11 @@
 import * as React from 'react';
 
-import * as CommonConstant from '../../../../constants/Common';
-import * as Distance from '../../../../constants/Distance';
-import DefaultStyle from '../../../../constants/DefaultStyle';
-import * as CommonFunc from '../../../../apptools/commonfunc';
+import * as CommonConstant from 'src/constants/Common';
+import * as Distance from 'src/constants/Distance';
+import DefaultStyle from 'src/constants/DefaultStyle';
+import * as CommonFunc from 'src/apptools/commonfunc';
 
-import { TopicInfo } from '../../../../interface';
+import { TopicInfo } from 'src/interface';
 
 interface LabelProps {
   topicInfo: TopicInfo

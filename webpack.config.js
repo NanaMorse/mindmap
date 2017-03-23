@@ -1,3 +1,5 @@
+const path = require('path');
+
 module.exports = {
   entry: './public/src/index.tsx',
   output: {
@@ -10,7 +12,11 @@ module.exports = {
 
   resolve: {
     // Add '.ts' and '.tsx' as resolvable extensions.
-    extensions: ["", ".webpack.js", ".web.js", ".ts", ".tsx", ".js"]
+    extensions: ["", ".webpack.js", ".ts", ".tsx", ".js"],
+
+    alias: {
+      src: path.join(__dirname, '/public/src')
+    },
   },
 
   module: {

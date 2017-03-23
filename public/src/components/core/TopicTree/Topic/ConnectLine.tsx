@@ -1,5 +1,5 @@
 import * as React from 'react';
-import CalcConnectLine from '../../../../calcpath/connectline';
+import CalcConnectLine from 'src/calcpath/connectline';
 
 // Connect line
 const ConnectLine = ({topicInfo}) => {

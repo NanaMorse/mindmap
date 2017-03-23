@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-import SheetContainer from '../../containers/SheetContainer';
+import SheetContainer from 'src/containers/SheetContainer';
 
 export function renderCoreComponent(store) {
   render(
