@@ -1,5 +1,5 @@
 
-namespace sheetModelNS {
+namespace modelNS {
   /** state */
   export interface state {
     /** sheet's background color */
@@ -16,7 +16,7 @@ namespace sheetModelNS {
   }
 }
 
-declare type sheetState = sheetModelNS.state
+declare type sheetState = modelNS.state
 
 declare type sheetModelType = {
   namespace: string
@@ -25,6 +25,6 @@ declare type sheetModelType = {
 
   reducers: {
     /** update sheet's background color */
-    updateSheetBackgroundColor: (state: sheetState, param: sheetModelNS.params.updateSheetBackgroundColor) => sheetState
+    updateSheetBackgroundColor: (state: sheetState, param: modelNS.params.updateSheetBackgroundColor) => sheetState
   }
 }
