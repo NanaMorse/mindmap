@@ -9,6 +9,7 @@
   "author": "morse",
   "license": "MIT",
   "dependencies": {
+    "dva": "^1.2.1",
     "koa": "^1.2.0",
     "koa-static": "^2.0.0",
     "react": "^15.3.1",

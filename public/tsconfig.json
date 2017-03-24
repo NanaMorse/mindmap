@@ -14,7 +14,7 @@
     }
   },
   "files": [
-    "src/interface/definefiles/index.d.ts"
+    "src/interface/index.ts"
   ],
   "include": [
     "src"
