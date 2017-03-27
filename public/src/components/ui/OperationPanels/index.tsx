@@ -1,5 +1,5 @@
 import * as React from 'react'
-import SheetEditPanel from './sheeteditpanel';
+import SheetEditPanel from './SheetEditPanel';
 import TopicEditPanel from './topiceditpanel';
 
 const OperatorPanels = () => {

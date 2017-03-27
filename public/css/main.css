@@ -3,7 +3,7 @@
   font-family: "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, Verdana, sans-serif;
 }
 
-body, #sheet-container {
+body, #core-container {
     width: 100vw;
     height: 100vh;
     overflow: hidden;

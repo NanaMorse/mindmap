@@ -3,7 +3,7 @@ export declare type appState = {
    * @description display mod of info item
    * */
   infoItemDisplay: {
-    [index: string]: 'card' | 'icon'
+    label: 'card' | 'icon'
   }
 }
 
@@ -37,6 +37,8 @@ export interface topicInfo {
    * @description topic's style
    * */
   style?: {
+    lineClass?: string
+
     shapeClass?: string
 
     textColor?: string
@@ -45,7 +47,19 @@ export interface topicInfo {
 
     fontSize?: string
 
+    fontColor?: string
+
     strokeWidth?: string
+
+    lineWidth?: string
+
+    strokeColor?: string
+
+    isFontBold?: boolean
+
+    isFontItalic?: boolean
+
+    isFontLineThrough?: boolean
   }
 
   /**
@@ -84,6 +98,19 @@ export interface extendTopicInfo extends topicInfo {
     width: number
     height: number
   }
+
+  /**
+   * @description the size of current topic with it's children
+   * */
+  bounds: {
+    width: number
+    height: number
+  }
+
+  /**
+   * @description the position of current topic
+   * */
+  position: [number, number]
 
   /**
    * @description parent's uuid

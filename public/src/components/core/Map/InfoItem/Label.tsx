@@ -5,10 +5,10 @@ import * as Distance from 'src/constants/Distance';
 import DefaultStyle from 'src/constants/DefaultStyle';
 import * as CommonFunc from 'src/apptools/commonfunc';
 
-import { TopicInfo } from 'src/interface';
+import { extendTopicInfo } from 'src/interface';
 
 interface LabelProps {
-  topicInfo: TopicInfo
+  topicInfo: extendTopicInfo
   displayMode: 'card' | 'icon'
   x?: number
 }

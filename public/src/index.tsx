@@ -1,16 +1,13 @@
 import 'babel-polyfill';
 import './apptools/KeyBind';
-import SocketHandler from './socketHandler'
-import { renderUIComponent } from './components/ui'
-
 import * as React from 'react';
 import dva from 'dva'
 import { Router, Route } from 'dva/router';
+import SocketHandler from './socketHandler'
 import mapModel from './models/map'
 import sheetModel from './models/sheet'
 import appModel from './models/app'
-
-import CoreComponent from './components/core'
+import AppComponent from './components'
 
 // init socket handle with callback
 new SocketHandler((storeData) => {
@@ -27,12 +24,10 @@ new SocketHandler((storeData) => {
   app.router(({ history }) => {
     return (
       <Router history={history}>
-        <Route path="/" component={CoreComponent} />
+        <Route path="/" component={AppComponent} />
       </Router>
     );
   });
 
-  app.start('#sheet-container');
-
-  // renderUIComponent()
+  app.start('#app');
 });
