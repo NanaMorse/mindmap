@@ -1,3 +1,112 @@
+export declare type appState = {
+  /**
+   * @description display mod of info item
+   * */
+  infoItemDisplay: {
+    [index: string]: 'card' | 'icon'
+  }
+}
+
+export declare type sheetState = {
+  backgroundColor: string
+}
+
+export declare type mapState = topicInfo
+
+/**
+ * @description interface of topic tree info, it's also the map info in store data
+ * */
+export interface topicInfo {
+  /**
+   * @description topic's uuid
+   * */
+  id: string
+
+  /**
+   * @description topic's title
+   * @default "TOPIC"
+   * */
+  title?: string
+
+  /**
+   * @description label's text
+   * */
+  label?: string
+
+  /**
+   * @description topic's style
+   * */
+  style?: {
+    shapeClass?: string
+
+    textColor?: string
+
+    fillColor?: string
+
+    fontSize?: string
+
+    strokeWidth?: string
+  }
+
+  /**
+   * @description the collection of child topic
+   * */
+  children?: Array<topicInfo>
+}
+
+/**
+ * @description interface of extended topic tree info, only exists in running time. extended in src/components/core/Map/index.tsx
+ * */
+export interface extendTopicInfo extends topicInfo {
+
+  /**
+   * @description the index of current topic in parent's children collection
+   * */
+  index: number
+
+  /**
+   * @description the size of topic's title
+   * */
+  titleAreaSize: {
+    width: number
+    height: number
+  }
+
+  /**
+   * @description the size of topic self's svg box
+   * */
+  boxSize: {
+    width: number
+    height: number
+  }
+
+  labelBoxSize: {
+    width: number
+    height: number
+  }
+
+  /**
+   * @description parent's uuid
+   * */
+  parentId: string
+
+  /**
+   * @description topic's type
+   * */
+  type: string
+
+  /**
+   * @description a copy of origin topic info
+   * */
+  originTopicInfo: topicInfo
+
+  /**
+   * @description the collection of child topic
+   * */
+  children?: Array<extendTopicInfo>
+}
+
+
 export interface SheetDispatchMethods {
   updateSheetBgColor: Function
   updateSheetInfoItemMode: Function

@@ -1,26 +1,18 @@
 import * as React from 'react';
-import TopicsContainer from 'src/containers/TopicsContainer';
+import { connect } from 'dva'
 import { componentMapManager, selectionsManager } from 'src/managers';
 import { dragSelectReceiver } from 'src/apptools/addon';
-import { SheetDispatchMethods } from 'src/interface';
+import { sheetState } from 'src/interface'
 
 interface SheetProps {
-  bgColor: string
-  settings: {
-    infoItem: {}
-  }
-  dispatchMethod: SheetDispatchMethods
+  sheet: sheetState
 }
 
-class Sheet extends React.Component<SheetProps, void> {
+class Sheet extends React.Component<SheetProps, any> {
 
   topicsContainer: HTMLElement;
 
   editReceiver: HTMLElement;
-
-  onClick() {
-    //selectionsManager.clearSelection();
-  }
 
   onWheel(e) {
     e.preventDefault();
@@ -37,7 +29,7 @@ class Sheet extends React.Component<SheetProps, void> {
   moveTopicsContainer(deltaX, deltaY) {
     if (deltaX === 0 && deltaY === 0) return false;
 
-    const {topicsContainer} = this;
+    const { topicsContainer } = this;
     const transformAttr = topicsContainer.getAttribute('transform');
     const execResult = /translate\(\s*([^\s,)]+)[ ,]([^\s,)]+)/.exec(transformAttr);
     const [preX, preY] = execResult ? [Number(execResult[1]), Number(execResult[2])] : [0, 0];
@@ -49,21 +41,13 @@ class Sheet extends React.Component<SheetProps, void> {
   moveEditReceiver(deltaX, deltaY) {
     if (deltaX === 0 && deltaY === 0) return false;
 
-    const {editReceiver} = this;
+    const { editReceiver } = this;
 
     if (Number(editReceiver.style.zIndex) < 0) return false;
 
-    const {left: preLeft, top: preTop} = editReceiver.style;
+    const { left: preLeft, top: preTop } = editReceiver.style;
     editReceiver.style.left = parseInt(preLeft) - deltaX + 'px';
     editReceiver.style.top = parseInt(preTop) - deltaY + 'px';
-  }
-
-  onUpdateSheetBgColor(bgColor) {
-    this.props.dispatchMethod.updateSheetBgColor(bgColor);
-  }
-
-  onUpdateSheetInfoItemMode(infoItem, mode) {
-    this.props.dispatchMethod.updateSheetInfoItemMode(infoItem, mode);
   }
 
   componentDidMount() {
@@ -76,25 +60,21 @@ class Sheet extends React.Component<SheetProps, void> {
   render() {
     const sheetProps = {
       id: 'sheet',
-      style: {
-        backgroundColor: this.props.bgColor
-      }
-    };
-
-    const sheetEvents = {
-      onClick: () => this.onClick(),
+      style: { backgroundColor: this.props.sheet.backgroundColor },
       onWheel: (e) => this.onWheel(e),
       onMouseDown: (e) => this.onMouseDown(e)
     };
-    
-    const topicSettings = {
-      infoItem: this.props.settings.infoItem
-    };
 
-    return <svg { ...sheetProps } { ...sheetEvents } >
-      <TopicsContainer {...topicSettings}/>
-    </svg>;
+    return (
+      <svg {...sheetProps}>
+        { this.props.children }
+      </svg>
+    );
   }
 }
 
-export default Sheet;
+const mapStateToProps = ({ sheet }) => {
+  return { sheet };
+};
+
+export default connect(mapStateToProps)(Sheet);

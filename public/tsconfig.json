@@ -13,13 +13,11 @@
       "src/*": ["./src/*"]
     }
   },
-  "files": [
-    "src/interface/index.ts"
-  ],
   "include": [
     "src"
   ],
   "exclude": [
-    "dist"
+    "dist",
+    "../node_modules"
   ]
 }

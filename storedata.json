@@ -1,13 +1,13 @@
 {
-  "sheet": {
-    "bgColor": "#ffffff",
-    "settings": {
-      "infoItem": {
-        "label": "icon"
-      }
+  "app": {
+    "infoItemDisplay": {
+      "label": "icon"
     }
   },
-  "topics": {
+  "sheet": {
+    "backgroundColor": "#ffffff"
+  },
+  "map": {
     "id": "300af847dec8435975135bc737",
     "title": "Hello",
     "style": {

@@ -1,10 +1,9 @@
-const sheetModel: sheetModelType = {
+import { sheetState } from 'src/interface'
+
+const sheetModel = {
   namespace: 'sheet',
 
-  state: {
-    /**
-     * @description background color of sheet
-     * */
+  state: <sheetState>{
     backgroundColor: ''
   },
 
@@ -12,8 +11,7 @@ const sheetModel: sheetModelType = {
     /**
      * @description update sheet's background color
      * */
-    updateSheetBackgroundColor(state, { payload }) {
-      const { backgroundColor } = payload;
+    updateSheetBackgroundColor(state: sheetState, backgroundColor: string): sheetState {
       return { ...state, backgroundColor }
     }
   }

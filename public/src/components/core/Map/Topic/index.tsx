@@ -111,7 +111,8 @@ class Topic extends React.Component<any, any> {
     innerGroupWidth += this.props.topicInfo.titleAreaSize.width;
 
     const needLabel = topicInfo.label;
-    const isLabelIcon = this.props.infoItem.label === CommonConstant.INFO_ITEM_ICON_MODE;
+    // const isLabelIcon = this.props.infoItem.label === CommonConstant.INFO_ITEM_ICON_MODE;
+    const isLabelIcon = false;
     const doRenderIconLabel = needLabel && isLabelIcon;
 
     let labelX: number;
@@ -133,12 +134,13 @@ class Topic extends React.Component<any, any> {
   renderCardItem() {
     const topicInfo = this.props.topicInfo;
     const needLabel = topicInfo.label;
-    const isLabelCard = this.props.infoItem.label === CommonConstant.INFO_ITEM_CARD_MODE;
+    // const isLabelCard = this.props.infoItem.label === CommonConstant.INFO_ITEM_CARD_MODE;
+    const isLabelCard = true;
     const doRenderCardLabel = needLabel && isLabelCard;
 
     return (
       <g className="card-item-group">
-        {doRenderCardLabel ? <Label topicInfo={topicInfo} displayMode={this.props.infoItem.label}/> : null}
+        {doRenderCardLabel ? <Label topicInfo={topicInfo} displayMode={'card'}/> : null}
       </g>
     );
   }

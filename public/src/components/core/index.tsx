@@ -1,13 +1,5 @@
 import * as React from 'react';
-import { render } from 'react-dom';
-import { Provider } from 'react-redux';
-import SheetContainer from 'src/containers/SheetContainer';
+import Sheet from './Sheet';
+import Map from './Map'
 
-export function renderCoreComponent(store) {
-  render(
-    <Provider store = { store }>
-      <SheetContainer />
-    </Provider>,
-    document.getElementById('sheet-container')
-  );
-}
+export default () => <Sheet><Map/></Sheet>
