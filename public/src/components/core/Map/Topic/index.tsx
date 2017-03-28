@@ -14,15 +14,21 @@ import * as EventTags from 'src/constants/EventTags';
 import * as CommonConstant from 'src/constants/Common';
 import * as CommonFunc from 'src/apptools/commonfunc';
 
-import { extendTopicInfo, appState } from 'src/interface';
+import { extendTopicInfo, topicInfo, appState } from 'src/interface';
 
 // todo props and state interface
 interface TopicProps {
   app: appState
+  targetTree: topicInfo
   topicInfo: extendTopicInfo
+  dispatch: Function
 }
 
-class Topic extends React.Component<TopicProps, any> {
+interface TopicState {
+  hovered: boolean
+}
+
+class Topic extends React.Component<TopicProps, TopicState> {
 
   refs: any;
 
@@ -30,10 +36,12 @@ class Topic extends React.Component<TopicProps, any> {
     super();
 
     this.state = {
-      selected: false,
       hovered: false
     };
+  }
 
+  static defaultProps = {
+    targetTree: {}
   }
 
   componentWillMount() {
@@ -45,7 +53,7 @@ class Topic extends React.Component<TopicProps, any> {
     selectionsManager.removeSelection(this);
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(nextProps: TopicProps, nextState) {
     const stringify = JSON.stringify.bind(JSON);
 
     // check state
@@ -56,12 +64,13 @@ class Topic extends React.Component<TopicProps, any> {
     const topicInfo = this.props.topicInfo;
     const nextTopicInfo = nextProps.topicInfo;
 
+    const targetTreeHasChanged = (this.props.targetTree || {} as any).id !== (nextProps.targetTree || {} as any).id;
     const styleHasChanged = stringify(topicInfo.style) !== stringify(nextTopicInfo.style);
     const boundsHasChanged = stringify(topicInfo.bounds) !== stringify(nextTopicInfo.bounds);
     const positionHasChanged = stringify(topicInfo.position) !== stringify(nextTopicInfo.position);
     const titleHasChanged = topicInfo.title !== nextTopicInfo.title;
 
-    const selfPropsHasChanged = styleHasChanged || boundsHasChanged || positionHasChanged || titleHasChanged;
+    const selfPropsHasChanged = styleHasChanged || boundsHasChanged || positionHasChanged || titleHasChanged || targetTreeHasChanged;
     if (selfPropsHasChanged) return true;
 
 
@@ -79,6 +88,14 @@ class Topic extends React.Component<TopicProps, any> {
     return childShapeClassHasChanged;
   }
 
+  /**
+   * @description check is this topic selected
+   */
+  isThisTopicSelected(): boolean {
+    const { topicInfo, targetTree } = this.props;
+    return targetTree && (topicInfo.id === targetTree.id);
+  }
+
   getTopicShapePath() {
     const topicInfo = this.props.topicInfo;
     return CalcTopicShape[topicInfo.style.shapeClass](topicInfo.boxSize);
@@ -87,22 +104,23 @@ class Topic extends React.Component<TopicProps, any> {
   // userAgent events
   onTopicClick(e) {
     e.stopPropagation();
-
-    if (this.state.selected === false) {
+    if (!this.isThisTopicSelected()) {
       (e.ctrlKey || e.metaKey) ? selectionsManager.addSelection(this)
         : selectionsManager.selectSingle(this);
       this.onSelected();
     }
-
   }
 
   onTopicDoubleClick() {
     AddOn.editReceiver.show(this);
   }
 
+  /**
+   * @description triggered when topic mouse enter, the topic should display hovered style
+   */
   onTopicMouseEnter() {
     // if not selected, show hovered box
-    if (!this.state.selected) {
+    if (!this.isThisTopicSelected()) {
       this.setState({hovered: true});
     }
   }
@@ -128,18 +146,24 @@ class Topic extends React.Component<TopicProps, any> {
     if (!pasteInfoManager.hasInfoStashed()) return;
   }
 
-  // lifecycle events
+  /**
+   * @description triggered when topic selected
+   * */
   onSelected() {
-    this.setState({selected: true, hovered: false});
+    // reset hovered state
+    this.setState({ hovered: false });
+    // update selected target
+    this.props.dispatch({ type: 'map/updateTargetTree', targetId: this.props.topicInfo.id });
+    // prepare edit receiver
     AddOn.editReceiver.prepare(this);
-
-    events.emit(EventTags.TOPIC_SELECTED, this.props.topicInfo);
   }
 
+  /**
+   * @description triggered when topic deselected
+   * */
   onDeselected() {
-    this.setState({selected: false});
-
-    events.emit(EventTags.TOPIC_DESELECTED);
+    // update selected target
+    this.props.dispatch({ type: 'map/updateTargetTree'});
   }
 
   onUpdateTitle(title) {
@@ -224,7 +248,7 @@ class Topic extends React.Component<TopicProps, any> {
 
   render() {
 
-    const {topicInfo} = this.props;
+    const { topicInfo } = this.props;
 
     const TopicGroupProps = {
       ref: 'TopicGroup',
@@ -256,7 +280,7 @@ class Topic extends React.Component<TopicProps, any> {
 
     const TopicSelectBoxProps = {
       d: topicSelectBoxPath,
-      selected: this.state.selected,
+      selected: this.isThisTopicSelected(),
       hovered: this.state.hovered
     };
 
@@ -281,8 +305,8 @@ class Topic extends React.Component<TopicProps, any> {
   }
 }
 
-const mapStateToProps = ({ app }) => {
-  return { app };
+const mapStateToProps = ({ app, map }) => {
+  return { app, targetTree: map.targetTree };
 };
 
 export default connect(mapStateToProps)(Topic);

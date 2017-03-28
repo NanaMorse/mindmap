@@ -1,11 +1,10 @@
 import * as React from 'react';
-
+import { connect } from 'dva';
 import {events, selectionsManager} from 'src/managers';
-
 import * as WidgetGenerator from './widgetgenerator';
-
 import * as EventTags from 'src/constants/EventTags';
 import * as CommonConstant from 'src/constants/Common';
+import { topicInfo, mapState } from 'src/interface'
 
 const AddChildTopicButton = WidgetGenerator.buttonGenerator('Add Child Topic', 'onAddChildTopic');
 
@@ -64,6 +63,10 @@ const UpdateFillColorPicker = WidgetGenerator.colorPickerGenerator('Fill Color',
 
 const UpdateLabelTextInput = WidgetGenerator.textInputGenerator('Label Text', 'onUpdateLabel');
 
+interface TopicEditPanelProps {
+  map: mapState
+}
+
 interface TopicEditPanelState {
   show?: boolean;
   isTargetRoot?: boolean;
@@ -86,7 +89,7 @@ interface TopicEditPanelState {
   labelText?: string;
 }
 
-class TopicEditPanel extends React.Component<void, TopicEditPanelState> {
+class TopicEditPanel extends React.Component<TopicEditPanelProps, TopicEditPanelState> {
   constructor() {
     super();
 
@@ -118,7 +121,7 @@ class TopicEditPanel extends React.Component<void, TopicEditPanelState> {
     const panelProps = {
       className: 'edit-panel topic-edit-panel',
       style: {
-        display: this.state.show ? 'block' : 'none'
+        display: this.props.map.targetTree ? 'block' : 'none'
       }
     };
 
@@ -279,4 +282,8 @@ class TopicEditPanel extends React.Component<void, TopicEditPanelState> {
   }
 }
 
-export default TopicEditPanel;
+const mapStateToProps = ({ map }) => {
+  return { map };
+};
+
+export default connect(mapStateToProps)(TopicEditPanel);

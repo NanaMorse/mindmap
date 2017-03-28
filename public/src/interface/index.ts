@@ -11,7 +11,10 @@ export declare type sheetState = {
   backgroundColor: string
 }
 
-export declare type mapState = topicInfo
+export declare type mapState = {
+  treeData: topicInfo
+  targetTree: topicInfo
+}
 
 /**
  * @description interface of topic tree info, it's also the map info in store data

@@ -1,15 +1,43 @@
-declare type mapState = {
+import { deepClone } from 'src/apptools/commonfunc'
+import { mapState, topicInfo } from 'src/interface'
 
+/**
+ * @param topicTreeToSearch the search area to find target topic
+ * @param targetId search target's uuid
+ * */
+function findTopicInfoById(topicTreeToSearch: topicInfo, targetId: string): topicInfo {
+  if (targetId === topicTreeToSearch.id) return topicTreeToSearch;
+
+  if (topicTreeToSearch.children) {
+    for (const childTopic of topicTreeToSearch.children) {
+      const topicInfo = findTopicInfoById(childTopic, targetId);
+      if (topicInfo) return topicInfo;
+    }
+  }
 }
 
 const mapModel = {
   namespace: 'map',
 
   state: {
-
+    treeData: {},
+    targetTree: null
   },
 
   reducers: {
+    /**
+     * @description update current selected topic info
+     * @param targetId selected topic's id
+     */
+    updateTargetTree(state: mapState, { targetId }: { targetId: string }) {
+      const treeDataCopy = deepClone(state.treeData);
+      let targetTree;
+      // if targetId is null, clear selected topic info
+      if (!targetId) targetTree = null;
+      else targetTree = findTopicInfoById(treeDataCopy, targetId);
+      return { ...state, targetTree };
+    },
+
     updateTopicTitle(state: mapState, title: string) {
       return state
     },

@@ -6,6 +6,7 @@ import { sheetState } from 'src/interface'
 
 interface SheetProps {
   sheet: sheetState
+  dispatch: Function
 }
 
 class Sheet extends React.Component<SheetProps, any> {
@@ -21,7 +22,8 @@ class Sheet extends React.Component<SheetProps, any> {
   }
 
   onMouseDown(e) {
-    selectionsManager.clearSelection();
+    // clear target topic list
+    this.props.dispatch({ type: 'map/updateTargetTree' });
     dragSelectReceiver.dragStart(e);
   }
 
