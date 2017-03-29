@@ -8,7 +8,7 @@ import TopicTitle from './Title';
 import Label from '../InfoItem/Label';
 
 import CalcTopicShape from 'src/calcpath/topicshape';
-import {events, selectionsManager, pasteInfoManager, componentMapManager} from 'src/managers';
+import { events, pasteInfoManager, componentMapManager } from 'src/managers';
 import * as AddOn from 'src/apptools/addon';
 import * as EventTags from 'src/constants/EventTags';
 import * as CommonConstant from 'src/constants/Common';
@@ -19,7 +19,7 @@ import { extendTopicInfo, topicInfo, appState } from 'src/interface';
 // todo props and state interface
 interface TopicProps {
   app: appState
-  targetTree: topicInfo
+  selectionList: Array<topicInfo>
   topicInfo: extendTopicInfo
   dispatch: Function
 }
@@ -41,7 +41,7 @@ class Topic extends React.Component<TopicProps, TopicState> {
   }
 
   static defaultProps = {
-    targetTree: {}
+    selectionList: []
   }
 
   componentWillMount() {
@@ -50,50 +50,51 @@ class Topic extends React.Component<TopicProps, TopicState> {
 
   componentWillUnmount() {
     componentMapManager.removeComponent(this.props.topicInfo.id);
-    selectionsManager.removeSelection(this);
   }
 
+  // todo 
   shouldComponentUpdate(nextProps: TopicProps, nextState) {
-    const stringify = JSON.stringify.bind(JSON);
+    // const stringify = JSON.stringify.bind(JSON);
 
-    // check state
-    const stateHasChanged = stringify(this.state) !== stringify(nextState);
-    if (stateHasChanged) return true;
+    // // check state
+    // const stateHasChanged = stringify(this.state) !== stringify(nextState);
+    // if (stateHasChanged) return true;
 
-    // check self's props
-    const topicInfo = this.props.topicInfo;
-    const nextTopicInfo = nextProps.topicInfo;
+    // // check self's props
+    // const topicInfo = this.props.topicInfo;
+    // const nextTopicInfo = nextProps.topicInfo;
 
-    const targetTreeHasChanged = (this.props.targetTree || {} as any).id !== (nextProps.targetTree || {} as any).id;
-    const styleHasChanged = stringify(topicInfo.style) !== stringify(nextTopicInfo.style);
-    const boundsHasChanged = stringify(topicInfo.bounds) !== stringify(nextTopicInfo.bounds);
-    const positionHasChanged = stringify(topicInfo.position) !== stringify(nextTopicInfo.position);
-    const titleHasChanged = topicInfo.title !== nextTopicInfo.title;
+    // const targetTreeHasChanged = (this.props.targetTree || {} as any).id !== (nextProps.targetTree || {} as any).id;
+    // const styleHasChanged = stringify(topicInfo.style) !== stringify(nextTopicInfo.style);
+    // const boundsHasChanged = stringify(topicInfo.bounds) !== stringify(nextTopicInfo.bounds);
+    // const positionHasChanged = stringify(topicInfo.position) !== stringify(nextTopicInfo.position);
+    // const titleHasChanged = topicInfo.title !== nextTopicInfo.title;
 
-    const selfPropsHasChanged = styleHasChanged || boundsHasChanged || positionHasChanged || titleHasChanged || targetTreeHasChanged;
-    if (selfPropsHasChanged) return true;
+    // const selfPropsHasChanged = styleHasChanged || boundsHasChanged || positionHasChanged || titleHasChanged || targetTreeHasChanged;
+    // if (selfPropsHasChanged) return true;
 
 
-    // check child structure props
-    const children = topicInfo.children;
-    const nextChildren = nextTopicInfo.children;
+    // // check child structure props
+    // const children = topicInfo.children;
+    // const nextChildren = nextTopicInfo.children;
 
-    let childShapeClassHasChanged = false;
-    if (children && nextChildren) {
-      childShapeClassHasChanged = children.some((childInfo, index) => {
-        return childInfo.style.shapeClass !== nextChildren[index].style.shapeClass;
-      });
-    }
+    // let childShapeClassHasChanged = false;
+    // if (children && nextChildren) {
+    //   childShapeClassHasChanged = children.some((childInfo, index) => {
+    //     return childInfo.style.shapeClass !== nextChildren[index].style.shapeClass;
+    //   });
+    // }
 
-    return childShapeClassHasChanged;
+    // return childShapeClassHasChanged;
+    return true
   }
 
   /**
    * @description check is this topic selected
    */
   isThisTopicSelected(): boolean {
-    const { topicInfo, targetTree } = this.props;
-    return targetTree && (topicInfo.id === targetTree.id);
+    const { topicInfo, selectionList } = this.props;
+    return Boolean(selectionList.length && selectionList.find(selectionInfo => selectionInfo.id === topicInfo.id));
   }
 
   getTopicShapePath() {
@@ -102,12 +103,24 @@ class Topic extends React.Component<TopicProps, TopicState> {
   }
 
   // userAgent events
-  onTopicClick(e) {
+  onTopicClick(e: MouseEvent) {
     e.stopPropagation();
+
+    const targetId = this.props.topicInfo.id;
+
+    // if has not selected
     if (!this.isThisTopicSelected()) {
-      (e.ctrlKey || e.metaKey) ? selectionsManager.addSelection(this)
-        : selectionsManager.selectSingle(this);
-      this.onSelected();
+      const dispatchType = (e.ctrlKey || e.metaKey) ? 'map/addSelectionToList' : 'map/setSingleSelection';
+      // reset hovered state
+      this.setState({ hovered: false });
+      // update selection store
+      this.props.dispatch({ type: dispatchType, topicInfo: this.props.topicInfo });
+      // prepare edit receiver
+      AddOn.editReceiver.prepare(this);
+    }
+    // else, deselected
+    else {
+      this.props.dispatch({ type: 'map/removeSelectionFromList', targetId });
     }
   }
 
@@ -121,14 +134,14 @@ class Topic extends React.Component<TopicProps, TopicState> {
   onTopicMouseEnter() {
     // if not selected, show hovered box
     if (!this.isThisTopicSelected()) {
-      this.setState({hovered: true});
+      this.setState({ hovered: true });
     }
   }
 
   onTopicMouseOut(e) {
     const targetClass = e.target.getAttribute('class');
     if (targetClass && targetClass.includes('topic-fill') && this.state.hovered) {
-      this.setState({hovered: false});
+      this.setState({ hovered: false });
     }
   }
 
@@ -144,26 +157,6 @@ class Topic extends React.Component<TopicProps, TopicState> {
 
   pasteTopicInfo() {
     if (!pasteInfoManager.hasInfoStashed()) return;
-  }
-
-  /**
-   * @description triggered when topic selected
-   * */
-  onSelected() {
-    // reset hovered state
-    this.setState({ hovered: false });
-    // update selected target
-    this.props.dispatch({ type: 'map/updateTargetTree', targetId: this.props.topicInfo.id });
-    // prepare edit receiver
-    AddOn.editReceiver.prepare(this);
-  }
-
-  /**
-   * @description triggered when topic deselected
-   * */
-  onDeselected() {
-    // update selected target
-    this.props.dispatch({ type: 'map/updateTargetTree'});
   }
 
   onUpdateTitle(title) {
@@ -224,8 +217,8 @@ class Topic extends React.Component<TopicProps, TopicState> {
 
     return (
       <g className="inner-item-group">
-        <TopicTitle {...TopicTitleProps} x={- innerGroupWidth / 2}/>
-        {doRenderIconLabel ? <Label topicInfo={topicInfo} displayMode={this.props.app.infoItemDisplay.label} x={labelX}/> : null}
+        <TopicTitle {...TopicTitleProps} x={- innerGroupWidth / 2} />
+        {doRenderIconLabel ? <Label topicInfo={topicInfo} displayMode={this.props.app.infoItemDisplay.label} x={labelX} /> : null}
       </g>
     );
 
@@ -241,7 +234,7 @@ class Topic extends React.Component<TopicProps, TopicState> {
 
     return (
       <g className="card-item-group">
-        {doRenderCardLabel ? <Label topicInfo={topicInfo} displayMode={'card'}/> : null}
+        {doRenderCardLabel ? <Label topicInfo={topicInfo} displayMode={'card'} /> : null}
       </g>
     );
   }
@@ -256,7 +249,7 @@ class Topic extends React.Component<TopicProps, TopicState> {
       transform: `translate(${topicInfo.position[0]},${topicInfo.position[1]})`
     };
 
-    const {topicShapePath, topicSelectBoxPath} = this.getTopicShapePath();
+    const { topicShapePath, topicSelectBoxPath } = this.getTopicShapePath();
     const style = topicInfo.style;
 
     const TopicFillProps = {
@@ -293,20 +286,20 @@ class Topic extends React.Component<TopicProps, TopicState> {
     return (
       <g {...TopicGroupProps} >
         <g {...TopicBoxGroupProps}>
-          {needShape ? <TopicShape {...TopicShapeProps}/> : []}
-          <TopicFill {...TopicFillProps}/>
+          {needShape ? <TopicShape {...TopicShapeProps} /> : []}
+          <TopicFill {...TopicFillProps} />
           {this.renderInnerItem()}
         </g>
-        <TopicSelectBox {...TopicSelectBoxProps}/>
+        <TopicSelectBox {...TopicSelectBoxProps} />
         {/*{this.renderCardItem()}*/}
-        {needConnectLine ? <ConnectLine topicInfo={topicInfo}/> : []}
+        {needConnectLine ? <ConnectLine topicInfo={topicInfo} /> : []}
       </g>
     );
   }
 }
 
 const mapStateToProps = ({ app, map }) => {
-  return { app, targetTree: map.targetTree };
+  return { app, selectionList: map.selectionList };
 };
 
 export default connect(mapStateToProps)(Topic);

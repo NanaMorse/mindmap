@@ -12,8 +12,8 @@ export declare type sheetState = {
 }
 
 export declare type mapState = {
-  treeData: topicInfo
-  targetTree: topicInfo
+  topicTree: topicInfo
+  selectionList: Array<extendTopicInfo>
 }
 
 /**
@@ -55,6 +55,8 @@ export interface topicInfo {
     strokeWidth?: string
 
     lineWidth?: string
+
+    lineColor?: string
 
     strokeColor?: string
 

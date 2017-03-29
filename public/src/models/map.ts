@@ -1,5 +1,5 @@
 import { deepClone } from 'src/apptools/commonfunc'
-import { mapState, topicInfo } from 'src/interface'
+import { mapState, topicInfo, extendTopicInfo } from 'src/interface'
 
 /**
  * @param topicTreeToSearch the search area to find target topic
@@ -16,96 +16,61 @@ function findTopicInfoById(topicTreeToSearch: topicInfo, targetId: string): topi
   }
 }
 
+/**
+ * @description reducers about selections manager
+ */
+const selectionsReducer = {
+
+  /**
+   * @description set only one topic selected
+   * @param state
+   * @param topicInfo selected topic's extended info
+   */
+  setSingleSelection(state: mapState, { topicInfo }: { topicInfo: extendTopicInfo }): mapState {
+    return { ...state, selectionList: [topicInfo] }
+  },
+
+  /**
+   * @description add a new selection to list
+   * @param state
+   * @param topicInfo selected topic's extended info
+   */
+  addSelectionToList(state: mapState, { topicInfo }: { topicInfo: extendTopicInfo }): mapState {
+    const selectionListCopy = deepClone(state.selectionList);
+    // push that topic into selection list
+    selectionListCopy.push(topicInfo);
+
+    return { ...state, selectionList: selectionListCopy }
+  },
+
+  /**
+   * @description remove one topic from selectionList, triggered when ctrl + click on a selected topic
+   */
+  removeSelectionFromList(state: mapState, { targetId }: { targetId: string }): mapState {
+    const selectionListCopy = deepClone(state.selectionList);
+    const removedTargetIndex = selectionListCopy.findIndex(selectionInfo => selectionInfo.id === targetId);
+    selectionListCopy.splice(removedTargetIndex, 1);
+
+    return { ...state, selectionList: selectionListCopy }
+  },
+
+  /**
+   * @description clear selectionList, no topic was selected
+   */
+  clearSelectionList(state: mapState): mapState {
+    return { ...state, selectionList: [] }
+  }
+};
+
 const mapModel = {
   namespace: 'map',
 
   state: {
-    treeData: {},
-    targetTree: null
+    topicTree: {},
+    selectionList: []
   },
 
-  reducers: {
-    /**
-     * @description update current selected topic info
-     * @param targetId selected topic's id
-     */
-    updateTargetTree(state: mapState, { targetId }: { targetId: string }) {
-      const treeDataCopy = deepClone(state.treeData);
-      let targetTree;
-      // if targetId is null, clear selected topic info
-      if (!targetId) targetTree = null;
-      else targetTree = findTopicInfoById(treeDataCopy, targetId);
-      return { ...state, targetTree };
-    },
-
-    updateTopicTitle(state: mapState, title: string) {
-      return state
-    },
-
-    updateTopicFontSize(state: mapState, fontSize: number) {
-      return state
-    },
-
-    updateTopicTextColor(state: mapState, textColor: string) {
-      return state
-    },
-
-    updateTopicIsTextBold(state: mapState, isTextBold: boolean) {
-      return state
-    },
-
-    updateTopicIsTextItalic(state: mapState, isTextItalic: boolean) {
-
-    },
-
-    updateTopicIsTextLineThrough(state: mapState, isTextLineThrough: boolean) {
-      return state
-    },
-
-    updateTopicShapeClass(state: mapState, shapeClass: string) {
-      return state
-    },
-
-    updateTopicBorderWidth(state: mapState, borderWidth: number) {
-      return state
-    },
-
-    updateTopicBorderColor(state: mapState, borderColor: string) {
-      return state
-    },
-
-    updateTopicLineClass(state: mapState, lineClass: string) {
-      return state
-    },
-
-    updateTopicLineWidth(state: mapState, lineWidth: number) {
-      return state
-    },
-
-    updateTopicLineColor(state: mapState, lineColor: string) {
-      return state
-    },
-
-    updateTopicFillColor(state: mapState, fillColor: string) {
-
-    },
-
-    updateTopicLabelText(state: mapState, labelText: string) {
-      return state
-    },
-
-    addChildTopic(state: mapState, index: number) {
-      return state
-    },
-
-    addParentTopic(state: mapState, parentId: string) {
-      return state
-    },
-
-    removeSelf(state: mapState) {
-      return state
-    }
-  }
+  reducers: Object.assign({}, selectionsReducer)
 };
 
 export default mapModel

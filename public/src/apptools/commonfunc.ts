@@ -49,7 +49,7 @@ export const deepAssign = (target, ...options) => {
   return target;
 };
 
-export const deepClone = (target) => {
+export function deepClone<T>(target: T): T {
   return JSON.parse(JSON.stringify(target));
 };
 

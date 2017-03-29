@@ -1,6 +1,6 @@
 import * as React from 'react'
 import SheetEditPanel from './SheetEditPanel';
-import TopicEditPanel from './topiceditpanel';
+import TopicEditPanel from './TopicEditPanel';
 
 const OperatorPanels = () => {
   return (

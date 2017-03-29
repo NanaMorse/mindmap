@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'dva';
-import {events, selectionsManager} from 'src/managers';
+import { events, selectionsManager } from 'src/managers';
 import * as WidgetGenerator from './widgetgenerator';
 import * as EventTags from 'src/constants/EventTags';
 import * as CommonConstant from 'src/constants/Common';
@@ -64,7 +64,7 @@ const UpdateFillColorPicker = WidgetGenerator.colorPickerGenerator('Fill Color',
 const UpdateLabelTextInput = WidgetGenerator.textInputGenerator('Label Text', 'onUpdateLabel');
 
 interface TopicEditPanelProps {
-  map: mapState
+  selectionList: Array<topicInfo>
 }
 
 interface TopicEditPanelState {
@@ -76,53 +76,84 @@ interface TopicEditPanelState {
   isFontBold?: boolean;
   isFontItalic?: boolean;
   isFontLineThrough?: boolean;
-  
+
   shapeClass?: string;
   fillColor?: string;
   strokeWidth?: string;
   strokeColor?: string;
-  
+
   lineClass?: string;
   lineWidth?: string;
   lineColor?: string;
-  
+
   labelText?: string;
 }
 
 class TopicEditPanel extends React.Component<TopicEditPanelProps, TopicEditPanelState> {
-  constructor() {
+  constructor(props: TopicEditPanelProps) {
     super();
 
-    this.state = {
-      show: false,
-      isTargetRoot: false,
+    this.setStateBySelectionList(props.selectionList);
+  }
 
-      fontSize: '',
-      fontColor: '',
-      isFontBold: false,
-      isFontItalic: false,
-      isFontLineThrough: false,
-      
-      shapeClass: '',
-      fillColor: '',
-      strokeWidth: '',
-      strokeColor: '',
-      
-      lineClass: '',
-      lineWidth: '',
-      lineColor: '',
-      
-      labelText: ''
+  static defaultProps = {
+    selectionList: []
+  };
+
+  componentDidMount() {
+    // todo 
+    events.on(EventTags.UNDO_OR_REDO_TRIGGERED, () => {
+      if (!this.state.show) return;
+
+      const selections = selectionsManager.getSelectionsArray();
+      this.setPanelWidgetValue(selections[selections.length - 1].props.topicInfo);
+    });
+  }
+
+  componentWillReceiveProps(nextProps: TopicEditPanelProps) {
+    this.setStateBySelectionList(nextProps.selectionList);
+  }
+
+  /**
+   * @description set state according to current selected topics
+   * @param selectionList current selected topics
+   * */
+  setStateBySelectionList(selectionList: Array<topicInfo>) {
+    if (!selectionList.length) return;
+
+    // todo 先根据最后列表中最后的一个topic来确定样式
+    const topicInfoToSetStyle = selectionList[selectionList.length - 1];
+    const styleToSet = topicInfoToSetStyle.style;
+
+    this.state = {
+      fontSize: styleToSet.fontSize,
+      fontColor: styleToSet.fontColor,
+      isFontBold: styleToSet.isFontBold,
+      isFontItalic: styleToSet.isFontItalic,
+      isFontLineThrough: styleToSet.isFontLineThrough,
+
+      shapeClass: styleToSet.shapeClass,
+      fillColor: styleToSet.fillColor,
+      strokeWidth: styleToSet.strokeWidth,
+      strokeColor: styleToSet.strokeColor,
+
+      lineClass: styleToSet.lineClass,
+      lineWidth: styleToSet.lineWidth,
+      lineColor: styleToSet.lineColor,
+
+      labelText: topicInfoToSetStyle.label || '',
+
+      // todo
+      isTargetRoot: false
     }
   }
 
   render() {
 
+    if (!this.props.selectionList.length) return <div />;
+
     const panelProps = {
       className: 'edit-panel topic-edit-panel',
-      style: {
-        display: this.props.map.targetTree ? 'block' : 'none'
-      }
     };
 
     const actionSingleTopicExceptRootProps = {
@@ -137,7 +168,7 @@ class TopicEditPanel extends React.Component<TopicEditPanelProps, TopicEditPanel
 
     const updateLabelProps = {
       value: this.state.labelText,
-      onChange: e => this.setState({labelText: e.target.value}),
+      onChange: e => this.setState({ labelText: e.target.value }),
       onBlur: e => this.dispatchOperator(e),
       onKeyDown: e => {
         const which = e.which;
@@ -147,28 +178,28 @@ class TopicEditPanel extends React.Component<TopicEditPanelProps, TopicEditPanel
 
     return (
       <div { ...panelProps } >
-        <AddChildTopicButton onClick={e => this.dispatchOperator(e)}/>
-        <AddTopicBeforeButton {...actionSingleTopicExceptRootProps}/>
-        <AddTopicAfterButton {...actionSingleTopicExceptRootProps}/>
-        <AddParentTopicButton {...actionSingleTopicExceptRootProps}/>
-        <RemoveTopicButton {...removeTopicProps}/>
-        <hr/>
-        <UpdateFontSizeSelector {...this.generateNormalProps('fontSize')}/>
-        <UpdateFontColorPicker {...this.generateColorPickerProps('fontColor')}/>
-        <UpdateIsFontBoldCheckBox {...this.generateCheckBoxProps('isFontBold')}/>
-        <UpdateIsFontItalicCheckBox {...this.generateCheckBoxProps('isFontItalic')}/>
-        <UpdateIsFontLineThroughCheckBox {...this.generateCheckBoxProps('isFontLineThrough')}/>
-        <hr/>
-        <UpdateShapeClassSelector {...this.generateNormalProps('shapeClass')}/>
-        <UpdateFillColorPicker {...this.generateColorPickerProps('fillColor')}/>
-        <UpdateStrokeWidthSelector {...this.generateNormalProps('strokeWidth')}/>
-        <UpdateStrokeColorPicker {...this.generateColorPickerProps('strokeColor')}/>
-        <hr/>
-        <UpdateLineClassSelector {...this.generateNormalProps('lineClass')}/>
-        <UpdateLineWidthSelector {...this.generateNormalProps('lineWidth')}/>
-        <UpdateLineColorPicker {...this.generateColorPickerProps('lineColor')}/>
-        <hr/>
-        <UpdateLabelTextInput {...updateLabelProps}/>
+        <AddChildTopicButton onClick={e => this.dispatchOperator(e)} />
+        <AddTopicBeforeButton {...actionSingleTopicExceptRootProps} />
+        <AddTopicAfterButton {...actionSingleTopicExceptRootProps} />
+        <AddParentTopicButton {...actionSingleTopicExceptRootProps} />
+        <RemoveTopicButton {...removeTopicProps} />
+        <hr />
+        <UpdateFontSizeSelector {...this.generateNormalProps('fontSize') } />
+        <UpdateFontColorPicker {...this.generateColorPickerProps('fontColor') } />
+        <UpdateIsFontBoldCheckBox {...this.generateCheckBoxProps('isFontBold') } />
+        <UpdateIsFontItalicCheckBox {...this.generateCheckBoxProps('isFontItalic') } />
+        <UpdateIsFontLineThroughCheckBox {...this.generateCheckBoxProps('isFontLineThrough') } />
+        <hr />
+        <UpdateShapeClassSelector {...this.generateNormalProps('shapeClass') } />
+        <UpdateFillColorPicker {...this.generateColorPickerProps('fillColor') } />
+        <UpdateStrokeWidthSelector {...this.generateNormalProps('strokeWidth') } />
+        <UpdateStrokeColorPicker {...this.generateColorPickerProps('strokeColor') } />
+        <hr />
+        <UpdateLineClassSelector {...this.generateNormalProps('lineClass') } />
+        <UpdateLineWidthSelector {...this.generateNormalProps('lineWidth') } />
+        <UpdateLineColorPicker {...this.generateColorPickerProps('lineColor') } />
+        <hr />
+        <UpdateLabelTextInput {...updateLabelProps} />
       </div>
     );
   }
@@ -240,10 +271,10 @@ class TopicEditPanel extends React.Component<TopicEditPanelProps, TopicEditPanel
     this.setState({
       fontSize: topicStyle.fontSize,
       fontColor: topicStyle.fontColor,
-      isFontBold: !!topicStyle.isFontBold,
-      isFontItalic: !!topicStyle.isFontItalic,
-      isFontLineThrough: !!topicStyle.isFontLineThrough,
-      
+      isFontBold: topicStyle.isFontBold,
+      isFontItalic: topicStyle.isFontItalic,
+      isFontLineThrough: topicStyle.isFontLineThrough,
+
       shapeClass: topicStyle.shapeClass,
       fillColor: topicStyle.fillColor,
       strokeWidth: topicStyle.strokeWidth,
@@ -252,38 +283,15 @@ class TopicEditPanel extends React.Component<TopicEditPanelProps, TopicEditPanel
       lineClass: topicStyle.lineClass,
       lineWidth: topicStyle.lineWidth,
       lineColor: topicStyle.lineColor,
-  
+
       labelText: topicInfo.label || '',
       isTargetRoot
-    });
-  }
-
-  componentDidMount() {
-    events.on(EventTags.TOPIC_SELECTED, (topicInfo) => {
-      if (!topicInfo) {
-        const selections = selectionsManager.getSelectionsArray();
-        topicInfo = selections[selections.length - 1].props.topicInfo;
-      }
-
-      this.setState({show: true});
-      this.setPanelWidgetValue(topicInfo);
-    });
-
-    events.on(EventTags.TOPIC_DESELECTED, () => {
-      this.setState({show: false});
-    });
-
-    events.on(EventTags.UNDO_OR_REDO_TRIGGERED, () => {
-      if (!this.state.show) return;
-
-      const selections = selectionsManager.getSelectionsArray();
-      this.setPanelWidgetValue(selections[selections.length - 1].props.topicInfo);
     });
   }
 }
 
 const mapStateToProps = ({ map }) => {
-  return { map };
+  return { selectionList: map.selectionList };
 };
 
 export default connect(mapStateToProps)(TopicEditPanel);

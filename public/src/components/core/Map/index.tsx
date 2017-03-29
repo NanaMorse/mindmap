@@ -23,7 +23,7 @@ class Map extends React.Component<MapProps, void> {
    * */
   calcExtendedTopicTreeInfo(topicInfo: topicInfo): extendTopicInfo {
     // copy as return value
-    const topicInfoCopy: extendTopicInfo = deepClone(topicInfo);
+    const topicInfoCopy: extendTopicInfo = deepClone(topicInfo) as extendTopicInfo;
 
     // set origin info
     topicInfoCopy.originTopicInfo = deepClone(topicInfo);
@@ -46,7 +46,7 @@ class Map extends React.Component<MapProps, void> {
    * @param treeLevelToCheck the check level of current check traversal, the start level is the ROOT level
    * @return the parent topic info of a topic node
    * */
-  getParentOfTopicNode(topicInfo: topicInfo, treeLevelToCheck: topicInfo = this.props.map.treeData): topicInfo {
+  getParentOfTopicNode(topicInfo: topicInfo, treeLevelToCheck: topicInfo = this.props.map.topicTree): topicInfo {
     // if the topicInfo to check is the current check level, it means this topic is the ROOT topic
     if (topicInfo === treeLevelToCheck) return;
 
@@ -133,7 +133,7 @@ class Map extends React.Component<MapProps, void> {
    * @description render nested topic tree component
    * */
   renderTopicTree() {
-    const extendedTopicInfo = this.calcExtendedTopicTreeInfo(this.props.map.treeData);
+    const extendedTopicInfo = this.calcExtendedTopicTreeInfo(this.props.map.topicTree);
 
     // get bounds and position
     layoutTopics(extendedTopicInfo);

@@ -16,6 +16,7 @@ export const selectionsManager = (() => {
     return selections;
   };
 
+  // done
   const addSelection = (selection) => {
 
     if (selections.indexOf(selection) < 0) {
@@ -24,11 +25,13 @@ export const selectionsManager = (() => {
 
   };
 
+  // done
   const selectSingle = (selection) => {
     clearSelection();
     addSelection(selection);
   };
 
+  // done
   const clearSelection = () => {
 
     if (!selections.length) return false;
