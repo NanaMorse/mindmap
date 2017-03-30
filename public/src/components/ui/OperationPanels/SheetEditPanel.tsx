@@ -3,7 +3,7 @@ import { connect } from 'dva'
 import * as WidgetGenerator from './widgetgenerator';
 import { events, componentMapManager } from 'src/managers';
 import * as CommonConstant from 'src/constants/Common';
-import { appState, sheetState } from 'src/interface'
+import { appState, sheetState, extendTopicInfo } from 'src/interface'
 
 const UpdateSheetBgColorPicker = WidgetGenerator.colorPickerGenerator('background color', 'sheet/updateSheetBackgroundColor');
 const UpdateLabelModeCheckBox = WidgetGenerator.checkBoxGenerator('show label', 'onUpdateSheetInfoItemMode');
@@ -11,15 +11,25 @@ const UpdateLabelModeCheckBox = WidgetGenerator.checkBoxGenerator('show label', 
 interface SheetEditPanelProps {
   app: appState
   sheet: sheetState
+  selectionList: Array<extendTopicInfo>
   dispatch: Function
 }
 
-class SheetEditPanel extends React.Component<SheetEditPanelProps, any> {
+interface SheetEditPanelState {
+  backgroundColor?: string
+  isLabelCard?: boolean
+}
+
+class SheetEditPanel extends React.Component<SheetEditPanelProps, SheetEditPanelState> {
+
+  static defaultProps = {
+    selectionList: []
+  };
+
   constructor(props: SheetEditPanelProps) {
     super(props);
 
     this.state = {
-      show: true,
       backgroundColor: props.sheet.backgroundColor,
       isLabelCard: props.app.infoItemDisplay.label === CommonConstant.INFO_ITEM_CARD_MODE
     }
@@ -61,7 +71,7 @@ class SheetEditPanel extends React.Component<SheetEditPanelProps, any> {
     const panelProps = {
       className: 'edit-panel sheet-edit-panel',
       style: {
-        display: this.state.show ? 'block' : 'none'
+        display: !this.props.selectionList.length ? 'block' : 'none'
       }
     };
     
@@ -74,8 +84,8 @@ class SheetEditPanel extends React.Component<SheetEditPanelProps, any> {
   }
 }
 
-const mapStateToProps = ({ sheet, app }) => {
-  return { sheet, app }
+const mapStateToProps = ({ sheet, app, map }) => {
+  return { sheet, app, selectionList: app.selectionList }
 };
 
 export default connect(mapStateToProps)(SheetEditPanel);

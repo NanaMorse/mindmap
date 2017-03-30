@@ -48,13 +48,12 @@ class Map extends React.Component<MapProps, void> {
    * */
   getParentOfTopicNode(topicInfo: topicInfo, treeLevelToCheck: topicInfo = this.props.map.topicTree): topicInfo {
     // if the topicInfo to check is the current check level, it means this topic is the ROOT topic
-    if (topicInfo === treeLevelToCheck) return;
-
+    if (topicInfo.id === treeLevelToCheck.id) return;
     // start traversing
     const children = treeLevelToCheck.children;
     if (children) {
       for (const childTreeToCheck of children) {
-        if (topicInfo === childTreeToCheck) return childTreeToCheck;
+        if (topicInfo.id === childTreeToCheck.id) return treeLevelToCheck;
 
         // use depth-first traversal to find the parent
         const parentResult = this.getParentOfTopicNode(topicInfo, childTreeToCheck);
@@ -81,7 +80,7 @@ class Map extends React.Component<MapProps, void> {
     topicInfo.parentId = parent ? parent.id : null;
 
     // set index
-    topicInfo.index = parent ? parent.children.indexOf(topicInfo) : 0;
+    topicInfo.index = parent ? parent.children.findIndex(childTopic => childTopic.id === topicInfo.id) : 0;
   }
 
   setTopicSizeInfo(topicInfo: extendTopicInfo) {

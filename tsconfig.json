@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "outDir": "./dist/",
+    "outDir": "./public/dist/",
     "sourceMap": true,
     "noImplicitAny": false,
     "watch": true,
@@ -10,14 +10,10 @@
     "jsx": "react",
     "types": ["node"],
     "paths": {
-      "src/*": ["./src/*"]
+      "src/*": ["./public/src/*"]
     }
   },
-  "include": [
-    "src"
-  ],
   "exclude": [
-    "dist",
-    "../node_modules"
+    "./node_modules"
   ]
 }

@@ -1,10 +1,11 @@
-import * as React from 'react';
-import { connect } from 'dva';
-import { events, selectionsManager } from 'src/managers';
-import * as WidgetGenerator from './widgetgenerator';
-import * as EventTags from 'src/constants/EventTags';
-import * as CommonConstant from 'src/constants/Common';
+import * as React from 'react'
+import { connect } from 'dva'
+import { events, selectionsManager } from 'src/managers'
+import * as WidgetGenerator from './widgetgenerator'
+import * as EventTags from 'src/constants/EventTags'
+import * as CommonConstant from 'src/constants/Common'
 import { topicInfo, mapState } from 'src/interface'
+import { Button } from '../antd'
 
 const AddChildTopicButton = WidgetGenerator.buttonGenerator('Add Child Topic', 'onAddChildTopic');
 
@@ -65,6 +66,7 @@ const UpdateLabelTextInput = WidgetGenerator.textInputGenerator('Label Text', 'o
 
 interface TopicEditPanelProps {
   selectionList: Array<topicInfo>
+  dispatch: Function
 }
 
 interface TopicEditPanelState {
@@ -111,6 +113,7 @@ class TopicEditPanel extends React.Component<TopicEditPanelProps, TopicEditPanel
   }
 
   componentWillReceiveProps(nextProps: TopicEditPanelProps) {
+    // reset state while selection list changed
     this.setStateBySelectionList(nextProps.selectionList);
   }
 
@@ -148,22 +151,53 @@ class TopicEditPanel extends React.Component<TopicEditPanelProps, TopicEditPanel
     }
   }
 
+  /**
+   * @description the operator button for editing topic tree
+   */
+  renderTreeEditWidgetArea() {
+
+    const addChildTopicBtnProps = {
+      type: 'primary',
+      onClick: () => this.props.dispatch({ type: 'map/addChildTopic' })
+    };
+
+    const addTopicBeforeBtnProps = {
+      type: 'primary',
+      onClick: () => this.props.dispatch({ type: 'map/addTopicBefore' })
+    };
+
+    const addTopicAfterBtnProps = {
+      type: 'primary',
+      onClick: () => this.props.dispatch({ type: 'map/addTopicAfter' })
+    };
+
+    const addParentTopicBtnProps = {
+      type: 'primary',
+      onClick: () => this.props.dispatch({ type: 'map/addParentTopic' })
+    };
+
+    const removeTopicBtnProps = {
+      type: 'danger',
+      onClick: () => this.props.dispatch({ type: 'map/removeTopic' })
+    };
+
+    return (
+      <div>
+        <Button {...addChildTopicBtnProps}>Add Child Topic</Button>
+        <Button {...addTopicBeforeBtnProps}>Add Topic Before</Button>
+        <Button {...addTopicAfterBtnProps}>Add Topic After</Button>
+        <Button {...addParentTopicBtnProps}>Add Parent Topic</Button>
+        <Button {...removeTopicBtnProps}>Remove Topic</Button>
+      </div>
+    )
+  }
+
   render() {
 
     if (!this.props.selectionList.length) return <div />;
 
     const panelProps = {
       className: 'edit-panel topic-edit-panel',
-    };
-
-    const actionSingleTopicExceptRootProps = {
-      onClick: e => this.dispatchOperator(e, null, [selectionsManager.getSelectionsArray()[0]]),
-      disabled: this.state.isTargetRoot
-    };
-
-    const removeTopicProps = {
-      onClick: e => this.dispatchOperator(e, null, selectionsManager.getSelectionsArrayWithoutChild()),
-      disabled: this.state.isTargetRoot
     };
 
     const updateLabelProps = {
@@ -178,11 +212,7 @@ class TopicEditPanel extends React.Component<TopicEditPanelProps, TopicEditPanel
 
     return (
       <div { ...panelProps } >
-        <AddChildTopicButton onClick={e => this.dispatchOperator(e)} />
-        <AddTopicBeforeButton {...actionSingleTopicExceptRootProps} />
-        <AddTopicAfterButton {...actionSingleTopicExceptRootProps} />
-        <AddParentTopicButton {...actionSingleTopicExceptRootProps} />
-        <RemoveTopicButton {...removeTopicProps} />
+        { this.renderTreeEditWidgetArea() }
         <hr />
         <UpdateFontSizeSelector {...this.generateNormalProps('fontSize') } />
         <UpdateFontColorPicker {...this.generateColorPickerProps('fontColor') } />

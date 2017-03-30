@@ -32,9 +32,6 @@ const operatorMap = {
 
   [KeyCode.DELETE_KEY](e) {
     e.preventDefault();
-    selectionsManager.getSelectionsArrayWithoutChild().forEach((selection) => {
-      selection.onRemoveSelfTopic();
-    });
   }
 };
 

@@ -49,58 +49,8 @@ export const selectionsManager = (() => {
     }
   };
 
-  const getSelectionsArrayWithoutChild = () => {
-    const isAAncestorOfB = getAncestorCheckMethod(selections);
 
-    return selections.filter((selectionB) => {
-      return !selections.some((selectionA) => {
-          return isAAncestorOfB(selectionA, selectionB);
-        }) && selectionB.getType() !== TOPIC_ROOT;
-    });
-  };
-
-  const getAncestorCheckMethod = (selections) => {
-    const ancestorMap = {};
-
-    const topicsInfo = getStore().getState().topics;
-
-    selections.forEach((selection) => {
-      getSelectionsAncestorList(selection);
-    });
-
-    return function (selectionA, selectionB) {
-      return selectionA.props.id !== topicsInfo.id && ancestorMap[selectionB.props.id].includes(selectionA.props.id);
-    };
-
-    function getSelectionsAncestorList(selection) {
-      const targetId = selection.props.id;
-      const targetList = ancestorMap[targetId] = [];
-
-      if (targetId === topicsInfo.id) return;
-
-      search();
-
-      function search(searchSource = topicsInfo) {
-        if (!searchSource.children) return;
-
-        for (const childTopic of searchSource.children) {
-          if (childTopic.id === targetId) {
-            targetList.push(searchSource.id);
-            return true;
-          }
-
-          targetList.push(searchSource.id);
-          if (search(childTopic)) {
-            return true;
-          }
-
-          targetList.pop();
-        }
-      }
-    }
-  };
-
-  return { getSelectionsArray, addSelection, selectSingle, clearSelection, removeSelection, getSelectionsArrayWithoutChild }
+  return { getSelectionsArray, addSelection, selectSingle, clearSelection, removeSelection }
 })();
 
 export const pasteInfoManager = (() => {

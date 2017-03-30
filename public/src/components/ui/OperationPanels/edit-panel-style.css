@@ -1,0 +1,77 @@
+/* edit panel */
+#operation-panel-container {
+    background-color: #f7f7f9;
+    position: fixed;
+    right: 0;
+    top: 50px;
+}
+
+.edit-panel {
+    width: 300px;
+    height: 100vh;
+    border-left: 2px solid #29333e;
+    -webkit-box-shadow: -4px 1px 10px -2px  #29333e;
+    -moz-box-shadow: -4px 1px 10px -2px  #29333e;
+    box-shadow: -4px 1px 10px -2px  #29333e;
+    padding: 10px;
+}
+
+.sketch-color-picker {
+    display: inline-flex;
+    position: relative;
+}
+
+.color-picker-swatch {
+    padding: 5px;
+    background: #fff;
+    border-radius: 1px;
+    box-shadow: 0 0 0 1px rgba(0,0,0,.1);
+    display: inline-block;
+    cursor: pointer;
+}
+
+.color-picker-swatch div {
+    width: 36px;
+    height: 14px;
+    border-radius: 2px;
+    border: 1px solid #d1d1d1;
+}
+
+.color-picker-popover {
+    position: absolute;
+    z-index: 2;
+    top: 27px;
+    right: 0;
+}
+
+.color-picker-cover {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+/* topic edit panel */
+.topic-edit-panel > div {
+    margin-right: 10px;
+    margin-top: 0.5em;
+}
+
+#onUpdateIsFontBold + label {
+    font-weight: 700;
+}
+
+#onUpdateIsFontItalic + label {
+    font-style: italic;
+}
+
+#onUpdateIsFontLineThrough + label {
+    text-decoration: line-through;
+}
+
+.edit-panel .ant-btn {
+    width: 100%;
+    display: block;
+    margin: 10px auto;
+}
