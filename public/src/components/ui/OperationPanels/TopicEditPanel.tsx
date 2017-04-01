@@ -1,65 +1,41 @@
 import * as React from 'react'
 import { connect } from 'dva'
-import { events, selectionsManager } from 'src/managers'
-import * as WidgetGenerator from './widgetgenerator'
-import * as EventTags from 'src/constants/EventTags'
 import * as CommonConstant from 'src/constants/Common'
-import { topicInfo, mapState } from 'src/interface'
+import { topicInfo } from 'src/interface'
 import { Button, Selector, ColorPicker, Switch } from '../antd'
 
 const optionsMap = {
   fontSize: {
     '8px': '8', '9px': '9', '10px': '10', '11px': '11', '12px': '12', '13px': '13', '14px': '14', '16px': '16',
     '18px': '18', '20px': '20', '22px': '22', '24px': '24', '36px': '36', '48px': '48', '56px': '56'
+  },
+
+  shapeClass: {
+    [CommonConstant.SHAPE_RECT]: 'Rect',
+    [CommonConstant.SHAPE_ROUNDED_RECT]: 'Rounded Rectangle',
+    [CommonConstant.SHAPE_PARALLELOGRAM]: 'Parallelogram'
+  },
+
+  borderWidth: {
+    [CommonConstant.STROKE_WIDTH_NONE]: 'None',
+    [CommonConstant.STROKE_WIDTH_THIN]: 'Thin',
+    [CommonConstant.STROKE_WIDTH_MIDDLE]: 'Middle',
+    [CommonConstant.STROKE_WIDTH_FAT]: 'Fat'
+  },
+
+  lineClass: {
+    [CommonConstant.LINE_NONE]: 'None',
+    [CommonConstant.LINE_RIGHT_ANGLE]: 'Right Angle',
+    [CommonConstant.LINE_ROUNDED]: 'Rounded'
+  },
+
+  lineWidth: {
+    [CommonConstant.LINE_WIDTH_NONE]: 'None',
+    [CommonConstant.LINE_WIDTH_THIN]: 'Thin',
+    [CommonConstant.LINE_WIDTH_MIDDLE]: 'Middle',
+    [CommonConstant.LINE_WIDTH_FAT]: 'Fat'
   }
 };
-
-const UpdateFontSizeSelector = WidgetGenerator.selectorGenerator('Font Size', 'onUpdateFontSize', {
-  '8px': '8', '9px': '9', '10px': '10', '11px': '11', '12px': '12', '13px': '13', '14px': '14', '16px': '16',
-  '18px': '18', '20px': '20', '22px': '22', '24px': '24', '36px': '36', '48px': '48', '56px': '56'
-});
-
-const UpdateFontColorPicker = WidgetGenerator.colorPickerGenerator('Font Color', 'onUpdateFontColor');
-
-const UpdateIsFontBoldCheckBox = WidgetGenerator.checkBoxGenerator('Bold', 'onUpdateIsFontBold');
-
-const UpdateIsFontItalicCheckBox = WidgetGenerator.checkBoxGenerator('Italic', 'onUpdateIsFontItalic');
-
-const UpdateIsFontLineThroughCheckBox = WidgetGenerator.checkBoxGenerator('Line Through', 'onUpdateIsFontLineThrough');
-
-const UpdateShapeClassSelector = WidgetGenerator.selectorGenerator('Shape Class', 'onUpdateShapeClass', {
-  [CommonConstant.SHAPE_RECT]: 'Rect',
-  [CommonConstant.SHAPE_ROUNDED_RECT]: 'Rounded Rectangle',
-  [CommonConstant.SHAPE_PARALLELOGRAM]: 'Parallelogram'
-});
-
-const UpdateStrokeWidthSelector = WidgetGenerator.selectorGenerator('Border Width', 'onUpdateStrokeWidth', {
-  [CommonConstant.STROKE_WIDTH_NONE]: 'None',
-  [CommonConstant.STROKE_WIDTH_THIN]: 'Thin',
-  [CommonConstant.STROKE_WIDTH_MIDDLE]: 'Middle',
-  [CommonConstant.STROKE_WIDTH_FAT]: 'Fat'
-});
-
-const UpdateStrokeColorPicker = WidgetGenerator.colorPickerGenerator('Border Color', 'onUpdateStrokeColor');
-
-const UpdateLineClassSelector = WidgetGenerator.selectorGenerator('Line Class', 'onUpdateLineClass', {
-  [CommonConstant.LINE_NONE]: 'None',
-  [CommonConstant.LINE_RIGHT_ANGLE]: 'Right Angle',
-  [CommonConstant.LINE_ROUNDED]: 'Rounded'
-});
-
-const UpdateLineWidthSelector = WidgetGenerator.selectorGenerator('Line Width', 'onUpdateLineWidth', {
-  [CommonConstant.LINE_WIDTH_NONE]: 'None',
-  [CommonConstant.LINE_WIDTH_THIN]: 'Thin',
-  [CommonConstant.LINE_WIDTH_MIDDLE]: 'Middle',
-  [CommonConstant.LINE_WIDTH_FAT]: 'Fat'
-});
-
-const UpdateLineColorPicker = WidgetGenerator.colorPickerGenerator('Line Color', 'onUpdateLineColor');
-
-const UpdateFillColorPicker = WidgetGenerator.colorPickerGenerator('Fill Color', 'onUpdateFillColor');
-
-const UpdateLabelTextInput = WidgetGenerator.textInputGenerator('Label Text', 'onUpdateLabel');
 
 interface TopicEditPanelProps {
   selectionList: Array<topicInfo>
@@ -98,16 +74,6 @@ class TopicEditPanel extends React.Component<TopicEditPanelProps, TopicEditPanel
   static defaultProps = {
     selectionList: []
   };
-
-  componentDidMount() {
-    // todo 
-    events.on(EventTags.UNDO_OR_REDO_TRIGGERED, () => {
-      if (!this.state.show) return;
-
-      const selections = selectionsManager.getSelectionsArray();
-      this.setPanelWidgetValue(selections[selections.length - 1].props.topicInfo);
-    });
-  }
 
   componentWillReceiveProps(nextProps: TopicEditPanelProps) {
     // reset state while selection list changed
@@ -190,7 +156,7 @@ class TopicEditPanel extends React.Component<TopicEditPanelProps, TopicEditPanel
   }
 
   /**
-   * @description the operator widget for edit topic text
+   * @description the operator widget for editing topic text
    */
   renderFontStyleEditWidgetArea() {
 
@@ -246,6 +212,90 @@ class TopicEditPanel extends React.Component<TopicEditPanelProps, TopicEditPanel
     )
   }
 
+  /**
+   * @description the operator widget for editing topic shape style
+   * */
+  renderShapeStyleEditWidgetArea() {
+    const shapeClassSelectorProps = {
+      options: optionsMap.shapeClass,
+      value: this.state.shapeClass,
+      onChange: (value) => this.props.dispatch({ type: 'map/setShapeClass', shapeClass: value })
+    };
+
+    const fillColorPickerProps = {
+      value: this.state.fillColor,
+      onChange: (value) => this.props.dispatch({ type: 'map/setFillColor', fillColor: value })
+    };
+
+    const borderWidthSelectorProps = {
+      options: optionsMap.borderWidth,
+      value: this.state.strokeWidth,
+      onChange: (value) => this.props.dispatch({ type: 'map/setBorderWidth', borderWidth: value })
+    };
+
+    const borderColorPickerProps = {
+      value: this.state.strokeColor,
+      onChange: (value) => this.props.dispatch({ type: 'map/setBorderColor', borderColor: value })
+    };
+
+    return (
+      <div>
+        <div className="row-container">
+          <span>Shape Class : </span>
+          <Selector {...shapeClassSelectorProps}/>
+        </div>
+        <div className="row-container">
+          <span>Fill Color : </span>
+          <ColorPicker {...fillColorPickerProps}/>
+        </div>
+        <div className="row-container">
+          <span>Border Width : </span>
+          <Selector {...borderWidthSelectorProps}/>
+        </div>
+        <div className="row-container">
+          <span>Border Color : </span>
+          <ColorPicker {...borderColorPickerProps}/>
+        </div>
+      </div>
+    )
+  }
+
+  renderLineStyleEditWidgetArea() {
+    const lineClassSelectorProps = {
+      options: optionsMap.lineClass,
+      value: this.state.lineClass,
+      onChange: (value) => this.props.dispatch({ type: 'map/setLineClass', lineClass: value })
+    };
+
+    const lineWidthSelectorProps = {
+      options: optionsMap.lineWidth,
+      value: this.state.lineWidth,
+      onChange: (value) => this.props.dispatch({ type: 'map/setLineWidth', lineWidth: value })
+    };
+
+    const lineColorPickerProps = {
+      value: this.state.lineColor,
+      onChange: (value) => this.props.dispatch({ type: 'map/setLineColor', lineColor: value })
+    };
+
+    return (
+      <div>
+        <div className="row-container">
+          <span>Line Class : </span>
+          <Selector {...lineClassSelectorProps}/>
+        </div>
+        <div className="row-container">
+          <span>Line Width : </span>
+          <Selector {...lineWidthSelectorProps}/>
+        </div>
+        <div className="row-container">
+          <span>Line Color : </span>
+          <ColorPicker {...lineColorPickerProps}/>
+        </div>
+      </div>
+    )
+  }
+
   render() {
 
     if (!this.props.selectionList.length) return <div />;
@@ -254,119 +304,17 @@ class TopicEditPanel extends React.Component<TopicEditPanelProps, TopicEditPanel
       className: 'edit-panel topic-edit-panel',
     };
 
-    const updateLabelProps = {
-      value: this.state.labelText,
-      onChange: e => this.setState({ labelText: e.target.value }),
-      onBlur: e => this.dispatchOperator(e),
-      onKeyDown: e => {
-        const which = e.which;
-        which === 13 && this.dispatchOperator(e);
-      }
-    };
-
     return (
       <div { ...panelProps } >
         { this.renderTreeEditWidgetArea() }
         <div className="hr"/>
         { this.renderFontStyleEditWidgetArea() }
         <div className="hr"/>
-        <UpdateShapeClassSelector {...this.generateNormalProps('shapeClass') } />
-        <UpdateFillColorPicker {...this.generateColorPickerProps('fillColor') } />
-        <UpdateStrokeWidthSelector {...this.generateNormalProps('strokeWidth') } />
-        <UpdateStrokeColorPicker {...this.generateColorPickerProps('strokeColor') } />
-        <hr />
-        <UpdateLineClassSelector {...this.generateNormalProps('lineClass') } />
-        <UpdateLineWidthSelector {...this.generateNormalProps('lineWidth') } />
-        <UpdateLineColorPicker {...this.generateColorPickerProps('lineColor') } />
-        <hr />
-        <UpdateLabelTextInput {...updateLabelProps} />
+        { this.renderShapeStyleEditWidgetArea() }
+        <div className="hr"/>
+        { this.renderLineStyleEditWidgetArea() }
       </div>
     );
-  }
-
-  generateColorPickerProps(stateKey) {
-    return {
-      value: this.state[stateKey],
-      onChange: (id, color) => {
-        selectionsManager.getSelectionsArray().forEach((component) => {
-          component[id](color);
-        });
-        this.setState({
-          [stateKey]: color
-        });
-      }
-    }
-  }
-
-  generateNormalProps(stateKey) {
-    return {
-      value: this.state[stateKey],
-      onChange: e => this.dispatchOperator(e, stateKey)
-    };
-  }
-
-  generateCheckBoxProps(stateKey) {
-    return {
-      checked: this.state[stateKey],
-      onClick: e => {
-        const widgetId = e.target.id;
-        const checked = e.target.checked;
-
-        selectionsManager.getSelectionsArray().forEach((component) => {
-          component[widgetId](checked);
-        });
-
-        this.setState({
-          [stateKey]: checked
-        });
-      }
-    }
-  }
-
-  dispatchOperator(e, syncValue?, operatorTargetArray = selectionsManager.getSelectionsArray()) {
-    const widgetId = e.target.id;
-    const widgetValue = e.target.value;
-
-    operatorTargetArray.forEach((component) => {
-      component[widgetId](widgetValue);
-    });
-
-    if (syncValue) {
-      this.setState({
-        [syncValue]: widgetValue
-      });
-    }
-  }
-
-  setPanelWidgetValue(topicInfo) {
-    let isTargetRoot; {
-      const selections = selectionsManager.getSelectionsArray();
-      if (selections.length === 1 && selections[0].props.topicInfo.type === CommonConstant.TOPIC_ROOT) {
-        isTargetRoot = true;
-      }
-    }
-
-    const topicStyle = topicInfo.style;
-
-    this.setState({
-      fontSize: topicStyle.fontSize,
-      fontColor: topicStyle.fontColor,
-      isFontBold: topicStyle.isFontBold,
-      isFontItalic: topicStyle.isFontItalic,
-      isFontLineThrough: topicStyle.isFontLineThrough,
-
-      shapeClass: topicStyle.shapeClass,
-      fillColor: topicStyle.fillColor,
-      strokeWidth: topicStyle.strokeWidth,
-      strokeColor: topicStyle.strokeColor,
-
-      lineClass: topicStyle.lineClass,
-      lineWidth: topicStyle.lineWidth,
-      lineColor: topicStyle.lineColor,
-
-      labelText: topicInfo.label || '',
-      isTargetRoot
-    });
   }
 }
 

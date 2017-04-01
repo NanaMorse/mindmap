@@ -273,6 +273,52 @@ const topicFontStyleEditReducer = {
   },
 };
 
+const topicShapeStyleEditReducer = {
+  setShapeClass(state: mapState, { shapeClass }: { shapeClass: string }): mapState {
+    return topicTreeWalkHelper.updateEverySelectionSelfInfo(state.topicTree, state.selectionList, (selectionInfo) => {
+      selectionInfo.style.shapeClass = shapeClass;
+    });
+  },
+
+  setFillColor(state: mapState, { fillColor }: { fillColor: string }): mapState {
+    return topicTreeWalkHelper.updateEverySelectionSelfInfo(state.topicTree, state.selectionList, (selectionInfo) => {
+      selectionInfo.style.fillColor = fillColor;
+    });
+  },
+
+  setBorderWidth(state: mapState, { borderWidth }: { borderWidth: string }): mapState {
+    return topicTreeWalkHelper.updateEverySelectionSelfInfo(state.topicTree, state.selectionList, (selectionInfo) => {
+      selectionInfo.style.strokeWidth = borderWidth;
+    });
+  },
+
+  setBorderColor(state: mapState, { borderColor }: { borderColor: string }): mapState {
+    return topicTreeWalkHelper.updateEverySelectionSelfInfo(state.topicTree, state.selectionList, (selectionInfo) => {
+      selectionInfo.style.strokeColor = borderColor;
+    });
+  }
+};
+
+const connectLineStyleEditReducer = {
+  setLineClass(state: mapState, { lineClass }: { lineClass: string }): mapState {
+    return topicTreeWalkHelper.updateEverySelectionSelfInfo(state.topicTree, state.selectionList, (selectionInfo) => {
+      selectionInfo.style.lineClass = lineClass;
+    });
+  },
+
+  setLineWidth(state: mapState, { lineWidth }: { lineWidth: string }): mapState {
+    return topicTreeWalkHelper.updateEverySelectionSelfInfo(state.topicTree, state.selectionList, (selectionInfo) => {
+      selectionInfo.style.lineWidth = lineWidth;
+    });
+  },
+
+  setLineColor(state: mapState, { lineColor }: { lineColor: string }): mapState {
+    return topicTreeWalkHelper.updateEverySelectionSelfInfo(state.topicTree, state.selectionList, (selectionInfo) => {
+      selectionInfo.style.lineColor = lineColor;
+    });
+  },
+};
+
 const mapModel = {
   namespace: 'map',
 
@@ -281,7 +327,11 @@ const mapModel = {
     selectionList: []
   },
 
-  reducers: Object.assign({}, selectionsReducer, topicTreeEditReducer, topicFontStyleEditReducer)
+  reducers: Object.assign({},
+    selectionsReducer, topicTreeEditReducer,
+    topicFontStyleEditReducer, topicShapeStyleEditReducer,
+    connectLineStyleEditReducer
+  )
 };
 
 export default mapModel

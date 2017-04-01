@@ -11,7 +11,7 @@ const sheetModel = {
     /**
      * @description update sheet's background color
      * */
-    updateSheetBackgroundColor(state: sheetState, { backgroundColor }: { backgroundColor: string }): sheetState {
+    setBackgroundColor(state: sheetState, { backgroundColor }: { backgroundColor: string }): sheetState {
       return { ...state, backgroundColor }
     }
   }
