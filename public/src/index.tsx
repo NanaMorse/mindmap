@@ -20,7 +20,15 @@ new SocketHandler((storeData) => {
   app.model(mapModel);
   app.model(sheetModel);
 
-  // 4. Router
+  // set middleware
+  app.use({
+    onAction: ({ dispatch, getState }) => (next) => (action) => {
+      console.log(getState())
+      next(action)
+    }
+  })
+
+  // set router
   app.router(({ history }) => {
     return (
       <Router history={history}>

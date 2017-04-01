@@ -29,54 +29,9 @@ text {
   top: 0;
 }
 
-/* copy from bootstrap */
-
-button {
-  font-size: 14px;
-  font-weight: 400;
-  text-align: center;
-  line-height: 1.42857143;
-
-  border-radius: 4px;
-  border: 1px solid transparent;
-
-  padding: 6px 12px;
-  margin-left: 10px;
-
-  cursor: pointer;
-  touch-action: manipulation;
-
-  outline: none;
+.header .ant-btn {
+    margin: 0 10px;
 }
-
-button[disabled] {
-  cursor: not-allowed;
-  opacity: .65;
-}
-
-.small-button {
-  padding: 5px 10px;
-  font-size: 12px;
-  line-height: 1.5;
-  border-radius: 3px;
-}
-
-.primary-button, .primary-button[disabled]:hover {
-  color: #fff;
-  background-color: #337ab7;
-  border-color: #2e6da4;
-}
-
-.primary-button:hover {
-  background-color: #286090;
-  border-color: #204d74;
-}
-
-.primary-button:active:hover {
-  background-color: #204d74;
-  border-color: #122b40;
-}
-
 
 /* app tools */
 #getTextSize, #editReceiver, #dragSelectBox {

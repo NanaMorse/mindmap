@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { events } from 'src/managers';
+import { Button } from './antd'
 import { undoMiddleware } from 'src/store/middlewares/undo';
-import { PUSH_UNDO_STACK, UNDO_OR_REDO_TRIGGERED } from 'src/constants/EventTags';
+
 
 interface HeaderState {
   hasUndo: boolean;
@@ -12,61 +12,26 @@ export default class Header extends React.Component<void, HeaderState> {
 
   constructor() {
     super();
-
-    this.state = {
-      hasUndo: false,
-      hasRedo: false
-    }
-  }
-
-  invokeUndo() {
-    setTimeout(() => {
-      undoMiddleware.undo();
-      this.setState({
-        hasUndo: undoMiddleware.hasUndo(),
-        hasRedo: true
-      });
-    }, 0)
-  }
-
-  invokeRedo() {
-    setTimeout(() => {
-      undoMiddleware.redo();
-      this.setState({
-        hasUndo: true,
-        hasRedo: undoMiddleware.hasRedo()
-      });
-    }, 0)
-  }
-
-  componentDidMount() {
-    events.on(PUSH_UNDO_STACK, () => {
-      this.setState({hasUndo: true, hasRedo: undoMiddleware.hasRedo()});
-    });
-
-    events.on(UNDO_OR_REDO_TRIGGERED, () => {
-      this.setState({hasUndo: undoMiddleware.hasUndo(), hasRedo: undoMiddleware.hasRedo()});
-    })
   }
 
   render() {
 
     const undoBtnProps = {
-      className: "primary-button",
-      disabled: !this.state.hasUndo,
-      onClick: () => this.invokeUndo()
+      type: "primary",
+      disabled: true,
+      onClick: () => null
     };
 
     const redoBtnProps = {
-      className: "primary-button",
-      disabled: !this.state.hasRedo,
-      onClick: () => this.invokeRedo()
+      type: "primary",
+      disabled: true,
+      onClick: () => null
     };
 
     return (
       <div className="header">
-        <button {...undoBtnProps}>Undo</button>
-        <button {...redoBtnProps}>Redo</button>
+        <Button {...undoBtnProps}>Undo</Button>
+        <Button {...redoBtnProps}>Redo</Button>
       </div>
     );
   }
