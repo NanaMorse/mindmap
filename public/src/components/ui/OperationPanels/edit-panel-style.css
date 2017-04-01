@@ -53,10 +53,6 @@
 }
 
 /* topic edit panel */
-.topic-edit-panel > div {
-    margin-right: 10px;
-    margin-top: 0.5em;
-}
 
 #onUpdateIsFontBold + label {
     font-weight: 700;
@@ -70,8 +66,35 @@
     text-decoration: line-through;
 }
 
+
+/* widget type-func area */
+.edit-panel .type-func {
+
+}
+
+/* panel's btn */
 .edit-panel .ant-btn {
     width: 100%;
     display: block;
     margin: 10px auto;
+}
+
+/* panel's widget row */
+.edit-panel .row-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 10px 0;
+}
+
+/* selector's width */
+.row-container .ant-select {
+    width: 70%;
+}
+
+/* panel's hr */
+.edit-panel .hr {
+    height: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.65);
+    margin: 10px 0;
 }

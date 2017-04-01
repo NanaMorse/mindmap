@@ -103,7 +103,7 @@ class ColorPicker extends React.Component<colorPickerWrapperProps, any> {
     this.setState({ displayColorPicker: false });
   }
 
-  onColorChange(color: choiceColor) {
+  onColorChange(color) {
     this.setState({color: color.hex})
   }
 
@@ -167,3 +167,4 @@ export function colorPickerGenerator(label: string, id: string) {
     );
   }
 }
+

@@ -80,6 +80,25 @@ class TopicTreeWalkHelper {
       }
     }
   }
+
+  /**
+   * @description update the topic info in selection list and topic tree
+   * */
+  public updateEverySelectionSelfInfo(topicTreeInfo: topicInfo, selectionList: Array<extendTopicInfo>, process: (selectionInfo: topicInfo) => any) {
+    const topicTreeCopy = deepClone(topicTreeInfo);
+    const selectionListCopy = deepClone(selectionList);
+
+    selectionListCopy.forEach(selectionInfo => {
+      selectionInfo.style = selectionInfo.style || {};
+      process(selectionInfo);
+
+      const topicInfoInTree = this.findTopicInfoById(topicTreeCopy, selectionInfo.id);
+      topicInfoInTree.style = topicInfoInTree.style || {};
+      process(topicInfoInTree);
+    });
+
+    return { topicTree: topicTreeCopy, selectionList: selectionListCopy }
+  }
 }
 
 const topicTreeWalkHelper = new TopicTreeWalkHelper();
@@ -221,6 +240,39 @@ const topicTreeEditReducer = {
   }
 };
 
+const topicFontStyleEditReducer = {
+
+  setFontSize(state: mapState, { fontSize }: { fontSize: string }): mapState {
+    return topicTreeWalkHelper.updateEverySelectionSelfInfo(state.topicTree, state.selectionList, (selectionInfo) => {
+      selectionInfo.style.fontSize = fontSize;
+    });
+  },
+
+  setFontColor(state: mapState, { fontColor }: { fontColor: string }): mapState {
+    return topicTreeWalkHelper.updateEverySelectionSelfInfo(state.topicTree, state.selectionList, (selectionInfo) => {
+      selectionInfo.style.fontColor = fontColor;
+    });
+  },
+
+  setIsFontBold(state: mapState, { isFontBold }: { isFontBold: boolean }): mapState {
+    return topicTreeWalkHelper.updateEverySelectionSelfInfo(state.topicTree, state.selectionList, (selectionInfo) => {
+      selectionInfo.style.isFontBold = isFontBold;
+    });
+  },
+
+  setIsFontItalic(state: mapState, { isFontItalic }: { isFontItalic: boolean }): mapState {
+    return topicTreeWalkHelper.updateEverySelectionSelfInfo(state.topicTree, state.selectionList, (selectionInfo) => {
+      selectionInfo.style.isFontItalic = isFontItalic;
+    });
+  },
+
+  setIsFontLineThrough(state: mapState, { isFontLineThrough }: { isFontLineThrough: boolean }): mapState {
+    return topicTreeWalkHelper.updateEverySelectionSelfInfo(state.topicTree, state.selectionList, (selectionInfo) => {
+      selectionInfo.style.isFontLineThrough = isFontLineThrough;
+    });
+  },
+};
+
 const mapModel = {
   namespace: 'map',
 
@@ -229,7 +281,7 @@ const mapModel = {
     selectionList: []
   },
 
-  reducers: Object.assign({}, selectionsReducer, topicTreeEditReducer)
+  reducers: Object.assign({}, selectionsReducer, topicTreeEditReducer, topicFontStyleEditReducer)
 };
 
 export default mapModel

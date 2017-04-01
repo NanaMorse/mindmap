@@ -5,17 +5,14 @@ import * as WidgetGenerator from './widgetgenerator'
 import * as EventTags from 'src/constants/EventTags'
 import * as CommonConstant from 'src/constants/Common'
 import { topicInfo, mapState } from 'src/interface'
-import { Button } from '../antd'
+import { Button, Selector, ColorPicker, Switch } from '../antd'
 
-const AddChildTopicButton = WidgetGenerator.buttonGenerator('Add Child Topic', 'onAddChildTopic');
-
-const AddTopicBeforeButton = WidgetGenerator.buttonGenerator('Add Topic Before', 'onAddTopicBefore');
-
-const AddTopicAfterButton = WidgetGenerator.buttonGenerator('Add Topic After', 'onAddTopicAfter');
-
-const AddParentTopicButton = WidgetGenerator.buttonGenerator('Add Parent Topic', 'onAddParentTopic');
-
-const RemoveTopicButton = WidgetGenerator.buttonGenerator('Remove Topic', 'onRemoveSelfTopic');
+const optionsMap = {
+  fontSize: {
+    '8px': '8', '9px': '9', '10px': '10', '11px': '11', '12px': '12', '13px': '13', '14px': '14', '16px': '16',
+    '18px': '18', '20px': '20', '22px': '22', '24px': '24', '36px': '36', '48px': '48', '56px': '56'
+  }
+};
 
 const UpdateFontSizeSelector = WidgetGenerator.selectorGenerator('Font Size', 'onUpdateFontSize', {
   '8px': '8', '9px': '9', '10px': '10', '11px': '11', '12px': '12', '13px': '13', '14px': '14', '16px': '16',
@@ -192,6 +189,63 @@ class TopicEditPanel extends React.Component<TopicEditPanelProps, TopicEditPanel
     )
   }
 
+  /**
+   * @description the operator widget for edit topic text
+   */
+  renderFontStyleEditWidgetArea() {
+
+    const fontSizeSelectorProps = {
+      options: optionsMap.fontSize,
+      value: this.state.fontSize,
+      onChange: (value) => this.props.dispatch({ type: 'map/setFontSize', fontSize: value })
+    };
+
+    const fontColorPickerProps = {
+      value: this.state.fontColor,
+      onChange: (value) => this.props.dispatch({ type: 'map/setFontColor', fontColor: value })
+    };
+
+    const isFontBoldSwitchProps = {
+      checked: this.state.isFontBold,
+      onChange: (value) => this.props.dispatch({ type: 'map/setIsFontBold', isFontBold: value })
+    };
+
+    const isFontItalicSwitchProps = {
+      checked: this.state.isFontItalic,
+      onChange: (value) => this.props.dispatch({ type: 'map/setIsFontItalic', isFontItalic: value })
+    };
+
+    const isFontLineThroughProps = {
+      checked: this.state.isFontLineThrough,
+      onChange: (value) => this.props.dispatch({ type: 'map/setIsFontLineThrough', isFontLineThrough: value })
+    };
+
+    return (
+      <div>
+        <div className="row-container">
+          <span>Font Size : </span>
+          <Selector {...fontSizeSelectorProps}/>
+        </div>
+        <div className="row-container">
+          <span>Font Color : </span>
+          <ColorPicker {...fontColorPickerProps}/>
+        </div>
+        <div className="row-container">
+          <span>Bold : </span>
+          <Switch {...isFontBoldSwitchProps}/>
+        </div>
+        <div className="row-container">
+          <span>Italic : </span>
+          <Switch {...isFontItalicSwitchProps}/>
+        </div>
+        <div className="row-container">
+          <span>Line Through : </span>
+          <Switch {...isFontLineThroughProps}/>
+        </div>
+      </div>
+    )
+  }
+
   render() {
 
     if (!this.props.selectionList.length) return <div />;
@@ -213,13 +267,9 @@ class TopicEditPanel extends React.Component<TopicEditPanelProps, TopicEditPanel
     return (
       <div { ...panelProps } >
         { this.renderTreeEditWidgetArea() }
-        <hr />
-        <UpdateFontSizeSelector {...this.generateNormalProps('fontSize') } />
-        <UpdateFontColorPicker {...this.generateColorPickerProps('fontColor') } />
-        <UpdateIsFontBoldCheckBox {...this.generateCheckBoxProps('isFontBold') } />
-        <UpdateIsFontItalicCheckBox {...this.generateCheckBoxProps('isFontItalic') } />
-        <UpdateIsFontLineThroughCheckBox {...this.generateCheckBoxProps('isFontLineThrough') } />
-        <hr />
+        <div className="hr"/>
+        { this.renderFontStyleEditWidgetArea() }
+        <div className="hr"/>
         <UpdateShapeClassSelector {...this.generateNormalProps('shapeClass') } />
         <UpdateFillColorPicker {...this.generateColorPickerProps('fillColor') } />
         <UpdateStrokeWidthSelector {...this.generateNormalProps('strokeWidth') } />
