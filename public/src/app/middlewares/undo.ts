@@ -22,14 +22,12 @@ export const ACTION_UNDO = 'ACTION_UNDO';
 
 export const ACTION_REDO = 'ACTION_REDO';
 
-const actionFilterReg = /^@@router/;
-
 export const undoMiddleware = (({ getState }) => dispatch => (action) => {
 
   const { type } = action;
 
   // if the action is router reducer / undo or redo reducer / need to ignore, just continue
-  if (actionFilterReg.test(type) || type === ACTION_UNDO || type === ACTION_REDO || action.ignoreUndo) {
+  if (/^@@router/.test(type) || type === ACTION_UNDO || type === ACTION_REDO || action.ignoreUndo) {
     return dispatch(action)
   }
 

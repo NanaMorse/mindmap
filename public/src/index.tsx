@@ -5,6 +5,10 @@ import SocketHandler from './socketHandler'
 import app from './app'
 
 // init socket handle with callback
-new SocketHandler((storeData) => {
-  app.start(storeData, '#app');
+new SocketHandler((storeData, wsInstance) => {
+  app.start({
+    initialState: storeData,
+    wrapperElem: '#app',
+    wsInstance,
+  });
 });

@@ -4,14 +4,15 @@ function webSocketMiddlewareGenerator(msgType: string, getData: (getState, dispa
   return (ws) => ({getState, dispatch}) => next => action => {
     next(action);
 
-    if (!action[broadcastTriggerFilter]) {
-      const sendMsg = {
-        type: msgType,
-        data: getData(getState, dispatch, action)
-      };
+    const { type } = action;
+    if (/^@@router/.test(type) || action[broadcastTriggerFilter]) return;
 
-      ws.send(JSON.stringify(sendMsg));
-    }
+    const sendMsg = {
+      type: msgType,
+      data: getData(getState, dispatch, action)
+    };
+
+    ws.send(JSON.stringify(sendMsg));
   }
 }
 

@@ -1,4 +1,4 @@
-import { initStoreWithData, getStore } from '../store';
+import app from 'src/app';
 
 class SocketHandler {
 
@@ -20,11 +20,11 @@ class SocketHandler {
 
       switch (parsedData.type) {
         case 'getStoreData': {
-          return initCallback(JSON.parse(parsedData.data));
+          return initCallback(JSON.parse(parsedData.data), this.wsInstance);
         }
 
         case 'receiveBroadcastAction': {
-          return getStore().dispatch(JSON.parse(parsedData.data));
+          return app.dispatch(JSON.parse(parsedData.data));
         }
       }
     };
@@ -33,7 +33,6 @@ class SocketHandler {
       console.log('lost connection!');
     };
   }
-
 }
 
 export default SocketHandler

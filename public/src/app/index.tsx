@@ -8,6 +8,7 @@ import sheetModel from 'src/models/sheet'
 import appModel from 'src/models/app'
 import AppComponent from 'src/components'
 import { undoMiddleware, undoGlobalReducer, hooks } from './middlewares/undo'
+import { createActionSocketMiddleware, createSyncStoreSocketMiddleware } from './middlewares/ws'
 
 class AppStarter {
 
@@ -28,7 +29,7 @@ class AppStarter {
   /**
    * @description init dva with initialState
    * */
-  public start(initialState: {}, wrapperElem: string | HTMLElement) {
+  public start({initialState, wrapperElem, wsInstance}) {
     this.app = dva({
       initialState,
       globalReducer: undoGlobalReducer
@@ -36,7 +37,7 @@ class AppStarter {
 
     this.setAllModels();
     this.setRouter();
-    this.setMiddleware();
+    this.setMiddleware(wsInstance);
 
     this.app.start(wrapperElem);
   }
@@ -48,16 +49,20 @@ class AppStarter {
     return this.app._store.dispatch(...args);
   }
 
+  public getState() {
+    return this.app._store.getState();
+  }
+
   private setAllModels() {
     this.app.model(appModel);
     this.app.model(mapModel);
     this.app.model(sheetModel);
   }
 
-  private setMiddleware() {
+  private setMiddleware(wsInstance) {
     // todo
     this.app.use({
-      onAction: undoMiddleware
+      onAction: [undoMiddleware, createActionSocketMiddleware(wsInstance), createSyncStoreSocketMiddleware(wsInstance)]
     });
   }
 

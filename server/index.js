@@ -38,6 +38,11 @@ function getStoreData() {
 
 // save store data
 function saveStoreData(storeData) {
+  storeData = JSON.parse(storeData);
+  delete storeData.routing;
+  delete storeData['@@dva'];
+  storeData = JSON.stringify(storeData);
+
   fs.writeFile('./storedata.json', storeData, function (err) {
     if (err) throw err;
     console.log('write ok!');
