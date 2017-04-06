@@ -23,7 +23,7 @@ class Sheet extends React.Component<SheetProps, any> {
 
   onMouseDown(e) {
     // clear target topic list
-    this.props.dispatch({ type: 'map/clearSelectionList' });
+    this.props.dispatch({ type: 'map/clearSelectionList', ignoreUndo: true });
     dragSelectReceiver.dragStart(e);
   }
 

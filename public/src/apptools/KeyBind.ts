@@ -1,37 +1,30 @@
-import * as KeyCode from '../constants/KeyCode';
-import {selectionsManager} from '../managers';
-
-import { undoMiddleware } from '../store/middlewares/undo';
+import * as KeyCode from '../constants/KeyCode'
+import app from 'src/app'
+import { ACTION_UNDO, ACTION_REDO } from 'src/app/middlewares/undo'
 
 const elementsIdToStopPropagation = ['onUpdateLabel'];
 
 const operatorMap = {
   [KeyCode.Z_KEY](e) {
     if (e.metaKey || e.ctrlKey) {
-      if (e.shiftKey) {
-        undoMiddleware.redo();
-      } else {
-        undoMiddleware.undo();
-      }
+      const dispatchType = e.shiftKey ? ACTION_REDO : ACTION_UNDO;
+      app.dispatch({ type: dispatchType });
     }
   },
 
   [KeyCode.TAB_KEY](e) {
     e.preventDefault();
-    selectionsManager.getSelectionsArray().forEach((selection) => {
-      selection.onAddChildTopic();
-    });
+    app.dispatch({ type: 'map/addChildTopic' });
   },
   
   [KeyCode.ENTER_KEY](e) {
     e.preventDefault();
-    selectionsManager.getSelectionsArray().forEach((selection) => {
-      selection.onAddTopicAfter();
-    });
+    app.dispatch({ type: 'map/addTopicAfter' });
   },
 
   [KeyCode.DELETE_KEY](e) {
     e.preventDefault();
+    app.dispatch({ type: 'map/removeTopic' });
   }
 };
 

@@ -21,6 +21,12 @@ module.exports = {
 
   module: {
     loaders: [
+      {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        exclude: /node_modules\/(?!(dva)\/).*/
+      },
+
       // All files with a '.ts' or '.tsx' extension will be handled by 'ts-loader'.
       {
         test: /\.ts(x?)$/,

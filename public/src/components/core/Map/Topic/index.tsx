@@ -114,13 +114,13 @@ class Topic extends React.Component<TopicProps, TopicState> {
       // reset hovered state
       this.setState({ hovered: false });
       // update selection store
-      this.props.dispatch({ type: dispatchType, topicInfo: this.props.topicInfo });
+      this.props.dispatch({ type: dispatchType, topicInfo: this.props.topicInfo, ignoreUndo: true });
       // prepare edit receiver
       AddOn.editReceiver.prepare(this);
     }
     // else, deselected
     else {
-      this.props.dispatch({ type: 'map/removeSelectionFromList', targetId });
+      this.props.dispatch({ type: 'map/removeSelectionFromList', targetId, ignoreUndo: true });
     }
   }
 

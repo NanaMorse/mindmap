@@ -1,9 +1,4 @@
 import * as EventEmitter from 'events';
-
-import { getStore } from '../store';
-
-import {TOPIC_ROOT} from '../constants/Common';
-
 import * as CommonFunc from '../apptools/commonfunc';
 
 export const events = new EventEmitter();
