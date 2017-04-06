@@ -106,7 +106,7 @@ export const editReceiver = (() => {
 
   // add Event
   input.addEventListener('keydown', e => {
-    var which = e.which;
+    const which = e.which;
     which in keyMap && keyDownMap[keyMap[which]].call(this, e);
   });
 

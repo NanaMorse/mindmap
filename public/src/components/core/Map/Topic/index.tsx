@@ -42,7 +42,7 @@ class Topic extends React.Component<TopicProps, TopicState> {
 
   static defaultProps = {
     selectionList: []
-  }
+  };
 
   componentWillMount() {
     componentMapManager.addComponent(this.props.topicInfo.id, this);
@@ -118,10 +118,6 @@ class Topic extends React.Component<TopicProps, TopicState> {
       // prepare edit receiver
       AddOn.editReceiver.prepare(this);
     }
-    // else, deselected
-    else {
-      this.props.dispatch({ type: 'map/removeSelectionFromList', targetId, ignoreUndo: true });
-    }
   }
 
   onTopicDoubleClick() {
@@ -163,6 +159,8 @@ class Topic extends React.Component<TopicProps, TopicState> {
     if (title === this.props.topicInfo.title) {
       return false;
     }
+
+    this.props.dispatch({ type: 'map/setTitle', title });
   }
 
   // method for editReceiver

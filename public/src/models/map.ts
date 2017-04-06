@@ -99,6 +99,19 @@ class TopicTreeWalkHelper {
 
     return { topicTree: topicTreeCopy, selectionList: selectionListCopy }
   }
+
+  public updateSingleSelectionSelfInfo(topicTreeInfo: topicInfo, selectionList: Array<extendTopicInfo>, process: (selectionInfo: topicInfo) => any) {
+    const topicTreeCopy = deepClone(topicTreeInfo);
+    const selectionListCopy = deepClone(selectionList);
+
+    const targetTopicInSelection = selectionListCopy[selectionListCopy.length - 1];
+    const targetTopicInTree = this.findTopicInfoById(topicTreeCopy, targetTopicInSelection.id);
+
+    process(targetTopicInSelection);
+    process(targetTopicInTree);
+
+    return { topicTree: topicTreeCopy, selectionList: selectionListCopy }
+  }
 }
 
 const topicTreeWalkHelper = new TopicTreeWalkHelper();
@@ -240,7 +253,13 @@ const topicTreeEditReducer = {
   }
 };
 
-const topicFontStyleEditReducer = {
+const topicTextEditReducer = {
+
+  setTitle(state: mapState, { title }: { title: string }): mapState {
+    return topicTreeWalkHelper.updateSingleSelectionSelfInfo(state.topicTree, state.selectionList, (selectionInfo) => {
+      selectionInfo.title = title;
+    });
+  },
 
   setFontSize(state: mapState, { fontSize }: { fontSize: string }): mapState {
     return topicTreeWalkHelper.updateEverySelectionSelfInfo(state.topicTree, state.selectionList, (selectionInfo) => {
@@ -329,7 +348,7 @@ const mapModel = {
 
   reducers: Object.assign({},
     selectionsReducer, topicTreeEditReducer,
-    topicFontStyleEditReducer, topicShapeStyleEditReducer,
+    topicTextEditReducer, topicShapeStyleEditReducer,
     connectLineStyleEditReducer
   )
 };

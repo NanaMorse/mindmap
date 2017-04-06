@@ -51,7 +51,7 @@ export const deepAssign = (target, ...options) => {
 
 export function deepClone<T>(target: T): T {
   return JSON.parse(JSON.stringify(target));
-};
+}
 
 export const replaceInfoId = (topicInfo) => {
   const infoCopy = deepClone(topicInfo);
