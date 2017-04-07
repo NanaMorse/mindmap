@@ -7,7 +7,7 @@ import { deepClone, getTextSize } from 'src/apptools/commonfunc';
 import layoutTopics from 'src/layout';
 import DefaultStyle from 'src/constants/DefaultStyle';
 import * as Distance from 'src/constants/Distance';
-
+import { topicExtendedInfoMap } from 'src/managers'
 import { mapState, appState, topicInfo, extendTopicInfo } from 'src/interface'
 
 interface MapProps {
@@ -37,6 +37,9 @@ class Map extends React.Component<MapProps, void> {
     this.setTopicSizeInfo(topicInfoCopy);
 
     topicInfo.children && (topicInfoCopy.children = topicInfo.children.map(childTopic => this.calcExtendedTopicTreeInfo(childTopic)));
+
+    // save extended topic info
+    topicExtendedInfoMap[topicInfoCopy.id] = deepClone(topicInfoCopy);
 
     return topicInfoCopy;
   }

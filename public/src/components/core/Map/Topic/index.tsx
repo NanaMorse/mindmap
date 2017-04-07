@@ -8,18 +8,16 @@ import TopicTitle from './Title';
 import Label from '../InfoItem/Label';
 
 import CalcTopicShape from 'src/calcpath/topicshape';
-import { events, pasteInfoManager, componentMapManager } from 'src/managers';
+import { pasteInfoManager, componentMapManager } from 'src/managers';
 import * as AddOn from 'src/apptools/addon';
-import * as EventTags from 'src/constants/EventTags';
 import * as CommonConstant from 'src/constants/Common';
-import * as CommonFunc from 'src/apptools/commonfunc';
 
 import { extendTopicInfo, topicInfo, appState } from 'src/interface';
 
 // todo props and state interface
 interface TopicProps {
   app: appState
-  selectionList: Array<topicInfo>
+  selectionList: Array<string>
   topicInfo: extendTopicInfo
   dispatch: Function
 }
@@ -94,7 +92,7 @@ class Topic extends React.Component<TopicProps, TopicState> {
    */
   isThisTopicSelected(): boolean {
     const { topicInfo, selectionList } = this.props;
-    return Boolean(selectionList.length && selectionList.find(selectionInfo => selectionInfo.id === topicInfo.id));
+    return Boolean(selectionList.length && (selectionList.indexOf(topicInfo.id) !== -1));
   }
 
   getTopicShapePath() {
@@ -106,15 +104,13 @@ class Topic extends React.Component<TopicProps, TopicState> {
   onTopicClick(e: MouseEvent) {
     e.stopPropagation();
 
-    const targetId = this.props.topicInfo.id;
-
     // if has not selected
     if (!this.isThisTopicSelected()) {
       const dispatchType = (e.ctrlKey || e.metaKey) ? 'map/addSelectionToList' : 'map/setSingleSelection';
       // reset hovered state
       this.setState({ hovered: false });
       // update selection store
-      this.props.dispatch({ type: dispatchType, topicInfo: this.props.topicInfo, ignoreUndo: true });
+      this.props.dispatch({ type: dispatchType, id: this.props.topicInfo.id, ignoreUndo: true });
       // prepare edit receiver
       AddOn.editReceiver.prepare(this);
     }

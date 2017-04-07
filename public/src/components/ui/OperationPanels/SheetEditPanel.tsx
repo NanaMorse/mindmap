@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { connect } from 'dva'
 import { ColorPicker } from '../antd'
-import { appState, sheetState, extendTopicInfo } from 'src/interface'
+import { appState, sheetState } from 'src/interface'
 
 interface SheetEditPanelProps {
   app: appState
   sheet: sheetState
-  selectionList: Array<extendTopicInfo>
+  selectionList: Array<string>
   dispatch: Function
 }
 

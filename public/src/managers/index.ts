@@ -1,5 +1,6 @@
-import * as EventEmitter from 'events';
-import * as CommonFunc from '../apptools/commonfunc';
+import * as EventEmitter from 'events'
+import * as CommonFunc from '../apptools/commonfunc'
+import { extendTopicInfo } from 'src/interface'
 
 export const events = new EventEmitter();
 
@@ -94,3 +95,8 @@ export const componentMapManager = (() => {
     }
   }
 })();
+
+/**
+ * @description topic id to extendedInfo map
+ * */
+export const topicExtendedInfoMap: { [index: string]: extendTopicInfo } = {};

@@ -13,7 +13,7 @@ export declare type sheetState = {
 
 export declare type mapState = {
   topicTree: topicInfo
-  selectionList: Array<extendTopicInfo>
+  selectionList: Array<string>
 }
 
 /**

@@ -1,4 +1,5 @@
 import { deepClone, generateUUID } from 'src/apptools/commonfunc'
+import { topicExtendedInfoMap } from 'src/managers'
 import { TOPIC_ROOT } from 'src/constants/Common';
 import { mapState, topicInfo, extendTopicInfo } from 'src/interface'
 
@@ -84,15 +85,12 @@ class TopicTreeWalkHelper {
   /**
    * @description update the topic info in selection list and topic tree
    * */
-  public updateEverySelectionSelfInfo(topicTreeInfo: topicInfo, selectionList: Array<extendTopicInfo>, process: (selectionInfo: topicInfo) => any) {
+  public updateEverySelectionSelfInfo(topicTreeInfo: topicInfo, selectionList: Array<string>, process: (selectionInfo: topicInfo) => any) {
     const topicTreeCopy = deepClone(topicTreeInfo);
     const selectionListCopy = deepClone(selectionList);
 
-    selectionListCopy.forEach(selectionInfo => {
-      selectionInfo.style = selectionInfo.style || {};
-      process(selectionInfo);
-
-      const topicInfoInTree = this.findTopicInfoById(topicTreeCopy, selectionInfo.id);
+    selectionListCopy.forEach(id => {
+      const topicInfoInTree = this.findTopicInfoById(topicTreeCopy, id);
       topicInfoInTree.style = topicInfoInTree.style || {};
       process(topicInfoInTree);
     });
@@ -100,14 +98,11 @@ class TopicTreeWalkHelper {
     return { topicTree: topicTreeCopy, selectionList: selectionListCopy }
   }
 
-  public updateSingleSelectionSelfInfo(topicTreeInfo: topicInfo, selectionList: Array<extendTopicInfo>, process: (selectionInfo: topicInfo) => any) {
+  public updateSingleSelectionSelfInfo(topicTreeInfo: topicInfo, selectionList: Array<string>, process: (selectionInfo: topicInfo) => any) {
     const topicTreeCopy = deepClone(topicTreeInfo);
     const selectionListCopy = deepClone(selectionList);
+    const targetTopicInTree = this.findTopicInfoById(topicTreeCopy, selectionListCopy[selectionListCopy.length - 1]);
 
-    const targetTopicInSelection = selectionListCopy[selectionListCopy.length - 1];
-    const targetTopicInTree = this.findTopicInfoById(topicTreeCopy, targetTopicInSelection.id);
-
-    process(targetTopicInSelection);
     process(targetTopicInTree);
 
     return { topicTree: topicTreeCopy, selectionList: selectionListCopy }
@@ -125,21 +120,21 @@ const selectionsReducer = {
   /**
    * @description set only one topic selected
    * @param state
-   * @param topicInfo selected topic's extended info
+   * @param id selected topic's id
    */
-  setSingleSelection(state: mapState, { topicInfo }: { topicInfo: extendTopicInfo }): mapState {
-    return { ...state, selectionList: [topicInfo] }
+  setSingleSelection(state: mapState, { id }: { id: string }): mapState {
+    return { ...state, selectionList: [id] }
   },
 
   /**
    * @description add a new selection to list
    * @param state
-   * @param topicInfo selected topic's extended info
+   * @param id selected topic's id
    */
-  addSelectionToList(state: mapState, { topicInfo }: { topicInfo: extendTopicInfo }): mapState {
+  addSelectionToList(state: mapState, { id }: { id: string }): mapState {
     const selectionListCopy = deepClone(state.selectionList);
     // push that topic into selection list
-    selectionListCopy.push(topicInfo);
+    selectionListCopy.push(id);
 
     return { ...state, selectionList: selectionListCopy }
   },
@@ -147,10 +142,9 @@ const selectionsReducer = {
   /**
    * @description remove one topic from selectionList, triggered when ctrl + click on a selected topic
    */
-  removeSelectionFromList(state: mapState, { targetId }: { targetId: string }): mapState {
+  removeSelectionFromList(state: mapState, { id }: { id: string }): mapState {
     const selectionListCopy = deepClone(state.selectionList);
-    const removedTargetIndex = selectionListCopy.findIndex(selectionInfo => selectionInfo.id === targetId);
-    selectionListCopy.splice(removedTargetIndex, 1);
+    selectionListCopy.splice(selectionListCopy.indexOf(id), 1);
 
     return { ...state, selectionList: selectionListCopy }
   },
@@ -174,7 +168,7 @@ const topicTreeEditReducer = {
   addChildTopic(state: mapState): mapState {
     const { selectionList } = state;
     const topicTreeCopy = deepClone(state.topicTree);
-    const targetTopicTree = topicTreeWalkHelper.findTopicInfoById(topicTreeCopy, selectionList[selectionList.length - 1].id);
+    const targetTopicTree = topicTreeWalkHelper.findTopicInfoById(topicTreeCopy, selectionList[selectionList.length - 1]);
 
     // only add child topic for the latest selection topic
     targetTopicTree.children = targetTopicTree.children || [];
@@ -190,11 +184,11 @@ const topicTreeEditReducer = {
   addTopicBefore(state: mapState): mapState {
     const { selectionList } = state;
     const topicTreeCopy = deepClone(state.topicTree);
-    const targetTopicTreeInfo = selectionList[selectionList.length - 1];
-    const parentTopicTreeInfo = topicTreeWalkHelper.findTopicInfoById(topicTreeCopy, targetTopicTreeInfo.parentId);
+    const targetTopicInfo = topicExtendedInfoMap[selectionList[selectionList.length - 1]];
+    const parentTopicTreeInfo = topicTreeWalkHelper.findTopicInfoById(topicTreeCopy, targetTopicInfo.parentId);
 
     // add a new topic into selection's left hand place
-    parentTopicTreeInfo.children.splice(targetTopicTreeInfo.index, 0, { id: generateUUID() });
+    parentTopicTreeInfo.children.splice(targetTopicInfo.index, 0, { id: generateUUID() });
 
     return { ...state, topicTree: topicTreeCopy }
   },
@@ -205,7 +199,7 @@ const topicTreeEditReducer = {
   addTopicAfter(state: mapState): mapState {
     const { selectionList } = state;
     const topicTreeCopy = deepClone(state.topicTree);
-    const targetTopicTreeInfo = selectionList[selectionList.length - 1];
+    const targetTopicTreeInfo = topicExtendedInfoMap[selectionList[selectionList.length - 1]];
     const parentTopicTreeInfo = topicTreeWalkHelper.findTopicInfoById(topicTreeCopy, targetTopicTreeInfo.parentId);
 
     // add a new topic into selection's right hand place
@@ -219,7 +213,7 @@ const topicTreeEditReducer = {
    * */
   addParentTopic(state: mapState): mapState {
     const selectionListCopy = deepClone(state.selectionList);
-    const targetTopicTreeInfo = selectionListCopy[selectionListCopy.length - 1];
+    const targetTopicTreeInfo = topicExtendedInfoMap[selectionListCopy[selectionListCopy.length - 1]];
 
     const topicTreeCopy = deepClone(state.topicTree);
     // find the selected topic's current parent
@@ -241,7 +235,9 @@ const topicTreeEditReducer = {
     const selectionListCopy = deepClone(state.selectionList);
     const topicTreeCopy = deepClone(state.topicTree);
 
-    const selectionListWithoutChild = topicTreeWalkHelper.getSelectionsArrayWithoutChild(topicTreeCopy, selectionListCopy);
+    const selectionListWithoutChild = topicTreeWalkHelper
+      .getSelectionsArrayWithoutChild(topicTreeCopy, selectionListCopy.map(id => topicExtendedInfoMap[id]));
+
     selectionListWithoutChild.forEach((selectionInfo) => {
       const selectionParent = topicTreeWalkHelper.findTopicInfoById(topicTreeCopy, selectionInfo.parentId);
       // remove topic from parent's child list

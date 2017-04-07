@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { connect } from 'dva'
 import * as CommonConstant from 'src/constants/Common'
-import { topicInfo } from 'src/interface'
+import { topicExtendedInfoMap } from 'src/managers'
 import { Button, Selector, ColorPicker, Switch } from '../antd'
 
 const optionsMap = {
@@ -38,7 +38,7 @@ const optionsMap = {
 };
 
 interface TopicEditPanelProps {
-  selectionList: Array<topicInfo>
+  selectionList: Array<string>
   dispatch: Function
 }
 
@@ -84,11 +84,11 @@ class TopicEditPanel extends React.Component<TopicEditPanelProps, TopicEditPanel
    * @description set state according to current selected topics
    * @param selectionList current selected topics
    * */
-  setStateBySelectionList(selectionList: Array<topicInfo>) {
+  setStateBySelectionList(selectionList: Array<string>) {
     if (!selectionList.length) return;
 
     // todo 先根据最后列表中最后的一个topic来确定样式
-    const topicInfoToSetStyle = selectionList[selectionList.length - 1];
+    const topicInfoToSetStyle = topicExtendedInfoMap[selectionList[selectionList.length - 1]];
     const styleToSet = topicInfoToSetStyle.style;
 
     this.state = {

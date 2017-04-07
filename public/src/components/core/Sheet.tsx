@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { connect } from 'dva'
-import { componentMapManager, selectionsManager } from 'src/managers';
 import { dragSelectReceiver } from 'src/apptools/addon';
 import { sheetState } from 'src/interface'
 
@@ -55,8 +54,6 @@ class Sheet extends React.Component<SheetProps, any> {
   componentDidMount() {
     this.topicsContainer = document.querySelector('.topics-group') as HTMLElement;
     this.editReceiver = document.querySelector('#editReceiver') as HTMLElement;
-
-    componentMapManager.sheetComponent = this;
   }
 
   render() {
