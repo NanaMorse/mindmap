@@ -1,3 +1,6 @@
+import { deepClone } from 'src/apptools/commonfunc'
+import { sheetState, appState, mapState } from 'src/interface'
+
 const delayInvoking = (() => {
 
   let firstInvoke;
@@ -14,9 +17,15 @@ const delayInvoking = (() => {
   }
 })();
 
-const pastStateStack = [];
+interface globalState {
+  sheet: sheetState
+  app: appState
+  map: mapState
+}
 
-const futureStateStack = [];
+const pastStateStack: Array<globalState> = [];
+
+const futureStateStack: Array<globalState> = [];
 
 export const ACTION_UNDO = 'ACTION_UNDO';
 
@@ -48,7 +57,7 @@ export const undoMiddleware = (({ getState }) => dispatch => (action) => {
  * @description global reducer for dispatch undo or redo action
  * */
 export const undoGlobalReducer = {
-  [ACTION_UNDO]: (state) => {
+  [ACTION_UNDO]: (state: globalState): globalState => {
 
     const pastState = pastStateStack.pop();
     if (!pastState) return state;
@@ -57,16 +66,21 @@ export const undoGlobalReducer = {
 
     hooks.onUndoOrRedoTrigger && hooks.onUndoOrRedoTrigger();
 
+    // selectionList remain the same
+    pastState.map.selectionList = deepClone(state.map.selectionList);
+
     return pastState;
   },
 
-  [ACTION_REDO]: (state) => {
+  [ACTION_REDO]: (state: globalState): globalState => {
     const futureState = futureStateStack.pop();
     if (!futureState) return state;
 
     pastStateStack.push(state);
 
     hooks.onUndoOrRedoTrigger && hooks.onUndoOrRedoTrigger();
+
+    futureState.map.selectionList = deepClone(state.map.selectionList);
 
     return futureState;
   }

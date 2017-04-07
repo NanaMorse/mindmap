@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "a mind map application based on react",
   "scripts": {
-    "build": "webpack --watch",
+    "dev": "webpack --watch",
     "start": "node server/index.js"
   },
   "author": "morse",
