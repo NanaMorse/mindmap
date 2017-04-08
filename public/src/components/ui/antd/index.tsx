@@ -4,20 +4,20 @@ import { SwatchesPicker } from 'react-color'
 import 'antd/lib/button/style/css'
 export const Button = require('antd/lib/button');
 
-import 'antd/lib/Dropdown/style/css'
-export const Dropdown = require('antd/lib/Dropdown');
+import 'antd/lib/dropdown/style/css'
+export const Dropdown = require('antd/lib/dropdown');
 
-import 'antd/lib/Menu/style/css'
-export const Menu = require('antd/lib/Menu');
+import 'antd/lib/menu/style/css'
+export const Menu = require('antd/lib/menu');
 
-import 'antd/lib/Icon/style/css'
-export const Icon = require('antd/lib/Icon');
+import 'antd/lib/icon/style/css'
+export const Icon = require('antd/lib/icon');
 
-import 'antd/lib/Select/style/css'
-export const Select = require('antd/lib/Select');
+import 'antd/lib/select/style/css'
+export const Select = require('antd/lib/select');
 
-import 'antd/lib/Switch/style/css'
-export const Switch = require('antd/lib/Switch');
+import 'antd/lib/switch/style/css'
+export const Switch = require('antd/lib/switch');
 
 
 interface SelectorProps {
