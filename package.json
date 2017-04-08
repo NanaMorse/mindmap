@@ -4,6 +4,7 @@
   "description": "a mind map application based on react",
   "scripts": {
     "dev": "webpack --watch",
+    "build": "webpack",
     "start": "node server/index.js"
   },
   "author": "morse",
