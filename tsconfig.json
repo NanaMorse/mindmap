@@ -10,7 +10,7 @@
     "jsx": "react",
     "types": ["node"],
     "paths": {
-      "src/*": ["./public/src/*"]
+      "src/*": ["./client/src/*"]
     }
   },
   "exclude": [

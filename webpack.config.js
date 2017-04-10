@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-  entry: './public/src/index.tsx',
+  entry: './client/src/index.tsx',
   output: {
     path : './public/dist',
     filename : 'bundle.js'
@@ -15,7 +15,7 @@ module.exports = {
     extensions: ["", ".webpack.js", ".ts", ".tsx", ".js"],
 
     alias: {
-      src: path.join(__dirname, '/public/src')
+      src: path.join(__dirname, '/client/src')
     },
   },
 
