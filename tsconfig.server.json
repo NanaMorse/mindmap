@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "./server/dist",
+    "module": "commonjs",
+    "target": "es5",
+    "sourceMap": false,
+    "noImplicitAny": false,
+    "paths": {
+      "src/*": ["./server/src/*"]
+    }
+  },
+  "include": [
+    "server/src"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

@@ -12,7 +12,7 @@ module.exports = {
 
   resolve: {
     // Add '.ts' and '.tsx' as resolvable extensions.
-    extensions: ["", ".webpack.js", ".ts", ".tsx", ".js"],
+    extensions: ["", ".ts", ".tsx", ".js"],
 
     alias: {
       src: path.join(__dirname, '/client/src')
@@ -36,9 +36,13 @@ module.exports = {
 
       {
         test: /\.css$/,
-        loader:'style!css!'
+        loader:'style-loader!css-loader!'
       }
     ]
+  },
+
+  ts: {
+    configFileName: 'tsconfig.client.json'
   },
 
   // When importing a module whose path matches one of the following, just
