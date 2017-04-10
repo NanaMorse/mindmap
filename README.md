@@ -8,7 +8,7 @@ if you want to try it by yourself, clone it and run those commands in your termi
 
 ```
 npm install
-npm run dev
+npm run build
 npm start
 ```
 
