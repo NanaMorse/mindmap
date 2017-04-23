@@ -42,7 +42,7 @@ module.exports = {
   },
 
   ts: {
-    configFileName: 'tsconfig.client.json'
+    configFileName: 'tsconfig.json'
   },
 
   // When importing a module whose path matches one of the following, just

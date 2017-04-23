@@ -3,15 +3,16 @@
   "version": "0.0.1",
   "description": "a mind map application based on react",
   "scripts": {
-    "build": "npm run build-client && npm run build-server",
-    "build-client": "webpack --config webpack.client.config.js",
-    "build-server": "tsc --p tsconfig.server.json",
+    "dev": "npm run dev-client && npm run dev-server",
+    "dev-client": "webpack --watch",
+    "dev-server": "tsc --p tsconfig.server.json",
     "start": "node server/dist/index.js"
   },
   "author": "morse",
   "license": "MIT",
   "dependencies": {
     "antd": "^2.8.3",
+    "babel-plugin-lodash": "^3.2.11",
     "dva": "git://github.com/NanaMorse/dva.git#global-reducer-option",
     "koa": "^1.2.0",
     "koa-static": "^2.0.0",
@@ -20,6 +21,7 @@
     "react-dom": "^15.3.1",
     "react-draggable": "^2.2.2",
     "react-redux": "^4.4.5",
+    "reactcss": "1.2.0",
     "redux": "^3.5.2",
     "ws": "^1.1.1"
   },
@@ -35,6 +37,7 @@
     "babel-polyfill": "^6.13.0",
     "babel-preset-es2015": "^6.9.0",
     "babel-preset-react": "^6.5.0",
+    "babel-preset-stage-0": "^6.24.1",
     "babel-preset-stage-2": "^6.22.0",
     "css-loader": "^0.27.3",
     "style-loader": "^0.16.1",
