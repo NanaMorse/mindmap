@@ -1,4 +1,5 @@
 import app from 'src/app';
+import config from 'root/common/config'
 
 class SocketHandler {
 
@@ -10,8 +11,7 @@ class SocketHandler {
   }
 
   private connectSocketServer() {
-    // todo set socket server path to config file
-    this.wsInstance = new WebSocket('ws://localhost:3000')
+    this.wsInstance = new WebSocket(config.socketServer)
   }
 
   private registerSocketMessageHandler(initCallback: Function) {

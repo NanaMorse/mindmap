@@ -4,13 +4,14 @@
     "outDir": "./public/dist/",
     "sourceMap": true,
     "noImplicitAny": false,
-    "watch": true,
     "module": "commonjs",
-    "target": "es6",
+    "target": "es5",
     "jsx": "react",
     "types": ["node"],
+    "lib": ["es2015", "es2017", "dom"],
     "paths": {
-      "src/*": ["./client/src/*"]
+      "src/*": ["./client/src/*"],
+      "root/*": ["./*"]
     }
   },
   "exclude": [

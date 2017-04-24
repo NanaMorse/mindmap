@@ -3,12 +3,15 @@
   "version": "0.0.1",
   "description": "a mind map application based on react",
   "scripts": {
-    "dev": "npm run dev-client && npm run dev-server",
-    "dev-client": "webpack --watch",
-    "dev-server": "tsc --p tsconfig.server.json",
+    "dev": "npm run dev-client & npm run dev-server",
+    "dev-client": "webpack --watch --env=$npm_package_config_dev_flag",
+    "dev-server": "tsc --p tsconfig.server.json --watch",
+    "build": "npm run build-client && npm run build-server",
+    "build-client": "webpack --json --env=$npm_package_config_prod_flag --optimize-minimize | webpack-bundle-size-analyzer",
+    "build-server": "tsc --p tsconfig.server.json",
     "start": "node server/dist/index.js"
   },
-  "author": "morse",
+  "author": "nana.morse",
   "license": "MIT",
   "dependencies": {
     "antd": "^2.8.3",
@@ -26,6 +29,7 @@
     "ws": "^1.1.1"
   },
   "devDependencies": {
+    "@types/es6-shim": "^0.31.33",
     "@types/koa": "^2.0.39",
     "@types/node": "^7.0.8",
     "@types/react": "^15.0.17",
@@ -43,6 +47,11 @@
     "style-loader": "^0.16.1",
     "ts-loader": "^0.8.2",
     "typescript": "^2.0.10",
-    "webpack": "^1.13.1"
+    "webpack": "^1.13.1",
+    "yargs": "^7.1.0"
+  },
+  "config": {
+    "dev_flag": "develop",
+    "prod_flag": "production"
   }
 }
