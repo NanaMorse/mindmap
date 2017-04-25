@@ -297,9 +297,6 @@ class TopicEditPanel extends React.Component<TopicEditPanelProps, TopicEditPanel
   }
 
   render() {
-
-    if (!this.props.selectionList.length) return <div />;
-
     const panelProps = {
       className: 'edit-panel topic-edit-panel',
     };

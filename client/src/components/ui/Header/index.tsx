@@ -1,9 +1,10 @@
 import * as React from 'react'
 import { events } from 'src/managers'
 import { UNDO_OR_REDO_TRIGGERED, PUSH_UNDO_STACK } from 'src/constants/EventTags'
-import { Button } from './antd'
+import { Button } from '../antd'
 import { ACTION_UNDO, ACTION_REDO, hooks } from 'src/app/middlewares/undo';
 import app from 'src/app'
+require('./index.scss');
 
 interface HeaderState {
   hasUndo: boolean;
@@ -34,6 +35,7 @@ export default class Header extends React.Component<void, HeaderState> {
   render() {
     const undoBtnProps = {
       type: "primary",
+      className: 'undo-btn',
       disabled: !this.state.hasUndo,
       onClick: () => app.dispatch({ type: ACTION_UNDO })
     };
@@ -45,10 +47,15 @@ export default class Header extends React.Component<void, HeaderState> {
     };
 
     return (
-      <div className="header">
-        <Button {...undoBtnProps}>Undo</Button>
-        <Button {...redoBtnProps}>Redo</Button>
-      </div>
+      <header>
+        <div className="profile-area">
+
+        </div>
+        <div className="undo-btn-area">
+          <Button {...undoBtnProps}>Undo</Button>
+          <Button {...redoBtnProps}>Redo</Button>
+        </div>
+      </header>
     );
   }
 }

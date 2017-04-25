@@ -18,7 +18,7 @@ if (isEnvProduction) {
 module.exports = {
   entry: './client/src/index.tsx',
   output: {
-    path : './public/dist',
+    path : path.join(__dirname, '/public/dist'),
     filename : 'bundle.js'
   },
 
@@ -27,7 +27,7 @@ module.exports = {
 
   resolve: {
     // Add '.ts' and '.tsx' as resolvable extensions.
-    extensions: ["", ".ts", ".tsx", ".js"],
+    extensions: [".ts", ".tsx", ".js"],
 
     alias: {
       src: path.join(__dirname, '/client/src'),
@@ -51,14 +51,16 @@ module.exports = {
       },
 
       {
-        test: /\.css$/,
-        loader:'style-loader!css-loader!'
+        test: /\.(s?)css$/,
+        use: [{
+          loader: "style-loader"
+        }, {
+          loader: "css-loader",
+        }, {
+          loader: "sass-loader",
+        }]
       }
     ]
-  },
-
-  ts: {
-    configFileName: 'tsconfig.json'
   },
 
   plugins: [

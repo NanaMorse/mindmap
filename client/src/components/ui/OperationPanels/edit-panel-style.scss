@@ -1,17 +1,8 @@
-/* edit panel */
-#operation-panel-container {
-    background-color: #f7f7f9;
-    position: fixed;
-    right: 0;
-    top: 50px;
-}
 
 .edit-panel {
-    width: 300px;
-    height: 100vh;
+    width: 340px;
+    height: 100%;
     border-left: 2px solid #29333e;
-    -webkit-box-shadow: -4px 1px 10px -2px  #29333e;
-    -moz-box-shadow: -4px 1px 10px -2px  #29333e;
     box-shadow: -4px 1px 10px -2px  #29333e;
     padding: 10px;
 }

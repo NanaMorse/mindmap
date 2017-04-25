@@ -1,0 +1,19 @@
+header {
+  width: 100%;
+  height: 60px;
+  background-color: #444;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .profile-area {
+    
+  }
+
+  .undo-btn-area {
+    margin-right: 20px;
+    .undo-btn {
+      margin-right: 10px;
+    }
+  }
+}
