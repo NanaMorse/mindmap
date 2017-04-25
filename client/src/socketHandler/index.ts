@@ -1,5 +1,5 @@
 import app from 'src/app';
-import config from 'root/common/config'
+import config from 'src/config'
 
 class SocketHandler {
 

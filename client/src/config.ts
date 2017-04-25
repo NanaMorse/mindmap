@@ -1,16 +1,11 @@
 /**
- * @fileOverview client端与server端共有的配置信息 / the common settings for client file and server file
+ * @fileOverview client端配置信息 / settings for client file
  * */
 
 // 获取环境变量信息 / get environment variable
 const { is_dev, is_prod } = process.env;
 
 export default {
-  /**
-   * @description 端口号
-   * */
-  serverPort: 3000,
-
   /**
    * @description socket服务器地址 / socket server location
    * */
