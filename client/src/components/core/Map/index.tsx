@@ -2,11 +2,11 @@ import * as React from 'react';
 import { connect } from 'dva'
 import Topic from './Topic';
 const Draggable = require('react-draggable');
-import * as CommonConstant from 'src/constants/common';
+import { TopicType, TopicStrokeWidthType, InfoItemMode } from 'src/constants/common';
 import { deepClone, getTextSize } from 'src/apptools/commonfunc';
 import layoutTopics from 'src/layout';
-import DefaultStyle from 'src/constants/DefaultStyle';
-import * as Distance from 'src/constants/Distance';
+import { LabelStyle, TopicStyle } from 'src/constants/defaultstyle';
+import * as Distance from 'src/constants/distance';
 import { topicExtendedInfoMap } from 'src/managers'
 import { mapState, appState, topicInfo, extendTopicInfo } from 'src/interface'
 
@@ -36,7 +36,7 @@ class Map extends React.Component<MapProps, void> {
     this.setTopicInfoAboutParent(topicInfoCopy);
 
     // mix style with default setting
-    topicInfoCopy.style = Object.assign({}, DefaultStyle[topicInfoCopy.type], topicInfoCopy.style);
+    topicInfoCopy.style = Object.assign({}, TopicStyle[topicInfoCopy.type], topicInfoCopy.style);
 
     this.setTopicSizeInfo(topicInfoCopy);
 
@@ -78,9 +78,9 @@ class Map extends React.Component<MapProps, void> {
 
     // set type
     let topicType;
-    if (!parent) topicType = CommonConstant.TOPIC_ROOT;
-    else if (!this.getParentOfTopicNode(parent)) topicType = CommonConstant.TOPIC_MAIN;
-    else topicType = CommonConstant.TOPIC_SUB;
+    if (!parent) topicType = TopicType.ROOT;
+    else if (!this.getParentOfTopicNode(parent)) topicType = TopicType.MAIN;
+    else topicType = TopicType.SUB;
     topicInfo.type = topicType;
 
     // set parentId
@@ -99,7 +99,7 @@ class Map extends React.Component<MapProps, void> {
 
     let boxSize = { width: 0, height: 0 };
     const fontSizeNumber = parseInt(fontSize);
-    const strokeWidthNumber = strokeWidth === CommonConstant.STROKE_WIDTH_NONE ? 0 : parseInt(strokeWidth);
+    const strokeWidthNumber = strokeWidth === TopicStrokeWidthType.NONE ? 0 : parseInt(strokeWidth);
     const { paddingLeft, paddingTop } = Distance.TopicPaddingOverride[type][shapeClass];
     boxSize.width = titleAreaSize.width + fontSizeNumber * paddingLeft * 2 + strokeWidthNumber;
     boxSize.height = titleAreaSize.height + fontSizeNumber * paddingTop * 2 + strokeWidthNumber;
@@ -119,12 +119,12 @@ class Map extends React.Component<MapProps, void> {
 
     let labelBoxSize: labelBoxSize;
 
-    if (infoItemSettings.label === CommonConstant.INFO_ITEM_CARD_MODE) {
-      const { width: labelTextWidth, height: labelTextHeight } = getTextSize(topicInfo.label, DefaultStyle.label.fontSize);
+    if (infoItemSettings.label === InfoItemMode.CARD) {
+      const { width: labelTextWidth, height: labelTextHeight } = getTextSize(topicInfo.label, LabelStyle.fontSize);
 
-      const labelPadding = Distance.LabelPadding;
-      const labelWidth = labelPadding.paddingLeft + labelTextWidth + labelPadding.paddingRight;
-      const labelHeight = labelPadding.paddingTop + labelTextHeight + labelPadding.paddingBottom;
+      const labelPadding = LabelStyle.padding;
+      const labelWidth = labelTextWidth + labelPadding * 2;
+      const labelHeight = labelTextHeight + labelPadding * 2;
 
       labelBoxSize = { width: labelWidth, height: labelHeight, mode: infoItemSettings.label };
     } else {
@@ -167,7 +167,7 @@ class Map extends React.Component<MapProps, void> {
 
   render() {
     return (
-      <Draggable handle={`.${CommonConstant.TOPIC_ROOT}`} onMouseDown={e => e.stopPropagation()}>
+      <Draggable handle={`.${TopicType.ROOT}`} onMouseDown={e => e.stopPropagation()}>
         <g><g className="topics-group" transform={`scale(${this.props.scaleValue})`}>{ this.renderTopicTree() }</g></g>
       </Draggable>
     );

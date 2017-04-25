@@ -1,11 +1,11 @@
-import * as CommonConstant from '../constants/Common';
-import DefaultStyle from '../constants/DefaultStyle';
+import { TopicShapeType } from '../constants/common';
+import { selectBoxSpace, TopicShapeSpecialData } from '../constants/defaultstyle';
 
 const getSelectBoxPath = (boxSize) => {
   let {width, height} = boxSize;
   
-  width += DefaultStyle.selectBoxSpace * 2;
-  height += DefaultStyle.selectBoxSpace * 2;
+  width += selectBoxSpace * 2;
+  height += selectBoxSpace * 2;
 
   const halfWidth = width / 2;
   const halfHeight = height / 2;
@@ -15,7 +15,7 @@ const getSelectBoxPath = (boxSize) => {
 
 export default {
   
-  [CommonConstant.SHAPE_RECT](boxSize) {
+  [TopicShapeType.RECT](boxSize) {
     const {width, height} = boxSize;
 
     const halfWidth = width / 2;
@@ -28,9 +28,9 @@ export default {
     return { topicShapePath, topicSelectBoxPath };
   },
 
-  [CommonConstant.SHAPE_ROUNDED_RECT](boxSize) {
+  [TopicShapeType.ROUNDED_RECT](boxSize) {
     const rx = 5, ry = 5;
-    const roundR = DefaultStyle.topicShapeStyle.roundedRectR;
+    const roundR = TopicShapeSpecialData.roundedRectR;
     const doubleR = roundR * 2;
 
     const {width, height} = boxSize;
@@ -49,13 +49,13 @@ export default {
     return { topicShapePath, topicSelectBoxPath };
   },
 
-  [CommonConstant.SHAPE_PARALLELOGRAM](boxSize) {
+  [TopicShapeType.PARALLELOGRAM](boxSize) {
     const {width, height} = boxSize;
 
     const halfWidth = width / 2;
     const halfHeight = height / 2;
 
-    const cutLength = height / DefaultStyle.topicShapeStyle.parallelogramSlope;
+    const cutLength = height / TopicShapeSpecialData.parallelogramSlope;
 
     const topicShapePath = `M ${-halfWidth + cutLength} ${-halfHeight} h ${width - cutLength} ` +
       `L ${halfWidth - cutLength} ${halfHeight} h ${cutLength - width} Z`;

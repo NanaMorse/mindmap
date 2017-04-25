@@ -1,6 +1,6 @@
 import logicToRight from './logic/logictoright';
-import * as Distance from '../constants/Distance';
-import * as CommonConstant from '../constants/Common';
+import * as Distance from '../constants/distance';
+import { InfoItemMode, LayoutType } from '../constants/common';
 
 export default (topicTree) => {
   topicTree.position = [300, 300];
@@ -19,7 +19,7 @@ export default (topicTree) => {
 
     // if has label
     if (parentTree.labelBoxSize) {
-      if (parentTree.labelBoxSize.mode === CommonConstant.INFO_ITEM_CARD_MODE) {
+      if (parentTree.labelBoxSize.mode === InfoItemMode.CARD) {
         bounds.height += parentTree.labelBoxSize.height;
       } else {
         bounds.width += parentTree.labelBoxSize.width;
@@ -28,7 +28,7 @@ export default (topicTree) => {
 
     const childrenBounds = { width : 0, height : 0 };
 
-    const {marginLeft, marginTop} = Distance.TopicMargin[CommonConstant.LOGIC_TO_RIGHT];
+    const {marginLeft, marginTop} = Distance.TopicMargin[LayoutType.LOGIC_TO_RIGHT];
 
     if (parentTree.children && parentTree.children.length) {
       parentTree.children.forEach((childTree) => {

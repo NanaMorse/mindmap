@@ -1,10 +1,10 @@
-import * as Distance from '../../constants/Distance';
-import * as CommonConstant from '../../constants/Common';
+import * as Distance from '../../constants/distance';
+import { LayoutType } from '../../constants/common';
 
 export default function logicToRight(parentTree) {
   const { position, boxSize, children } = parentTree;
 
-  const {marginLeft, marginTop} = Distance.TopicMargin[CommonConstant.LOGIC_TO_RIGHT];
+  const {marginLeft, marginTop} = Distance.TopicMargin[LayoutType.LOGIC_TO_RIGHT];
 
   let topHeight = 0;
 

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { connect } from 'dva'
-import * as CommonConstant from 'src/constants/Common'
+import { TopicShapeType, TopicStrokeWidthType, LineType, LineStrokeWidthType } from 'src/constants/common'
 import { topicExtendedInfoMap } from 'src/managers'
 import { Button, Selector, ColorPicker, Switch } from '../antd'
 
@@ -11,29 +11,29 @@ const optionsMap = {
   },
 
   shapeClass: {
-    [CommonConstant.SHAPE_RECT]: 'Rect',
-    [CommonConstant.SHAPE_ROUNDED_RECT]: 'Rounded Rectangle',
-    [CommonConstant.SHAPE_PARALLELOGRAM]: 'Parallelogram'
+    [TopicShapeType.RECT]: 'Rect',
+    [TopicShapeType.ROUNDED_RECT]: 'Rounded Rectangle',
+    [TopicShapeType.PARALLELOGRAM]: 'Parallelogram'
   },
 
   borderWidth: {
-    [CommonConstant.STROKE_WIDTH_NONE]: 'None',
-    [CommonConstant.STROKE_WIDTH_THIN]: 'Thin',
-    [CommonConstant.STROKE_WIDTH_MIDDLE]: 'Middle',
-    [CommonConstant.STROKE_WIDTH_FAT]: 'Fat'
+    [TopicStrokeWidthType.NONE]: 'None',
+    [TopicStrokeWidthType.THIN]: 'Thin',
+    [TopicStrokeWidthType.MIDDLE]: 'Middle',
+    [TopicStrokeWidthType.BOLD]: 'Bold'
   },
 
   lineClass: {
-    [CommonConstant.LINE_NONE]: 'None',
-    [CommonConstant.LINE_RIGHT_ANGLE]: 'Right Angle',
-    [CommonConstant.LINE_ROUNDED]: 'Rounded'
+    [LineType.NONE]: 'None',
+    [LineType.RIGHT_ANGLE]: 'Right Angle',
+    [LineType.ROUNDED]: 'Rounded'
   },
 
   lineWidth: {
-    [CommonConstant.LINE_WIDTH_NONE]: 'None',
-    [CommonConstant.LINE_WIDTH_THIN]: 'Thin',
-    [CommonConstant.LINE_WIDTH_MIDDLE]: 'Middle',
-    [CommonConstant.LINE_WIDTH_FAT]: 'Fat'
+    [LineStrokeWidthType.NONE]: 'None',
+    [LineStrokeWidthType.THIN]: 'Thin',
+    [LineStrokeWidthType.MIDDLE]: 'Middle',
+    [LineStrokeWidthType.BOLD]: 'Bold'
   }
 };
 

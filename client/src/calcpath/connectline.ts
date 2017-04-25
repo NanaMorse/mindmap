@@ -1,9 +1,10 @@
-import * as CommonConstant from '../constants/Common';
-import * as Distance from '../constants/Distance';
-import DefaultStyle from '../constants/DefaultStyle';
+import { LineType, LayoutType, TopicShapeType } from '../constants/common';
+import * as Distance from '../constants/distance';
+import { TopicShapeSpecialData } from '../constants/defaultstyle';
+
 
 export default {
-  [CommonConstant.LINE_RIGHT_ANGLE](topicInfo) {
+  [LineType.RIGHT_ANGLE](topicInfo) {
 
     const {startPoint, centerPoint, endPoints} = getImportantPoints(topicInfo);
 
@@ -27,7 +28,7 @@ export default {
     return path;
   },
 
-  [CommonConstant.LINE_ROUNDED](topicInfo) {
+  [LineType.ROUNDED](topicInfo) {
 
     const roundR = 5;
 
@@ -66,16 +67,16 @@ export default {
 function getImportantPoints(topicInfo) {
   const {position: parentPosition, boxSize, style} = topicInfo;
 
-  const marginLeft = Distance.TopicMargin[CommonConstant.LOGIC_TO_RIGHT].marginLeft;
+  const marginLeft = Distance.TopicMargin[LayoutType.LOGIC_TO_RIGHT].marginLeft;
 
   const halfWidth = boxSize.width / 2;
 
   // startPoint
   let startPoint;
   switch (style.shapeClass) {
-    case CommonConstant.SHAPE_PARALLELOGRAM :
+    case TopicShapeType.PARALLELOGRAM :
     {
-      const cutLength = boxSize.height / 2 / DefaultStyle.topicShapeStyle.parallelogramSlope;
+      const cutLength = boxSize.height / 2 / TopicShapeSpecialData.parallelogramSlope;
       startPoint = [halfWidth - cutLength, 0];
       break;
     }
@@ -96,9 +97,9 @@ function getImportantPoints(topicInfo) {
     const fixedPosition = [position[0] - parentPosition[0], position[1] - parentPosition[1]];
 
     switch (style.shapeClass) {
-      case CommonConstant.SHAPE_PARALLELOGRAM :
+      case TopicShapeType.PARALLELOGRAM :
       {
-        const cutLength = boxSize.height / 2 / DefaultStyle.topicShapeStyle.parallelogramSlope;
+        const cutLength = boxSize.height / 2 / TopicShapeSpecialData.parallelogramSlope;
         return [fixedPosition[0] - boxSize.width / 2 + cutLength, fixedPosition[1]];
       }
 

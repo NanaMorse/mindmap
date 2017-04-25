@@ -1,8 +1,6 @@
 import * as React from 'react';
-
-import * as CommonConstant from 'src/constants/Common';
-import * as Distance from 'src/constants/Distance';
-import DefaultStyle from 'src/constants/DefaultStyle';
+import { InfoItemMode } from 'src/constants/common';
+import { LabelStyle } from 'src/constants/defaultstyle';
 import * as CommonFunc from 'src/apptools/commonfunc';
 
 import { extendTopicInfo } from 'src/interface';
@@ -16,7 +14,7 @@ interface LabelProps {
 const Label = ({topicInfo, displayMode, x}: LabelProps) => {
   let {boxSize: {width: parentWidth, height: parentHeight}, labelBoxSize: {width: labelWidth, height: labelHeight} , label: labelText} = topicInfo;
 
-  if (displayMode === CommonConstant.INFO_ITEM_CARD_MODE) {
+  if (displayMode === InfoItemMode.CARD) {
 
     const halfParentWidth = parentWidth / 2;
     const halfParentHeight = parentHeight / 2;
@@ -25,12 +23,12 @@ const Label = ({topicInfo, displayMode, x}: LabelProps) => {
 
     let path = `M ${-halfParentWidth} ${halfParentHeight + 1} h ${labelWidth} v ${labelHeight} h ${-labelWidth} v ${-labelHeight} z`;
 
-    const labelTextStartX = -halfParentWidth + Distance.LabelPadding.paddingLeft;
+    const {fontSize, fillColor, padding} = LabelStyle;
+
+    const labelTextStartX = -halfParentWidth + padding;
     const labelTextStartY = halfParentHeight + 1 + labelHeight / 2;
 
-    const {fontSize, fillColor} = DefaultStyle.label;
-
-    labelText = CommonFunc.wrapTextWithEllipsis(labelText, fontSize, labelWidth - Distance.LabelPadding.paddingLeft - Distance.LabelPadding.paddingRight);
+    labelText = CommonFunc.wrapTextWithEllipsis(labelText, fontSize, labelWidth - padding * 2);
 
     return (
       <g className="label">

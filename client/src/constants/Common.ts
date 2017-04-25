@@ -1,33 +1,5 @@
-export const LOGIC_TO_RIGHT = 'LOGIC_TO_RIGHT';
-
-// Topic Shape Types
-export const SHAPE_RECT = 'SHAPE_RECT';
-export const SHAPE_ROUNDED_RECT = 'SHAPE_ROUNDED_RECT';
-export const SHAPE_PARALLELOGRAM = 'SHAPE_PARALLELOGRAM';
-
-// Topic Stroke Width Types
-export const STROKE_WIDTH_NONE = 'STROKE_NONE';
-export const STROKE_WIDTH_THIN = '1px';
-export const STROKE_WIDTH_MIDDLE = '4px';
-export const STROKE_WIDTH_FAT = '8px';
-
-// Connect Line Types
-export const LINE_NONE = 'LINE_NONE';
-export const LINE_RIGHT_ANGLE = 'LINE_RIGHT_ANGLE';
-export const LINE_ROUNDED = 'LINE_ROUNDED';
-
-// Connect Line Width Types
-export const LINE_WIDTH_NONE = 'LINE_NONE';
-export const LINE_WIDTH_THIN = '1px';
-export const LINE_WIDTH_MIDDLE = '4px';
-export const LINE_WIDTH_FAT = '8px';
-
-// Info item display mode
-export const INFO_ITEM_ICON_MODE = 'icon';
-export const INFO_ITEM_CARD_MODE = 'card';
-
 /**
- * @description Topic类型 / Topic type
+ * @description Topic类型 / Topic Type
  * */
 export const TopicType = {
   // 根节点
@@ -36,6 +8,67 @@ export const TopicType = {
   MAIN: 'MAIN',
   // 子节点
   SUB: 'SUB'
+};
+
+/**
+ * @description Topic形状类型 Topic Shape Type
+ * */
+export const TopicShapeType = {
+  // 矩形
+  RECT: 'RECT',
+  // 圆角矩形
+  ROUNDED_RECT: 'ROUNDED_RECT',
+  // 菱形
+  PARALLELOGRAM: 'PARALLELOGRAM'
+};
+
+/**
+ * @description Topic描边宽度 Topic stroke width
+ * */
+export const TopicStrokeWidthType = {
+  // 没有描边
+  NONE: 'NONE',
+  // 细的
+  THIN: 1,
+  // 中等的
+  MIDDLE: 4,
+  // 粗的
+  BOLD: 8
+};
+
+/**
+ * @description 连接线形状类型 Line Type
+ * */
+export const LineType = {
+  // 无连线
+  NONE: 'NONE',
+  // 直角线
+  RIGHT_ANGLE: 'RIGHT_ANGLE',
+  // 圆角线
+  ROUNDED: 'ROUNDED'
+};
+
+/**
+ * @description 连接线的宽度
+ * */
+export const LineStrokeWidthType = TopicStrokeWidthType;
+
+/**
+ * @description 布局类型
+ * */
+export const LayoutType = {
+  // 向右逻辑图
+  LOGIC_TO_RIGHT: 'LOGIC_TO_RIGHT'
+};
+
+/**
+ * @description info item 显示类型
+ * */
+export const InfoItemMode = {
+  // 卡片类型
+  CARD: 'CARD',
+  // 图标类型
+  ICON: 'ICON'
 };
 
 /**

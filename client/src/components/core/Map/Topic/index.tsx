@@ -10,7 +10,7 @@ import Label from '../InfoItem/Label';
 import CalcTopicShape from 'src/calcpath/topicshape';
 import { pasteInfoManager, componentMapManager } from 'src/managers';
 import * as AddOn from 'src/apptools/addon';
-import * as CommonConstant from 'src/constants/Common';
+import {TopicType, LineStrokeWidthType, TopicStrokeWidthType, LineType} from 'src/constants/common';
 
 import { extendTopicInfo, topicInfo, appState } from 'src/interface';
 
@@ -142,7 +142,7 @@ class Topic extends React.Component<TopicProps, TopicState> {
   }
 
   cutTopicInfo() {
-    if (this.getType() === CommonConstant.TOPIC_ROOT) return false;
+    if (this.getType() === TopicType.ROOT) return false;
 
     pasteInfoManager.refreshInfo(this.props.topicInfo.originTopicInfo);
   }
@@ -272,10 +272,11 @@ class Topic extends React.Component<TopicProps, TopicState> {
     };
 
     const needConnectLine =
-      style.lineClass !== CommonConstant.LINE_NONE &&
-      style.lineWidth !== CommonConstant.LINE_WIDTH_NONE &&
+      style.lineClass !== LineType.NONE &&
+      style.lineWidth !== LineStrokeWidthType.NONE &&
       topicInfo.children && topicInfo.children.length;
-    const needShape = style.strokeWidth !== CommonConstant.STROKE_WIDTH_NONE;
+
+    const needShape = style.strokeWidth !== TopicStrokeWidthType.NONE;
 
     return (
       <g {...TopicGroupProps} >

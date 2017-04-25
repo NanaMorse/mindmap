@@ -4,6 +4,7 @@ const appModel = {
   namespace: 'app',
 
   state: <appState> {
+    // info item的显示方式
     infoItemDisplay: {}
   },
 

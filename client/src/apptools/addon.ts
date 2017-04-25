@@ -1,4 +1,4 @@
-import DefaultStyle from '../constants/DefaultStyle';
+import { TopicEditorStyle } from '../constants/defaultstyle';
 import { TOPIC_SELECTED } from '../constants/EventTags';
 
 import { events, selectionsManager, componentMapManager } from '../managers';
@@ -21,7 +21,7 @@ export const editReceiver = (() => {
 
   input.id = 'editReceiver';
 
-  const {minWidth, minHeight} = DefaultStyle.editReceiver;
+  const {minWidth, minHeight} = TopicEditorStyle;
 
   input.style.minWidth = minWidth + 'px';
   input.style.minHeight = minHeight + 'px';

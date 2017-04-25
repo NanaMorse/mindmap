@@ -1,6 +1,6 @@
 import { deepClone, generateUUID } from 'src/apptools/commonfunc'
 import { topicExtendedInfoMap } from 'src/managers'
-import { TOPIC_ROOT } from 'src/constants/Common';
+import { TopicType } from 'src/constants/common';
 import { mapState, topicInfo, extendTopicInfo } from 'src/interface'
 
 /**
@@ -38,7 +38,7 @@ class TopicTreeWalkHelper {
     return selectionList.filter((selectionB) => {
       return !selectionList.some((selectionA) => {
         return isAAncestorOfB(selectionA, selectionB);
-      }) && selectionB.id !== TOPIC_ROOT;
+      }) && selectionB.type !== TopicType.ROOT;
     });
   }
 
