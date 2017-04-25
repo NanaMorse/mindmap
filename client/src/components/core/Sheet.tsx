@@ -5,6 +5,7 @@ import { sheetState } from 'src/interface'
 
 interface SheetProps {
   sheet: sheetState
+  selectionList: Array<string>
   dispatch: Function
 }
 
@@ -21,9 +22,14 @@ class Sheet extends React.Component<SheetProps, any> {
   }
 
   onMouseDown(e) {
-    // clear target topic list
-    this.props.dispatch({ type: 'map/clearSelectionList', ignoreUndo: true });
     dragSelectReceiver.dragStart(e);
+  }
+
+  onMouseUp() {
+    if (this.props.selectionList.length !== 0) {
+      // clear target topic list
+      this.props.dispatch({ type: 'map/clearSelectionList', ignoreUndo: true });
+    }
   }
 
   // todo try svg animation
@@ -61,7 +67,8 @@ class Sheet extends React.Component<SheetProps, any> {
       id: 'sheet',
       style: { backgroundColor: this.props.sheet.backgroundColor },
       onWheel: (e) => this.onWheel(e),
-      onMouseDown: (e) => this.onMouseDown(e)
+      onMouseDown: (e) => this.onMouseDown(e),
+      onMouseUp: () => this.onMouseUp()
     };
 
     return (
@@ -72,8 +79,8 @@ class Sheet extends React.Component<SheetProps, any> {
   }
 }
 
-const mapStateToProps = ({ sheet }) => {
-  return { sheet };
+const mapStateToProps = ({ sheet, map }) => {
+  return { sheet, selectionList: map.selectionList };
 };
 
 export default connect(mapStateToProps)(Sheet);

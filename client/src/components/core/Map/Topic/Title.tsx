@@ -14,7 +14,10 @@ interface TopicTitleProps {
 class TopicTitle extends React.Component<TopicTitleProps, void> {
   render() {
 
-    const {title, fontSize, fontColor, isFontBold, isFontItalic, isFontLineThrough, x} = this.props;
+    let { title, fontSize, fontColor, isFontBold, isFontItalic, isFontLineThrough, x } = this.props;
+
+    // 设置默认title
+    if (title.trim() === '') title = 'Topic';
 
     const style: any = {
       fontSize: fontSize,
