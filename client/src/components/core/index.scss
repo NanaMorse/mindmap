@@ -1,0 +1,15 @@
+.core-container {
+  width: calc(100% - 300px);
+
+  // svg缩放滑块容器
+  .scale-slider-container {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    height: 200px;
+    padding: 10px 0 20px 0;
+    border-radius: 20px;
+    background-color: #eee;
+    border: 1px solid #eee;
+  }
+}

@@ -19,6 +19,8 @@ export const Select = require('antd/lib/select');
 import 'antd/lib/switch/style/css'
 export const Switch = require('antd/lib/switch');
 
+import 'antd/lib/slider/style/css'
+export const Slider = require('antd/lib/slider');
 
 interface SelectorProps {
   // the option list for selector

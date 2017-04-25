@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect } from 'dva'
 import Topic from './Topic';
 const Draggable = require('react-draggable');
-import * as CommonConstant from 'src/constants/Common';
+import * as CommonConstant from 'src/constants/common';
 import { deepClone, getTextSize } from 'src/apptools/commonfunc';
 import layoutTopics from 'src/layout';
 import DefaultStyle from 'src/constants/DefaultStyle';
@@ -13,6 +13,10 @@ import { mapState, appState, topicInfo, extendTopicInfo } from 'src/interface'
 interface MapProps {
   map: mapState
   app: appState
+  /**
+   * @description mindmap缩放值
+   * */
+  scaleValue: number
 }
 
 class Map extends React.Component<MapProps, void> {
@@ -164,7 +168,7 @@ class Map extends React.Component<MapProps, void> {
   render() {
     return (
       <Draggable handle={`.${CommonConstant.TOPIC_ROOT}`} onMouseDown={e => e.stopPropagation()}>
-        <g><g className="topics-group">{ this.renderTopicTree() }</g></g>
+        <g><g className="topics-group" transform={`scale(${this.props.scaleValue})`}>{ this.renderTopicTree() }</g></g>
       </Draggable>
     );
   }
