@@ -7,7 +7,7 @@
     "dev-client": "webpack --watch --env=$npm_package_config_dev_flag",
     "dev-server": "tsc --p tsconfig.server.json --watch",
     "build": "npm run build-client && npm run build-server",
-    "build-client": "webpack --json --env=$npm_package_config_prod_flag --optimize-minimize | webpack-bundle-size-analyzer",
+    "build-client": "webpack --env=$npm_package_config_prod_flag --optimize-minimize",
     "build-server": "tsc --p tsconfig.server.json",
     "start": "node server/dist/index.js"
   },

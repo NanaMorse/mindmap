@@ -12,7 +12,7 @@ export default {
   get socketServer() {
     // 需要变动的时候配置这里
     const devServer = 'ws://localhost:3000';
-    const prodServer = 'ws://localhost:3000';
+    const prodServer = 'ws://52.220.174.148:3000';
 
     if (is_dev) return devServer;
     if (is_prod) return prodServer;
