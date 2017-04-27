@@ -2,5 +2,6 @@
 node_modules
 public/dist/
 server/dist/
+share/*.js
 storedata.json
 npm-debug.log

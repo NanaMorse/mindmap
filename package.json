@@ -5,10 +5,10 @@
   "scripts": {
     "dev": "npm run dev-client & npm run dev-server",
     "dev-client": "webpack --watch --env=$npm_package_config_dev_flag",
-    "dev-server": "tsc --p tsconfig.server.json --watch",
+    "dev-server": "tsc --p tsconfig.server.json --watch & tsc ./share/*.ts --watch",
     "build": "npm run build-client && npm run build-server",
     "build-client": "webpack --env=$npm_package_config_prod_flag --optimize-minimize",
-    "build-server": "tsc --p tsconfig.server.json",
+    "build-server": "tsc --p tsconfig.server.json & tsc ./share/*.ts",
     "start": "node server/dist/index.js"
   },
   "author": "nana.morse",
@@ -31,11 +31,13 @@
   "devDependencies": {
     "@types/es6-shim": "^0.31.33",
     "@types/koa": "^2.0.39",
+    "@types/koa-static": "^2.0.22",
     "@types/node": "^7.0.8",
     "@types/react": "^15.0.17",
     "@types/react-color": "^2.11.0",
     "@types/react-dom": "^0.14.23",
     "@types/react-redux": "^4.4.37",
+    "@types/ws": "0.0.40",
     "babel-core": "^6.9.1",
     "babel-loader": "^6.4.1",
     "babel-polyfill": "^6.13.0",
