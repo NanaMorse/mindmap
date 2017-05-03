@@ -5,6 +5,10 @@ export declare type appState = {
   infoItemDisplay: {
     label: 'card' | 'icon'
   }
+  /**
+   * @description 是否正在获取初始化state
+   * */
+  receivingInitState: boolean
 }
 
 export declare type sheetState = {

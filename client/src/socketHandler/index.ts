@@ -20,7 +20,8 @@ class SocketHandler {
 
       switch (parsedData.type) {
         case 'getStoreData': {
-          return initCallback(JSON.parse(parsedData.data), this.wsInstance);
+          initCallback(JSON.parse(parsedData.data), this.wsInstance);
+          return app.dispatch({ type: 'app/receiveInitStateSuccess' });
         }
 
         case 'receiveBroadcastAction': {

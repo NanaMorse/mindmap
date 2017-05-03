@@ -2,6 +2,7 @@ export const getTextSize = (() => {
   const p = document.createElement('p');
 
   p.id = 'getTextSize';
+  p.style.visibility = 'hidden';
 
   document.querySelector('#app-tools-container').appendChild(p);
 

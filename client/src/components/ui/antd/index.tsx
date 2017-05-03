@@ -22,6 +22,9 @@ export const Switch = require('antd/lib/switch');
 import 'antd/lib/slider/style/css'
 export const Slider = require('antd/lib/slider');
 
+import 'antd/lib/spin/style/css'
+export const Spin = require('antd/lib/spin');
+
 interface SelectorProps {
   // the option list for selector
   options: { [index: string]: string }
