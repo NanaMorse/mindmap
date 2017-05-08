@@ -90,6 +90,9 @@ class Map extends React.Component<MapProps, void> {
     topicInfo.index = parent ? parent.children.findIndex(childTopic => childTopic.id === topicInfo.id) : 0;
   }
 
+  /**
+   * @description calc and set topic's size info
+   * */
   setTopicSizeInfo(topicInfo: extendTopicInfo) {
     const { style: { fontSize, strokeWidth, shapeClass }, type } = topicInfo;
 
@@ -139,10 +142,12 @@ class Map extends React.Component<MapProps, void> {
    * @description render nested topic tree component
    * */
   renderTopicTree() {
-    const extendedTopicInfo = this.calcExtendedTopicTreeInfo(this.props.map.topicTree);
+    const { topicTree, mapStructure } = this.props.map;
+
+    const extendedTopicInfo = this.calcExtendedTopicTreeInfo(topicTree);
 
     // get bounds and position
-    layoutTopics(extendedTopicInfo);
+    layoutTopics(extendedTopicInfo, mapStructure);
 
     const topicsList = [];
 

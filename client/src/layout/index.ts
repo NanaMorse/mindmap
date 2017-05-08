@@ -1,67 +1,83 @@
+/**
+ * @fileOverview 布局入口函数 / layout entry function
+ * */
 import logicToRight from './logic/logictoright';
 import * as Distance from '../constants/distance';
-import { InfoItemMode, LayoutType } from '../constants/common';
+import { LayoutType } from '../constants/common';
+import { extendTopicInfo } from 'src/interface'
 
-export default (topicTree) => {
-  topicTree.position = [300, 300];
+/**
+ * @description structure name to layout function
+ * */
+const layoutFunctionMap = {
+  [LayoutType.LOGIC_TO_RIGHT]: logicToRight
+};
 
-  calcComponentsBounds(topicTree);
+/**
+ * @description the root topic's default position
+ * */
+const rootPosition: [number, number] = [300, 300];
 
-  calcChildrenPosition(topicTree);
+/**
+ * @description calculate and assign the position of every single topic
+ * @param topicTree
+ * @param mapStructure
+ * @return {extendTopicInfo}
+ * */
+export default (topicTree: extendTopicInfo, mapStructure: string) => {
+  // set root topic's position
+  topicTree.position = rootPosition;
 
-  function calcComponentsBounds(parentTree) {
-    const boxSize = parentTree.boxSize;
+  calcComponentsBounds(topicTree, mapStructure);
 
-    const bounds = {
-      width : boxSize.width,
-      height : boxSize.height
-    };
+  calcComponentPosition(topicTree, mapStructure);
+}
 
-    // if has label
-    if (parentTree.labelBoxSize) {
-      if (parentTree.labelBoxSize.mode === InfoItemMode.CARD) {
-        bounds.height += parentTree.labelBoxSize.height;
-      } else {
-        bounds.width += parentTree.labelBoxSize.width;
-      }
-    }
+/**
+ * @description 计算每一个组件的bounds数据 / calculate component's bounds info
+ * */
+function calcComponentsBounds(topicTree: extendTopicInfo, mapStructure: string) {
+  const boxSize = topicTree.boxSize;
 
-    const childrenBounds = { width : 0, height : 0 };
+  const bounds = {
+    width : boxSize.width,
+    height : boxSize.height
+  };
 
-    const {marginLeft, marginTop} = Distance.TopicMargin[LayoutType.LOGIC_TO_RIGHT];
+  const childrenBounds = { width : 0, height : 0 };
 
-    if (parentTree.children && parentTree.children.length) {
-      parentTree.children.forEach((childTree) => {
-        const childBounds = calcComponentsBounds(childTree);
-        if (childBounds.width > childrenBounds.width) childrenBounds.width = childBounds.width;
-        childrenBounds.height += childBounds.height + marginTop;
-      });
+  const {marginLeft, marginTop} = Distance.TopicMargin[mapStructure];
 
-      childrenBounds.width += marginLeft;
-      childrenBounds.height -= marginTop;
-    }
-
-    bounds.width += childrenBounds.width;
-    if (childrenBounds.height > bounds.height) bounds.height = childrenBounds.height;
-
-    parentTree.bounds = bounds;
-    parentTree.childrenBounds = childrenBounds;
-    parentTree.boxSize = boxSize;
-
-    return bounds;
-  }
-
-  function calcChildrenPosition(parentTree) {
-    const parentId = parentTree.id;
-
-    // todo
-
-    const children = parentTree.children;
-
-    logicToRight(parentTree);
-
-    children && children.forEach((childTree) => {
-      calcChildrenPosition(childTree);
+  if (topicTree.children && topicTree.children.length) {
+    topicTree.children.forEach((childTree) => {
+      const childBounds = calcComponentsBounds(childTree, mapStructure);
+      if (childBounds.width > childrenBounds.width) childrenBounds.width = childBounds.width;
+      childrenBounds.height += childBounds.height + marginTop;
     });
+
+    childrenBounds.width += marginLeft;
+    childrenBounds.height -= marginTop;
   }
+
+  bounds.width += childrenBounds.width;
+  if (childrenBounds.height > bounds.height) bounds.height = childrenBounds.height;
+
+  topicTree.bounds = bounds;
+  topicTree.childrenBounds = childrenBounds;
+  topicTree.boxSize = boxSize;
+
+  return bounds;
+}
+
+/**
+ * @description 计算每一个组件的位置
+ * */
+function calcComponentPosition(topicInfo: extendTopicInfo, mapStructure: string) {
+  const children = topicInfo.children;
+
+  layoutFunctionMap[mapStructure](topicInfo);
+
+  children && children.forEach((childTree) => {
+    calcComponentPosition(childTree, mapStructure);
+  });
 }

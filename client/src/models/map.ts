@@ -1,6 +1,6 @@
 import { deepClone, generateUUID } from 'src/apptools/commonfunc'
 import { topicExtendedInfoMap } from 'src/managers'
-import { TopicType } from 'src/constants/common';
+import { TopicType, LayoutType } from 'src/constants/common';
 import { mapState, topicInfo, extendTopicInfo } from 'src/interface'
 
 /**
@@ -252,94 +252,134 @@ const topicTreeEditReducer = {
 const topicTextEditReducer = {
 
   setTitle(state: mapState, { title }: { title: string }): mapState {
-    return topicTreeWalkHelper.updateSingleSelectionSelfInfo(state.topicTree, state.selectionList, (selectionInfo) => {
-      selectionInfo.title = title;
-    });
+    return {
+      ...state,
+      ...topicTreeWalkHelper.updateSingleSelectionSelfInfo(state.topicTree, state.selectionList, (selectionInfo) => {
+        selectionInfo.title = title;
+      })
+    };
   },
 
   setFontSize(state: mapState, { fontSize }: { fontSize: string }): mapState {
-    return topicTreeWalkHelper.updateEverySelectionSelfInfo(state.topicTree, state.selectionList, (selectionInfo) => {
-      selectionInfo.style.fontSize = fontSize;
-    });
+    return {
+      ...state,
+      ...topicTreeWalkHelper.updateEverySelectionSelfInfo(state.topicTree, state.selectionList, (selectionInfo) => {
+        selectionInfo.style.fontSize = fontSize;
+      })
+    };
   },
 
   setFontColor(state: mapState, { fontColor }: { fontColor: string }): mapState {
-    return topicTreeWalkHelper.updateEverySelectionSelfInfo(state.topicTree, state.selectionList, (selectionInfo) => {
-      selectionInfo.style.fontColor = fontColor;
-    });
+    return {
+      ...state,
+      ...topicTreeWalkHelper.updateEverySelectionSelfInfo(state.topicTree, state.selectionList, (selectionInfo) => {
+        selectionInfo.style.fontColor = fontColor;
+      })
+    };
   },
 
   setIsFontBold(state: mapState, { isFontBold }: { isFontBold: boolean }): mapState {
-    return topicTreeWalkHelper.updateEverySelectionSelfInfo(state.topicTree, state.selectionList, (selectionInfo) => {
-      selectionInfo.style.isFontBold = isFontBold;
-    });
+    return {
+      ...state,
+      ...topicTreeWalkHelper.updateEverySelectionSelfInfo(state.topicTree, state.selectionList, (selectionInfo) => {
+        selectionInfo.style.isFontBold = isFontBold;
+      })
+    };
   },
 
   setIsFontItalic(state: mapState, { isFontItalic }: { isFontItalic: boolean }): mapState {
-    return topicTreeWalkHelper.updateEverySelectionSelfInfo(state.topicTree, state.selectionList, (selectionInfo) => {
-      selectionInfo.style.isFontItalic = isFontItalic;
-    });
+    return {
+      ...state,
+      ...topicTreeWalkHelper.updateEverySelectionSelfInfo(state.topicTree, state.selectionList, (selectionInfo) => {
+        selectionInfo.style.isFontItalic = isFontItalic;
+      })
+    };
   },
 
   setIsFontLineThrough(state: mapState, { isFontLineThrough }: { isFontLineThrough: boolean }): mapState {
-    return topicTreeWalkHelper.updateEverySelectionSelfInfo(state.topicTree, state.selectionList, (selectionInfo) => {
-      selectionInfo.style.isFontLineThrough = isFontLineThrough;
-    });
+    return {
+      ...state,
+      ...topicTreeWalkHelper.updateEverySelectionSelfInfo(state.topicTree, state.selectionList, (selectionInfo) => {
+        selectionInfo.style.isFontLineThrough = isFontLineThrough;
+      })
+    };
   },
 };
 
 const topicShapeStyleEditReducer = {
   setShapeClass(state: mapState, { shapeClass }: { shapeClass: string }): mapState {
-    return topicTreeWalkHelper.updateEverySelectionSelfInfo(state.topicTree, state.selectionList, (selectionInfo) => {
-      selectionInfo.style.shapeClass = shapeClass;
-    });
+    return {
+      ...state,
+      ...topicTreeWalkHelper.updateEverySelectionSelfInfo(state.topicTree, state.selectionList, (selectionInfo) => {
+        selectionInfo.style.shapeClass = shapeClass;
+      })
+    };
   },
 
   setFillColor(state: mapState, { fillColor }: { fillColor: string }): mapState {
-    return topicTreeWalkHelper.updateEverySelectionSelfInfo(state.topicTree, state.selectionList, (selectionInfo) => {
-      selectionInfo.style.fillColor = fillColor;
-    });
+    return {
+      ...state,
+      ...topicTreeWalkHelper.updateEverySelectionSelfInfo(state.topicTree, state.selectionList, (selectionInfo) => {
+        selectionInfo.style.fillColor = fillColor;
+      })
+    };
   },
 
   setBorderWidth(state: mapState, { borderWidth }: { borderWidth: string }): mapState {
-    return topicTreeWalkHelper.updateEverySelectionSelfInfo(state.topicTree, state.selectionList, (selectionInfo) => {
-      selectionInfo.style.strokeWidth = borderWidth;
-    });
+    return {
+      ...state,
+      ...topicTreeWalkHelper.updateEverySelectionSelfInfo(state.topicTree, state.selectionList, (selectionInfo) => {
+        selectionInfo.style.strokeWidth = borderWidth;
+      })
+    };
   },
 
   setBorderColor(state: mapState, { borderColor }: { borderColor: string }): mapState {
-    return topicTreeWalkHelper.updateEverySelectionSelfInfo(state.topicTree, state.selectionList, (selectionInfo) => {
-      selectionInfo.style.strokeColor = borderColor;
-    });
+    return {
+      ...state,
+      ...topicTreeWalkHelper.updateEverySelectionSelfInfo(state.topicTree, state.selectionList, (selectionInfo) => {
+        selectionInfo.style.strokeColor = borderColor;
+      })
+    };
   }
 };
 
 const connectLineStyleEditReducer = {
   setLineClass(state: mapState, { lineClass }: { lineClass: string }): mapState {
-    return topicTreeWalkHelper.updateEverySelectionSelfInfo(state.topicTree, state.selectionList, (selectionInfo) => {
-      selectionInfo.style.lineClass = lineClass;
-    });
+    return {
+      ...state,
+      ...topicTreeWalkHelper.updateEverySelectionSelfInfo(state.topicTree, state.selectionList, (selectionInfo) => {
+        selectionInfo.style.lineClass = lineClass;
+      })
+    };
   },
 
   setLineWidth(state: mapState, { lineWidth }: { lineWidth: string }): mapState {
-    return topicTreeWalkHelper.updateEverySelectionSelfInfo(state.topicTree, state.selectionList, (selectionInfo) => {
-      selectionInfo.style.lineWidth = lineWidth;
-    });
+    return {
+      ...state,
+      ...topicTreeWalkHelper.updateEverySelectionSelfInfo(state.topicTree, state.selectionList, (selectionInfo) => {
+        selectionInfo.style.lineWidth = lineWidth;
+      })
+    };
   },
 
   setLineColor(state: mapState, { lineColor }: { lineColor: string }): mapState {
-    return topicTreeWalkHelper.updateEverySelectionSelfInfo(state.topicTree, state.selectionList, (selectionInfo) => {
-      selectionInfo.style.lineColor = lineColor;
-    });
+    return {
+      ...state,
+      ...topicTreeWalkHelper.updateEverySelectionSelfInfo(state.topicTree, state.selectionList, (selectionInfo) => {
+        selectionInfo.style.lineColor = lineColor;
+      })
+    };
   },
 };
 
 const mapModel = {
   namespace: 'map',
 
-  state: {
+  state: <mapState>{
     topicTree: {},
-    selectionList: []
+    selectionList: [],
+    mapStructure: LayoutType.LOGIC_TO_RIGHT
   },
 
   reducers: Object.assign({},
