@@ -21,7 +21,7 @@ class SocketHandler {
       switch (parsedData.type) {
         case 'getStoreData': {
           initCallback(JSON.parse(parsedData.data), this.wsInstance);
-          return app.dispatch({ type: 'app/receiveInitStateSuccess' });
+          return app.dispatch({ type: 'app/receiveInitStateSuccess', ignoreUndo: true });
         }
 
         case 'receiveBroadcastAction': {

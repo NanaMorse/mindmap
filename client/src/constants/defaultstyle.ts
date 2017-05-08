@@ -70,6 +70,14 @@ export const TopicEditorStyle = {
 };
 
 /**
+ * @description 选择框的颜色
+ * */
+export const SelectBoxColor = {
+  HOVER: 'rgb(199, 217, 231)',
+  SELECTED: 'rgb(75, 111, 189)'
+};
+
+/**
  * @description topic选择框与topic之间的间距
  * */
 export const selectBoxSpace = 5;

@@ -12,7 +12,7 @@ import { pasteInfoManager, componentMapManager } from 'src/managers';
 import * as AddOn from 'src/apptools/addon';
 import {TopicType, LineStrokeWidthType, TopicStrokeWidthType, LineType} from 'src/constants/common';
 
-import { extendTopicInfo, topicInfo, appState } from 'src/interface';
+import { extendTopicInfo, appState } from 'src/interface';
 
 // todo props and state interface
 interface TopicProps {

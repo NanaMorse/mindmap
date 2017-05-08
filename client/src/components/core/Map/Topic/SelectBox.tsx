@@ -1,4 +1,5 @@
-import * as React from 'react';
+import * as React from 'react'
+import { SelectBoxColor } from 'src/constants/defaultstyle'
 
 // Topic Select Box
 interface TopicSelectBoxProps {
@@ -8,14 +9,17 @@ interface TopicSelectBoxProps {
 }
 
 const TopicSelectBox = ({d, selected, hovered}: TopicSelectBoxProps) => {
-  const style = {
-    visibility: selected || hovered ? 'visible' : 'hidden'
+
+  const selectedBoxProps = {
+    className: 'topic-select-box',
+    fill: 'none',
+    d: d,
+    stroke: selected ? SelectBoxColor.SELECTED : SelectBoxColor.HOVER,
+    strokeWidth: '3',
+    style: { visibility: (selected || hovered) ? 'visible' : 'hidden' }
   };
 
-  const hoveredStroke = 'rgb(199, 217, 231)';
-  const selectedStroke = 'rgb(75, 111, 189)';
-
-  return <path d={ d } className="topic-select-box" fill="none" stroke={selected ? selectedStroke : hoveredStroke} strokeWidth="3" style={ style } />;
+  return <path { ...selectedBoxProps }/>;
 };
 
 export default TopicSelectBox;
