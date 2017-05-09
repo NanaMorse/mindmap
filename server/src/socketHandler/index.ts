@@ -1,6 +1,6 @@
 import * as WebSocket from 'ws'
 import * as fs from 'fs'
-import { ServerEventTags, ClientEventTags } from 'share/eventtags'
+import { ServerEventTags, ClientEventTags } from 'root/share/eventtags'
 
 const storeFilePath = './storedata.json';
 
@@ -21,6 +21,7 @@ class SocketHandler {
    * @param ws
    * */
   private onClientConnect(ws: WebSocket) {
+    console.log('client connect!');
     this.sendFullStoreDataToClient(ws);
     ws.on('message', (message) => this.onClientSendMessageToServer(message, ws))
   }
@@ -30,7 +31,7 @@ class SocketHandler {
    * */
   private sendFullStoreDataToClient(ws: WebSocket) {
     const storeData = fs.readFileSync(storeFilePath, 'utf-8');
-    ws.send({ type: ServerEventTags.RECEIVE_STORE_DATA, data: storeData })
+    ws.send(JSON.stringify({ type: ServerEventTags.RECEIVE_STORE_DATA, data: storeData }))
   }
 
   /**

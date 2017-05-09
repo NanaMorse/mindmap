@@ -11,7 +11,7 @@ interface HeaderState {
   hasRedo: boolean;
 }
 
-export default class Header extends React.Component<void, HeaderState> {
+export default class Header extends React.Component<any, HeaderState> {
 
   constructor() {
     super();

@@ -1,19 +1,21 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "outDir": "./server/dist",
-    "module": "commonjs",
+    "outFile": "./server/dist/bundle.js",
+    "module": "system",
     "target": "es5",
     "sourceMap": false,
     "noImplicitAny": false,
     "paths": {
-      "src/*": ["./server/src/*"]
+      "src/*": ["./server/src/*"],
+      "root/*": ["./*"]
     }
   },
   "include": [
     "server/src"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "share"
   ]
 }
