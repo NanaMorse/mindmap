@@ -1,4 +1,5 @@
-import app from 'src/app';
+import app from 'src/app'
+import { ServerEventTags } from 'root/share/eventtags'
 import config from 'src/config'
 
 class SocketHandler {
@@ -15,16 +16,15 @@ class SocketHandler {
   }
 
   private registerSocketMessageHandler(initCallback: Function) {
-    this.wsInstance.onmessage = (msg) => {
+    this.wsInstance.onmessage = (msg: MessageEvent) => {
       const parsedData = JSON.parse(msg.data);
 
       switch (parsedData.type) {
-        case 'getStoreData': {
-          initCallback(JSON.parse(parsedData.data), this.wsInstance);
-          return app.dispatch({ type: 'app/receiveInitStateSuccess', ignoreUndo: true });
+        case ServerEventTags.RECEIVE_STORE_DATA: {
+          return initCallback(JSON.parse(parsedData.data), this.wsInstance);
         }
 
-        case 'receiveBroadcastAction': {
+        case ServerEventTags.RECEIVE_BROADCAST_ACTION: {
           return app.dispatch(JSON.parse(parsedData.data));
         }
       }

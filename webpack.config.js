@@ -5,8 +5,10 @@ const fs = require('fs');
 
 // 获取脚本参数 / get script parameter
 const { env } = yargs.argv;
-const isEnvDevelop = env === process.env.npm_package_config_dev_flag;
-const isEnvProduction = env === process.env.npm_package_config_prod_flag;
+const isEnvDevelop = env === 'develop';
+const isEnvProduction = env === 'production';
+
+console.log(env, isEnvDevelop, isEnvProduction);
 
 if (isEnvProduction) {
   // 删除source-map数据 / remove source map data
