@@ -37,15 +37,14 @@ class SocketHandler {
   /**
    * @description 监听client端发送的数据
    * */
-  private onClientSendMessageToServer(message: { type: string, data: any }, ws: WebSocket) {
-    const { type, data } = message;
-
+  private onClientSendMessageToServer(message, ws: WebSocket) {
+    const { type, data } = JSON.parse(message);
     switch (type) {
       case ClientEventTags.SYNC_STORE: {
         return this.saveStoreDataToServer(data);
       }
       case ClientEventTags.SYNC_ACTION: {
-        return this.broadcastActionToOtherClient(ws, data);
+        return this.broadcastActionToOtherClient(data, ws);
       }
     }
   }
@@ -69,14 +68,14 @@ class SocketHandler {
   /**
    * @description 将action发送给其他的客户端
    * */
-  private broadcastActionToOtherClient(ws: WebSocket, data) {
+  private broadcastActionToOtherClient(data, ws: WebSocket) {
     const parsedAction = JSON.parse(data);
     // set broadcast filter
     parsedAction['_isBroadcast'] = true;
 
     this.webSocketServer.clients.forEach((client) => {
       if (client !== ws) client.send(JSON.stringify({
-        type: 'receiveBroadcastAction',
+        type: ServerEventTags.RECEIVE_BROADCAST_ACTION,
         data: JSON.stringify(parsedAction)
       }));
     });

@@ -8,7 +8,9 @@
  * */
 export const ServerEventTags = {
   // 获取store数据
-  RECEIVE_STORE_DATA: 'RECEIVE_STORE_DATA'
+  RECEIVE_STORE_DATA: 'RECEIVE_STORE_DATA',
+  // 获取ACTION拘束
+  RECEIVE_BROADCAST_ACTION: 'RECEIVE_BROADCAST_ACTION'
 };
 
 /**
