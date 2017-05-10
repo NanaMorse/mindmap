@@ -2,5 +2,4 @@
 node_modules
 public/dist/
 server/dist/
-storedata.json
 npm-debug.log

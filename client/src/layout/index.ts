@@ -28,56 +28,5 @@ export default (topicTree: extendTopicInfo, mapStructure: string) => {
   // set root topic's position
   topicTree.position = rootPosition;
 
-  calcComponentsBounds(topicTree, mapStructure);
-
-  calcComponentPosition(topicTree, mapStructure);
-}
-
-/**
- * @description 计算每一个组件的bounds数据 / calculate component's bounds info
- * */
-function calcComponentsBounds(topicTree: extendTopicInfo, mapStructure: string) {
-  const boxSize = topicTree.boxSize;
-
-  const bounds = {
-    width : boxSize.width,
-    height : boxSize.height
-  };
-
-  const childrenBounds = { width : 0, height : 0 };
-
-  const {marginLeft, marginTop} = Distance.TopicMargin[mapStructure];
-
-  if (topicTree.children && topicTree.children.length) {
-    topicTree.children.forEach((childTree) => {
-      const childBounds = calcComponentsBounds(childTree, mapStructure);
-      if (childBounds.width > childrenBounds.width) childrenBounds.width = childBounds.width;
-      childrenBounds.height += childBounds.height + marginTop;
-    });
-
-    childrenBounds.width += marginLeft;
-    childrenBounds.height -= marginTop;
-  }
-
-  bounds.width += childrenBounds.width;
-  if (childrenBounds.height > bounds.height) bounds.height = childrenBounds.height;
-
-  topicTree.bounds = bounds;
-  topicTree.childrenBounds = childrenBounds;
-  topicTree.boxSize = boxSize;
-
-  return bounds;
-}
-
-/**
- * @description 计算每一个组件的位置
- * */
-function calcComponentPosition(topicInfo: extendTopicInfo, mapStructure: string) {
-  const children = topicInfo.children;
-
-  layoutFunctionMap[mapStructure](topicInfo);
-
-  children && children.forEach((childTree) => {
-    calcComponentPosition(childTree, mapStructure);
-  });
+  layoutFunctionMap[mapStructure].startLayout(topicTree);
 }
