@@ -24,7 +24,7 @@ const rootPosition: [number, number] = [300, 300];
  * @param mapStructure
  * @return {extendTopicInfo}
  * */
-export default (topicTree: extendTopicInfo, mapStructure: string) => {
+export default (topicTree: extendTopicInfo, mapStructure: string = LayoutType.LOGIC_TO_RIGHT) => {
   // set root topic's position
   topicTree.position = rootPosition;
 

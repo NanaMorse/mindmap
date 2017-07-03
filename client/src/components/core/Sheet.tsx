@@ -80,11 +80,9 @@ class Sheet extends React.Component<SheetProps, any> {
     };
 
     return (
-      <Spin {...spinProps}>
-        <svg {...sheetProps}>
-          { this.props.children }
-        </svg>
-      </Spin>
+      <svg {...sheetProps}>
+        { this.props.children }
+      </svg>
     );
   }
 }
