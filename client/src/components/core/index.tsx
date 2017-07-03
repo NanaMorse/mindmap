@@ -59,7 +59,6 @@ class CoreComponent extends React.PureComponent<any, CoreComponentState> {
         <Sheet>
           <Map scaleValue={this.state.scaleValue}/>
         </Sheet>
-        { this.renderScaleChangeSlider() }
       </div>
     )
   }
